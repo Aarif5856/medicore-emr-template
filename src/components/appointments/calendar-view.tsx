@@ -601,17 +601,25 @@ function DayApptBlock({
   appointment,
   top,
   height,
+  column,
+  columnCount,
   ...handlers
 }: {
   appointment: Appointment;
   top: number;
   height: number;
+  column: number;
+  columnCount: number;
 } & Handlers) {
   const s = STATUS_STYLES[appointment.status];
   const startD = parseISO(appointment.start);
   const endD = addMinutes(startD, appointment.durationMin);
   const [first = "", last = ""] = appointment.doctorName.replace("Dr. ", "").split(" ");
   const cancelled = appointment.status === "Cancelled";
+  const gapPct = columnCount > 1 ? 1 : 0;
+  const widthPct = 100 / columnCount - gapPct;
+  const leftPct = (100 / columnCount) * column;
+  const narrow = columnCount > 1;
 
   return (
     <Popover>
@@ -619,12 +627,17 @@ function DayApptBlock({
         <button
           type="button"
           className={cn(
-            "absolute left-2 right-2 flex flex-col overflow-hidden rounded-lg border-l-4 px-3 py-2 text-left shadow-sm transition-transform hover:z-10 hover:scale-[1.01]",
+            "absolute flex flex-col overflow-hidden rounded-lg border-l-4 px-3 py-2 text-left shadow-sm transition-transform hover:z-20 hover:scale-[1.01]",
             s.leftBorder,
             s.chip,
             cancelled && "opacity-60",
           )}
-          style={{ top: `${top}px`, height: `${Math.max(height - 4, 42)}px` }}
+          style={{
+            top: `${top}px`,
+            height: `${Math.max(height - 4, 42)}px`,
+            left: `calc(${leftPct}% + 4px)`,
+            width: `calc(${widthPct}% - 8px)`,
+          }}
         >
           <div className="flex items-center gap-2">
             <Avatar className="h-6 w-6">
