@@ -427,7 +427,7 @@ function WeekView({
                   {hours.map((h) => (
                     <div key={h} className="h-[60px] border-b border-border/60" />
                   ))}
-                  {items.map((a) => {
+                  {layoutOverlaps(items).map(({ appointment: a, column, columnCount }) => {
                     const startD = parseISO(a.start);
                     const startMin = startD.getHours() * 60 + startD.getMinutes();
                     const top =
@@ -440,6 +440,8 @@ function WeekView({
                         appointment={a}
                         top={top}
                         height={height}
+                        column={column}
+                        columnCount={columnCount}
                         {...handlers}
                       />
                     );
