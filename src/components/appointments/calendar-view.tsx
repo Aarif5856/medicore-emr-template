@@ -572,7 +572,7 @@ function DayView({
             {hours.map((h) => (
               <div key={h} className="h-[84px] border-b border-border/60" />
             ))}
-            {items.map((a) => {
+            {layoutOverlaps(items).map(({ appointment: a, column, columnCount }) => {
               const startD = parseISO(a.start);
               const startMin = startD.getHours() * 60 + startD.getMinutes();
               const top = ((startMin - HOURS_START * 60) / 60) * HOUR_HEIGHT_DAY;
@@ -584,6 +584,8 @@ function DayView({
                   appointment={a}
                   top={top}
                   height={height}
+                  column={column}
+                  columnCount={columnCount}
                   {...handlers}
                 />
               );
