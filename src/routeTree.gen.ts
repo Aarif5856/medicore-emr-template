@@ -16,7 +16,6 @@ import { Route as AuthLoginRouteImport } from './routes/_auth.login'
 import { Route as AppStaffRouteImport } from './routes/_app.staff'
 import { Route as AppSettingsRouteImport } from './routes/_app.settings'
 import { Route as AppPharmacyRouteImport } from './routes/_app.pharmacy'
-import { Route as AppPatientsRouteImport } from './routes/_app.patients'
 import { Route as AppNotificationsRouteImport } from './routes/_app.notifications'
 import { Route as AppMessagesRouteImport } from './routes/_app.messages'
 import { Route as AppLaboratoryRouteImport } from './routes/_app.laboratory'
@@ -24,6 +23,7 @@ import { Route as AppDoctorsRouteImport } from './routes/_app.doctors'
 import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
 import { Route as AppBillingRouteImport } from './routes/_app.billing'
 import { Route as AppAppointmentsRouteImport } from './routes/_app.appointments'
+import { Route as AppPatientsIndexRouteImport } from './routes/_app.patients.index'
 import { Route as AppPatientsNewRouteImport } from './routes/_app.patients.new'
 import { Route as AppPatientsPatientIdRouteImport } from './routes/_app.patients.$patientId'
 
@@ -58,11 +58,6 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
 const AppPharmacyRoute = AppPharmacyRouteImport.update({
   id: '/pharmacy',
   path: '/pharmacy',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppPatientsRoute = AppPatientsRouteImport.update({
-  id: '/patients',
-  path: '/patients',
   getParentRoute: () => AppRoute,
 } as any)
 const AppNotificationsRoute = AppNotificationsRouteImport.update({
@@ -100,15 +95,20 @@ const AppAppointmentsRoute = AppAppointmentsRouteImport.update({
   path: '/appointments',
   getParentRoute: () => AppRoute,
 } as any)
+const AppPatientsIndexRoute = AppPatientsIndexRouteImport.update({
+  id: '/patients/',
+  path: '/patients/',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppPatientsNewRoute = AppPatientsNewRouteImport.update({
-  id: '/new',
-  path: '/new',
-  getParentRoute: () => AppPatientsRoute,
+  id: '/patients/new',
+  path: '/patients/new',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppPatientsPatientIdRoute = AppPatientsPatientIdRouteImport.update({
-  id: '/$patientId',
-  path: '/$patientId',
-  getParentRoute: () => AppPatientsRoute,
+  id: '/patients/$patientId',
+  path: '/patients/$patientId',
+  getParentRoute: () => AppRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -120,13 +120,13 @@ export interface FileRoutesByFullPath {
   '/laboratory': typeof AppLaboratoryRoute
   '/messages': typeof AppMessagesRoute
   '/notifications': typeof AppNotificationsRoute
-  '/patients': typeof AppPatientsRouteWithChildren
   '/pharmacy': typeof AppPharmacyRoute
   '/settings': typeof AppSettingsRoute
   '/staff': typeof AppStaffRoute
   '/login': typeof AuthLoginRoute
   '/patients/$patientId': typeof AppPatientsPatientIdRoute
   '/patients/new': typeof AppPatientsNewRoute
+  '/patients/': typeof AppPatientsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -137,13 +137,13 @@ export interface FileRoutesByTo {
   '/laboratory': typeof AppLaboratoryRoute
   '/messages': typeof AppMessagesRoute
   '/notifications': typeof AppNotificationsRoute
-  '/patients': typeof AppPatientsRouteWithChildren
   '/pharmacy': typeof AppPharmacyRoute
   '/settings': typeof AppSettingsRoute
   '/staff': typeof AppStaffRoute
   '/login': typeof AuthLoginRoute
   '/patients/$patientId': typeof AppPatientsPatientIdRoute
   '/patients/new': typeof AppPatientsNewRoute
+  '/patients': typeof AppPatientsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -157,13 +157,13 @@ export interface FileRoutesById {
   '/_app/laboratory': typeof AppLaboratoryRoute
   '/_app/messages': typeof AppMessagesRoute
   '/_app/notifications': typeof AppNotificationsRoute
-  '/_app/patients': typeof AppPatientsRouteWithChildren
   '/_app/pharmacy': typeof AppPharmacyRoute
   '/_app/settings': typeof AppSettingsRoute
   '/_app/staff': typeof AppStaffRoute
   '/_auth/login': typeof AuthLoginRoute
   '/_app/patients/$patientId': typeof AppPatientsPatientIdRoute
   '/_app/patients/new': typeof AppPatientsNewRoute
+  '/_app/patients/': typeof AppPatientsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -176,13 +176,13 @@ export interface FileRouteTypes {
     | '/laboratory'
     | '/messages'
     | '/notifications'
-    | '/patients'
     | '/pharmacy'
     | '/settings'
     | '/staff'
     | '/login'
     | '/patients/$patientId'
     | '/patients/new'
+    | '/patients/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -193,13 +193,13 @@ export interface FileRouteTypes {
     | '/laboratory'
     | '/messages'
     | '/notifications'
-    | '/patients'
     | '/pharmacy'
     | '/settings'
     | '/staff'
     | '/login'
     | '/patients/$patientId'
     | '/patients/new'
+    | '/patients'
   id:
     | '__root__'
     | '/'
@@ -212,13 +212,13 @@ export interface FileRouteTypes {
     | '/_app/laboratory'
     | '/_app/messages'
     | '/_app/notifications'
-    | '/_app/patients'
     | '/_app/pharmacy'
     | '/_app/settings'
     | '/_app/staff'
     | '/_auth/login'
     | '/_app/patients/$patientId'
     | '/_app/patients/new'
+    | '/_app/patients/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -278,13 +278,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPharmacyRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/patients': {
-      id: '/_app/patients'
-      path: '/patients'
-      fullPath: '/patients'
-      preLoaderRoute: typeof AppPatientsRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/_app/notifications': {
       id: '/_app/notifications'
       path: '/notifications'
@@ -334,36 +327,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAppointmentsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/patients/': {
+      id: '/_app/patients/'
+      path: '/patients'
+      fullPath: '/patients/'
+      preLoaderRoute: typeof AppPatientsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/patients/new': {
       id: '/_app/patients/new'
-      path: '/new'
+      path: '/patients/new'
       fullPath: '/patients/new'
       preLoaderRoute: typeof AppPatientsNewRouteImport
-      parentRoute: typeof AppPatientsRoute
+      parentRoute: typeof AppRoute
     }
     '/_app/patients/$patientId': {
       id: '/_app/patients/$patientId'
-      path: '/$patientId'
+      path: '/patients/$patientId'
       fullPath: '/patients/$patientId'
       preLoaderRoute: typeof AppPatientsPatientIdRouteImport
-      parentRoute: typeof AppPatientsRoute
+      parentRoute: typeof AppRoute
     }
   }
 }
-
-interface AppPatientsRouteChildren {
-  AppPatientsPatientIdRoute: typeof AppPatientsPatientIdRoute
-  AppPatientsNewRoute: typeof AppPatientsNewRoute
-}
-
-const AppPatientsRouteChildren: AppPatientsRouteChildren = {
-  AppPatientsPatientIdRoute: AppPatientsPatientIdRoute,
-  AppPatientsNewRoute: AppPatientsNewRoute,
-}
-
-const AppPatientsRouteWithChildren = AppPatientsRoute._addFileChildren(
-  AppPatientsRouteChildren,
-)
 
 interface AppRouteChildren {
   AppAppointmentsRoute: typeof AppAppointmentsRoute
@@ -373,10 +359,12 @@ interface AppRouteChildren {
   AppLaboratoryRoute: typeof AppLaboratoryRoute
   AppMessagesRoute: typeof AppMessagesRoute
   AppNotificationsRoute: typeof AppNotificationsRoute
-  AppPatientsRoute: typeof AppPatientsRouteWithChildren
   AppPharmacyRoute: typeof AppPharmacyRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppStaffRoute: typeof AppStaffRoute
+  AppPatientsPatientIdRoute: typeof AppPatientsPatientIdRoute
+  AppPatientsNewRoute: typeof AppPatientsNewRoute
+  AppPatientsIndexRoute: typeof AppPatientsIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
@@ -387,10 +375,12 @@ const AppRouteChildren: AppRouteChildren = {
   AppLaboratoryRoute: AppLaboratoryRoute,
   AppMessagesRoute: AppMessagesRoute,
   AppNotificationsRoute: AppNotificationsRoute,
-  AppPatientsRoute: AppPatientsRouteWithChildren,
   AppPharmacyRoute: AppPharmacyRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppStaffRoute: AppStaffRoute,
+  AppPatientsPatientIdRoute: AppPatientsPatientIdRoute,
+  AppPatientsNewRoute: AppPatientsNewRoute,
+  AppPatientsIndexRoute: AppPatientsIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
