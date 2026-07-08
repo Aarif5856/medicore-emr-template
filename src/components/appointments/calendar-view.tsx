@@ -591,6 +591,3 @@ function DayApptBlock({
     </Popover>
   );
 }
-
-// Prevent unused-import warning for initials utility (kept for future extension)
-void initials;
