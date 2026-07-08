@@ -9,38 +9,216 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthRouteImport } from './routes/_auth'
+import { Route as AppRouteImport } from './routes/_app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthLoginRouteImport } from './routes/_auth.login'
+import { Route as AppStaffRouteImport } from './routes/_app.staff'
+import { Route as AppSettingsRouteImport } from './routes/_app.settings'
+import { Route as AppPharmacyRouteImport } from './routes/_app.pharmacy'
+import { Route as AppPatientsRouteImport } from './routes/_app.patients'
+import { Route as AppNotificationsRouteImport } from './routes/_app.notifications'
+import { Route as AppMessagesRouteImport } from './routes/_app.messages'
+import { Route as AppLaboratoryRouteImport } from './routes/_app.laboratory'
+import { Route as AppDoctorsRouteImport } from './routes/_app.doctors'
+import { Route as AppDashboardRouteImport } from './routes/_app.dashboard'
+import { Route as AppBillingRouteImport } from './routes/_app.billing'
+import { Route as AppAppointmentsRouteImport } from './routes/_app.appointments'
 
+const AuthRoute = AuthRouteImport.update({
+  id: '/_auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AppStaffRoute = AppStaffRouteImport.update({
+  id: '/staff',
+  path: '/staff',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPharmacyRoute = AppPharmacyRouteImport.update({
+  id: '/pharmacy',
+  path: '/pharmacy',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPatientsRoute = AppPatientsRouteImport.update({
+  id: '/patients',
+  path: '/patients',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNotificationsRoute = AppNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMessagesRoute = AppMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLaboratoryRoute = AppLaboratoryRouteImport.update({
+  id: '/laboratory',
+  path: '/laboratory',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDoctorsRoute = AppDoctorsRouteImport.update({
+  id: '/doctors',
+  path: '/doctors',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDashboardRoute = AppDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBillingRoute = AppBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAppointmentsRoute = AppAppointmentsRouteImport.update({
+  id: '/appointments',
+  path: '/appointments',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/appointments': typeof AppAppointmentsRoute
+  '/billing': typeof AppBillingRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/doctors': typeof AppDoctorsRoute
+  '/laboratory': typeof AppLaboratoryRoute
+  '/messages': typeof AppMessagesRoute
+  '/notifications': typeof AppNotificationsRoute
+  '/patients': typeof AppPatientsRoute
+  '/pharmacy': typeof AppPharmacyRoute
+  '/settings': typeof AppSettingsRoute
+  '/staff': typeof AppStaffRoute
+  '/login': typeof AuthLoginRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/appointments': typeof AppAppointmentsRoute
+  '/billing': typeof AppBillingRoute
+  '/dashboard': typeof AppDashboardRoute
+  '/doctors': typeof AppDoctorsRoute
+  '/laboratory': typeof AppLaboratoryRoute
+  '/messages': typeof AppMessagesRoute
+  '/notifications': typeof AppNotificationsRoute
+  '/patients': typeof AppPatientsRoute
+  '/pharmacy': typeof AppPharmacyRoute
+  '/settings': typeof AppSettingsRoute
+  '/staff': typeof AppStaffRoute
+  '/login': typeof AuthLoginRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_app': typeof AppRouteWithChildren
+  '/_auth': typeof AuthRouteWithChildren
+  '/_app/appointments': typeof AppAppointmentsRoute
+  '/_app/billing': typeof AppBillingRoute
+  '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/doctors': typeof AppDoctorsRoute
+  '/_app/laboratory': typeof AppLaboratoryRoute
+  '/_app/messages': typeof AppMessagesRoute
+  '/_app/notifications': typeof AppNotificationsRoute
+  '/_app/patients': typeof AppPatientsRoute
+  '/_app/pharmacy': typeof AppPharmacyRoute
+  '/_app/settings': typeof AppSettingsRoute
+  '/_app/staff': typeof AppStaffRoute
+  '/_auth/login': typeof AuthLoginRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/appointments'
+    | '/billing'
+    | '/dashboard'
+    | '/doctors'
+    | '/laboratory'
+    | '/messages'
+    | '/notifications'
+    | '/patients'
+    | '/pharmacy'
+    | '/settings'
+    | '/staff'
+    | '/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/appointments'
+    | '/billing'
+    | '/dashboard'
+    | '/doctors'
+    | '/laboratory'
+    | '/messages'
+    | '/notifications'
+    | '/patients'
+    | '/pharmacy'
+    | '/settings'
+    | '/staff'
+    | '/login'
+  id:
+    | '__root__'
+    | '/'
+    | '/_app'
+    | '/_auth'
+    | '/_app/appointments'
+    | '/_app/billing'
+    | '/_app/dashboard'
+    | '/_app/doctors'
+    | '/_app/laboratory'
+    | '/_app/messages'
+    | '/_app/notifications'
+    | '/_app/patients'
+    | '/_app/pharmacy'
+    | '/_app/settings'
+    | '/_app/staff'
+    | '/_auth/login'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  AuthRoute: typeof AuthRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +226,137 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_auth/login': {
+      id: '/_auth/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_app/staff': {
+      id: '/_app/staff'
+      path: '/staff'
+      fullPath: '/staff'
+      preLoaderRoute: typeof AppStaffRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/settings': {
+      id: '/_app/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/pharmacy': {
+      id: '/_app/pharmacy'
+      path: '/pharmacy'
+      fullPath: '/pharmacy'
+      preLoaderRoute: typeof AppPharmacyRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/patients': {
+      id: '/_app/patients'
+      path: '/patients'
+      fullPath: '/patients'
+      preLoaderRoute: typeof AppPatientsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/notifications': {
+      id: '/_app/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AppNotificationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/messages': {
+      id: '/_app/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof AppMessagesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/laboratory': {
+      id: '/_app/laboratory'
+      path: '/laboratory'
+      fullPath: '/laboratory'
+      preLoaderRoute: typeof AppLaboratoryRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/doctors': {
+      id: '/_app/doctors'
+      path: '/doctors'
+      fullPath: '/doctors'
+      preLoaderRoute: typeof AppDoctorsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/dashboard': {
+      id: '/_app/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/billing': {
+      id: '/_app/billing'
+      path: '/billing'
+      fullPath: '/billing'
+      preLoaderRoute: typeof AppBillingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/appointments': {
+      id: '/_app/appointments'
+      path: '/appointments'
+      fullPath: '/appointments'
+      preLoaderRoute: typeof AppAppointmentsRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppAppointmentsRoute: typeof AppAppointmentsRoute
+  AppBillingRoute: typeof AppBillingRoute
+  AppDashboardRoute: typeof AppDashboardRoute
+  AppDoctorsRoute: typeof AppDoctorsRoute
+  AppLaboratoryRoute: typeof AppLaboratoryRoute
+  AppMessagesRoute: typeof AppMessagesRoute
+  AppNotificationsRoute: typeof AppNotificationsRoute
+  AppPatientsRoute: typeof AppPatientsRoute
+  AppPharmacyRoute: typeof AppPharmacyRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppStaffRoute: typeof AppStaffRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppAppointmentsRoute: AppAppointmentsRoute,
+  AppBillingRoute: AppBillingRoute,
+  AppDashboardRoute: AppDashboardRoute,
+  AppDoctorsRoute: AppDoctorsRoute,
+  AppLaboratoryRoute: AppLaboratoryRoute,
+  AppMessagesRoute: AppMessagesRoute,
+  AppNotificationsRoute: AppNotificationsRoute,
+  AppPatientsRoute: AppPatientsRoute,
+  AppPharmacyRoute: AppPharmacyRoute,
+  AppSettingsRoute: AppSettingsRoute,
+  AppStaffRoute: AppStaffRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
+interface AuthRouteChildren {
+  AuthLoginRoute: typeof AuthLoginRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthLoginRoute: AuthLoginRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  AuthRoute: AuthRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
