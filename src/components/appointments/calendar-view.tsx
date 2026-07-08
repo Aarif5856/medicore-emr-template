@@ -301,6 +301,59 @@ function DayOverflowPopover({
 
 const HOUR_HEIGHT_WEEK = 60;
 
+interface LaidOut {
+  appointment: Appointment;
+  column: number;
+  columnCount: number;
+}
+
+/**
+ * Group overlapping appointments into clusters and assign each a column index
+ * plus the cluster's total column count. Standard Google/Outlook algorithm.
+ */
+function layoutOverlaps(items: Appointment[]): LaidOut[] {
+  const sorted = [...items].sort((a, b) => a.start.localeCompare(b.start));
+  const result: LaidOut[] = [];
+  let cluster: { appt: Appointment; endMin: number; column: number }[] = [];
+  let clusterStartIndex = 0;
+
+  const flush = () => {
+    const cols = cluster.reduce((m, e) => Math.max(m, e.column + 1), 0);
+    for (let i = 0; i < cluster.length; i++) {
+      result[clusterStartIndex + i] = {
+        appointment: cluster[i]!.appt,
+        column: cluster[i]!.column,
+        columnCount: cols,
+      };
+    }
+  };
+
+  for (const a of sorted) {
+    const startD = parseISO(a.start);
+    const startMin = startD.getHours() * 60 + startD.getMinutes();
+    const endMin = startMin + a.durationMin;
+
+    const clusterMaxEnd = cluster.reduce((m, e) => Math.max(m, e.endMin), 0);
+    if (cluster.length > 0 && startMin >= clusterMaxEnd) {
+      flush();
+      clusterStartIndex = result.length;
+      cluster = [];
+    }
+
+    // Pick lowest free column
+    const used = new Set(
+      cluster.filter((e) => e.endMin > startMin).map((e) => e.column),
+    );
+    let col = 0;
+    while (used.has(col)) col++;
+
+    cluster.push({ appt: a, endMin, column: col });
+    result.push({ appointment: a, column: col, columnCount: 0 }); // placeholder; overwritten on flush
+  }
+  if (cluster.length > 0) flush();
+  return result;
+}
+
 function WeekView({
   cursor,
   appointments,
@@ -374,7 +427,7 @@ function WeekView({
                   {hours.map((h) => (
                     <div key={h} className="h-[60px] border-b border-border/60" />
                   ))}
-                  {items.map((a) => {
+                  {layoutOverlaps(items).map(({ appointment: a, column, columnCount }) => {
                     const startD = parseISO(a.start);
                     const startMin = startD.getHours() * 60 + startD.getMinutes();
                     const top =
@@ -387,6 +440,8 @@ function WeekView({
                         appointment={a}
                         top={top}
                         height={height}
+                        column={column}
+                        columnCount={columnCount}
                         {...handlers}
                       />
                     );
@@ -405,17 +460,24 @@ function WeekApptBlock({
   appointment,
   top,
   height,
+  column,
+  columnCount,
   ...handlers
 }: {
   appointment: Appointment;
   top: number;
   height: number;
+  column: number;
+  columnCount: number;
 } & Handlers) {
   const s = STATUS_STYLES[appointment.status];
   const startD = parseISO(appointment.start);
   const endD = addMinutes(startD, appointment.durationMin);
   const cancelled = appointment.status === "Cancelled";
   const finalHeight = Math.max(height - 2, 22);
+  const gapPct = columnCount > 1 ? 1 : 0;
+  const widthPct = 100 / columnCount - gapPct;
+  const leftPct = (100 / columnCount) * column;
 
   return (
     <Popover>
@@ -423,12 +485,17 @@ function WeekApptBlock({
         <button
           type="button"
           className={cn(
-            "absolute left-1 right-1 overflow-hidden rounded-md border-l-4 px-1.5 py-1 text-left shadow-sm transition-transform hover:z-10 hover:scale-[1.02]",
+            "absolute overflow-hidden rounded-md border-l-4 px-1.5 py-1 text-left shadow-sm transition-transform hover:z-20 hover:scale-[1.02]",
             s.leftBorder,
             s.chip,
             cancelled && "opacity-60",
           )}
-          style={{ top: `${top}px`, height: `${finalHeight}px` }}
+          style={{
+            top: `${top}px`,
+            height: `${finalHeight}px`,
+            left: `calc(${leftPct}% + 2px)`,
+            width: `calc(${widthPct}% - 4px)`,
+          }}
         >
           <div
             className={cn(
@@ -505,7 +572,7 @@ function DayView({
             {hours.map((h) => (
               <div key={h} className="h-[84px] border-b border-border/60" />
             ))}
-            {items.map((a) => {
+            {layoutOverlaps(items).map(({ appointment: a, column, columnCount }) => {
               const startD = parseISO(a.start);
               const startMin = startD.getHours() * 60 + startD.getMinutes();
               const top = ((startMin - HOURS_START * 60) / 60) * HOUR_HEIGHT_DAY;
@@ -517,6 +584,8 @@ function DayView({
                   appointment={a}
                   top={top}
                   height={height}
+                  column={column}
+                  columnCount={columnCount}
                   {...handlers}
                 />
               );
@@ -532,17 +601,24 @@ function DayApptBlock({
   appointment,
   top,
   height,
+  column,
+  columnCount,
   ...handlers
 }: {
   appointment: Appointment;
   top: number;
   height: number;
+  column: number;
+  columnCount: number;
 } & Handlers) {
   const s = STATUS_STYLES[appointment.status];
   const startD = parseISO(appointment.start);
   const endD = addMinutes(startD, appointment.durationMin);
   const [first = "", last = ""] = appointment.doctorName.replace("Dr. ", "").split(" ");
   const cancelled = appointment.status === "Cancelled";
+  const gapPct = columnCount > 1 ? 1 : 0;
+  const widthPct = 100 / columnCount - gapPct;
+  const leftPct = (100 / columnCount) * column;
 
   return (
     <Popover>
@@ -550,12 +626,17 @@ function DayApptBlock({
         <button
           type="button"
           className={cn(
-            "absolute left-2 right-2 flex flex-col overflow-hidden rounded-lg border-l-4 px-3 py-2 text-left shadow-sm transition-transform hover:z-10 hover:scale-[1.01]",
+            "absolute flex flex-col overflow-hidden rounded-lg border-l-4 px-3 py-2 text-left shadow-sm transition-transform hover:z-20 hover:scale-[1.01]",
             s.leftBorder,
             s.chip,
             cancelled && "opacity-60",
           )}
-          style={{ top: `${top}px`, height: `${Math.max(height - 4, 42)}px` }}
+          style={{
+            top: `${top}px`,
+            height: `${Math.max(height - 4, 42)}px`,
+            left: `calc(${leftPct}% + 4px)`,
+            width: `calc(${widthPct}% - 8px)`,
+          }}
         >
           <div className="flex items-center gap-2">
             <Avatar className="h-6 w-6">
