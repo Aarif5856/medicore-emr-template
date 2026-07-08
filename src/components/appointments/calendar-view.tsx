@@ -301,6 +301,59 @@ function DayOverflowPopover({
 
 const HOUR_HEIGHT_WEEK = 60;
 
+interface LaidOut {
+  appointment: Appointment;
+  column: number;
+  columnCount: number;
+}
+
+/**
+ * Group overlapping appointments into clusters and assign each a column index
+ * plus the cluster's total column count. Standard Google/Outlook algorithm.
+ */
+function layoutOverlaps(items: Appointment[]): LaidOut[] {
+  const sorted = [...items].sort((a, b) => a.start.localeCompare(b.start));
+  const result: LaidOut[] = [];
+  let cluster: { appt: Appointment; endMin: number; column: number }[] = [];
+  let clusterStartIndex = 0;
+
+  const flush = () => {
+    const cols = cluster.reduce((m, e) => Math.max(m, e.column + 1), 0);
+    for (let i = 0; i < cluster.length; i++) {
+      result[clusterStartIndex + i] = {
+        appointment: cluster[i]!.appt,
+        column: cluster[i]!.column,
+        columnCount: cols,
+      };
+    }
+  };
+
+  for (const a of sorted) {
+    const startD = parseISO(a.start);
+    const startMin = startD.getHours() * 60 + startD.getMinutes();
+    const endMin = startMin + a.durationMin;
+
+    const clusterMaxEnd = cluster.reduce((m, e) => Math.max(m, e.endMin), 0);
+    if (cluster.length > 0 && startMin >= clusterMaxEnd) {
+      flush();
+      clusterStartIndex = result.length;
+      cluster = [];
+    }
+
+    // Pick lowest free column
+    const used = new Set(
+      cluster.filter((e) => e.endMin > startMin).map((e) => e.column),
+    );
+    let col = 0;
+    while (used.has(col)) col++;
+
+    cluster.push({ appt: a, endMin, column: col });
+    result.push({ appointment: a, column: col, columnCount: 0 }); // placeholder; overwritten on flush
+  }
+  if (cluster.length > 0) flush();
+  return result;
+}
+
 function WeekView({
   cursor,
   appointments,
