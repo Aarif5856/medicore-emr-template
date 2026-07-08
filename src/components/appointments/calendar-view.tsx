@@ -619,7 +619,6 @@ function DayApptBlock({
   const gapPct = columnCount > 1 ? 1 : 0;
   const widthPct = 100 / columnCount - gapPct;
   const leftPct = (100 / columnCount) * column;
-  const narrow = columnCount > 1;
 
   return (
     <Popover>
