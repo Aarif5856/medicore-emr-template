@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { PATIENTS_SUMMARY } from "@/data/patients";
 import { PatientsTable } from "@/components/patients/patients-table";
 
-export const Route = createFileRoute("/_app/patients")({
+export const Route = createFileRoute("/_app/patients/")({
   head: () => ({ meta: [{ title: "Patients — MediCore EMR" }] }),
   component: PatientsPage,
 });
