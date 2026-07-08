@@ -460,17 +460,24 @@ function WeekApptBlock({
   appointment,
   top,
   height,
+  column,
+  columnCount,
   ...handlers
 }: {
   appointment: Appointment;
   top: number;
   height: number;
+  column: number;
+  columnCount: number;
 } & Handlers) {
   const s = STATUS_STYLES[appointment.status];
   const startD = parseISO(appointment.start);
   const endD = addMinutes(startD, appointment.durationMin);
   const cancelled = appointment.status === "Cancelled";
   const finalHeight = Math.max(height - 2, 22);
+  const gapPct = columnCount > 1 ? 1 : 0;
+  const widthPct = 100 / columnCount - gapPct;
+  const leftPct = (100 / columnCount) * column;
 
   return (
     <Popover>
@@ -478,12 +485,17 @@ function WeekApptBlock({
         <button
           type="button"
           className={cn(
-            "absolute left-1 right-1 overflow-hidden rounded-md border-l-4 px-1.5 py-1 text-left shadow-sm transition-transform hover:z-10 hover:scale-[1.02]",
+            "absolute overflow-hidden rounded-md border-l-4 px-1.5 py-1 text-left shadow-sm transition-transform hover:z-20 hover:scale-[1.02]",
             s.leftBorder,
             s.chip,
             cancelled && "opacity-60",
           )}
-          style={{ top: `${top}px`, height: `${finalHeight}px` }}
+          style={{
+            top: `${top}px`,
+            height: `${finalHeight}px`,
+            left: `calc(${leftPct}% + 2px)`,
+            width: `calc(${widthPct}% - 4px)`,
+          }}
         >
           <div
             className={cn(
