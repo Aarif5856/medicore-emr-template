@@ -403,6 +403,3 @@ function PatientCombobox({
     </Popover>
   );
 }
-
-// Avoid unused imports warning for `parseISO` (kept for future extension).
-void parseISO;
