@@ -21,7 +21,6 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
-import { initials } from "@/components/patients/status-badge";
 import { AppointmentStatusBadge, STATUS_STYLES } from "@/components/appointments/status-badge";
 import { AppointmentDetail } from "@/components/appointments/appointment-detail";
 import { HOURS_END, HOURS_START, type Appointment } from "@/data/appointments";
