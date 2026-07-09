@@ -93,7 +93,7 @@ const SEEDS: Seed[] = [
     unread: 3,
     messages: [
       { dir: "in", text: "Bed 12 vitals are trending down.", at: min(45) },
-      { dir: "in", text: "BP 92/58, HR 108.", at: min: 44 as unknown as number ? "" : "" , at: min(44) },
+      { dir: "in", text: "BP 92/58, HR 108.", at: min(44) },
       { dir: "in", text: "Calling the on-call doc now.", at: min(12) },
     ],
   },
