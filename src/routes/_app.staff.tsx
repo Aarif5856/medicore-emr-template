@@ -27,6 +27,7 @@ const TONE_STYLES = {
 } as const;
 
 function StaffPage() {
+  const navigate = useNavigate();
   const { staff, addStaff, updateStaff } = useStaff();
   const [addOpen, setAddOpen] = useState(false);
   const [viewTarget, setViewTarget] = useState<StaffMember | null>(null);
