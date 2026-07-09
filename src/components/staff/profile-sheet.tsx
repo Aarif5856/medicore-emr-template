@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { FileText, Mail, MessageSquare, Pencil, Phone } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -31,24 +32,59 @@ import {
   ShiftBadge,
   StatusBadge,
 } from "@/components/staff/badges";
+import { AddStaffDialog } from "@/components/staff/add-staff-dialog";
 
 interface Props {
   staff: StaffMember | null;
   allStaff: StaffMember[];
+  managers?: StaffMember[];
   onOpenChange: (open: boolean) => void;
-  onEdit: (s: StaffMember) => void;
+  onEditSubmit?: (id: string, patch: Partial<StaffMember>) => void;
+  onMessage?: (s: StaffMember) => void;
 }
 
-export function StaffProfileSheet({ staff, allStaff, onOpenChange, onEdit }: Props) {
+export function StaffProfileSheet({
+  staff,
+  allStaff,
+  managers,
+  onOpenChange,
+  onEditSubmit,
+  onMessage,
+}: Props) {
+  const [editOpen, setEditOpen] = useState(false);
+  const derivedManagers =
+    managers ?? allStaff.filter((s) => s.role === "Doctor" || s.role === "Admin");
+
   return (
-    <Sheet open={staff !== null} onOpenChange={onOpenChange}>
-      <SheetContent
-        side="right"
-        className="flex w-full flex-col gap-0 p-0 sm:max-w-2xl"
-      >
-        {staff && <ProfileBody staff={staff} allStaff={allStaff} onEdit={onEdit} />}
-      </SheetContent>
-    </Sheet>
+    <>
+      <Sheet open={staff !== null} onOpenChange={onOpenChange}>
+        <SheetContent
+          side="right"
+          className="flex w-full flex-col gap-0 p-0 sm:max-w-2xl"
+        >
+          {staff && (
+            <ProfileBody
+              staff={staff}
+              allStaff={allStaff}
+              onEdit={() => setEditOpen(true)}
+              onMessage={onMessage ? () => onMessage(staff) : undefined}
+            />
+          )}
+        </SheetContent>
+      </Sheet>
+
+      <AddStaffDialog
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        managers={derivedManagers}
+        initialValue={staff}
+        onSave={(id, patch) => {
+          onEditSubmit?.(id, patch);
+          setEditOpen(false);
+          onOpenChange(false);
+        }}
+      />
+    </>
   );
 }
 
@@ -56,10 +92,12 @@ function ProfileBody({
   staff,
   allStaff,
   onEdit,
+  onMessage,
 }: {
   staff: StaffMember;
   allStaff: StaffMember[];
-  onEdit: (s: StaffMember) => void;
+  onEdit: () => void;
+  onMessage?: () => void;
 }) {
   const manager = allStaff.find((s) => s.id === staff.reportingManagerId);
   return (
