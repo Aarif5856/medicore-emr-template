@@ -623,6 +623,84 @@ function AppearanceSection() {
 
       <Card className="card-glass">
         <CardHeader>
+          <CardTitle className="text-base">Language Direction</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-xs text-muted-foreground">
+            Choose the writing direction. Right-to-left reorients the sidebar, tables, and
+            spacing for languages such as Arabic, Hebrew, Farsi, and Urdu.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {([
+              {
+                key: "ltr",
+                label: "LTR",
+                hint: "Left → Right (English, Spanish, French…)",
+                preview: "Aa",
+              },
+              {
+                key: "rtl",
+                label: "RTL",
+                hint: "Right → Left (العربية, עברית, فارسی…)",
+                preview: "أ",
+              },
+            ] as Array<{ key: Direction; label: string; hint: string; preview: string }>).map(
+              (opt) => {
+                const selected = direction === opt.key;
+                return (
+                  <button
+                    key={opt.key}
+                    type="button"
+                    onClick={() => setDirection(opt.key)}
+                    className={cn(
+                      "group flex items-start gap-3 rounded-lg border p-3 text-start transition-all",
+                      selected
+                        ? "border-primary bg-primary/5 ring-2 ring-primary/40"
+                        : "border-border hover:border-primary/40 hover:bg-muted/40",
+                    )}
+                    aria-pressed={selected}
+                  >
+                    <div
+                      className={cn(
+                        "grid h-11 w-11 shrink-0 place-items-center rounded-md border text-lg font-semibold",
+                        selected
+                          ? "border-primary/40 bg-primary/10 text-primary"
+                          : "border-border bg-muted/40 text-muted-foreground",
+                      )}
+                      aria-hidden
+                      dir={opt.key}
+                    >
+                      <Languages className="h-5 w-5" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-sm font-medium text-foreground">
+                          {opt.label}
+                        </span>
+                        <span
+                          className={cn(
+                            "h-3 w-3 rounded-full border",
+                            selected
+                              ? "border-primary bg-primary"
+                              : "border-border bg-transparent",
+                          )}
+                          aria-hidden
+                        />
+                      </div>
+                      <p className="mt-0.5 line-clamp-2 text-[11px] text-muted-foreground">
+                        {opt.hint}
+                      </p>
+                    </div>
+                  </button>
+                );
+              },
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="card-glass">
+        <CardHeader>
           <CardTitle className="text-base">Display</CardTitle>
         </CardHeader>
         <CardContent>
