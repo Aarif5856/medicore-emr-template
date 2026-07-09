@@ -21,6 +21,7 @@ import {
   Sun,
   Upload,
   User as UserIcon,
+  X,
 } from "lucide-react";
 
 import { Breadcrumbs } from "@/components/breadcrumbs";
