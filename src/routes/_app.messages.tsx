@@ -27,6 +27,12 @@ export const Route = createFileRoute("/_app/messages")({
 
 function MessagesPage() {
   const navigate = useNavigate();
+  const { staffId } = Route.useSearch();
+  const { staff: staffList, updateStaff } = useStaff();
+  const managers = useMemo(
+    () => staffList.filter((s) => s.role === "Doctor" || s.role === "Admin"),
+    [staffList],
+  );
   const [conversations, setConversations] = useState<Conversation[]>(CONVERSATIONS);
   const [activeId, setActiveId] = useState<string | null>(CONVERSATIONS[0]?.id ?? null);
   const [mobileView, setMobileView] = useState<"list" | "thread">("list");
