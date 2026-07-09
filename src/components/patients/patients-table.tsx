@@ -454,7 +454,7 @@ function PageNumbers<TData>({
         onClick={() => table.previousPage()}
         disabled={!table.getCanPreviousPage()}
       >
-        <ChevronLeft className="h-4 w-4" />
+        <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
       </Button>
       {pages.map((p, i) =>
         p === "…" ? (
@@ -480,7 +480,7 @@ function PageNumbers<TData>({
         onClick={() => table.nextPage()}
         disabled={!table.getCanNextPage()}
       >
-        <ChevronRight className="h-4 w-4" />
+        <ChevronRight className="h-4 w-4 rtl:rotate-180" />
       </Button>
     </div>
   );

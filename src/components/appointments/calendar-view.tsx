@@ -68,7 +68,7 @@ export function CalendarView({
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <Button variant="outline" size="icon" className="h-9 w-9" onClick={() => nav(-1)}>
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
           </Button>
           <Button
             variant="outline"
@@ -79,7 +79,7 @@ export function CalendarView({
             Today
           </Button>
           <Button variant="outline" size="icon" className="h-9 w-9" onClick={() => nav(1)}>
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-4 w-4 rtl:rotate-180" />
           </Button>
           <div className="ms-2 text-sm font-semibold text-foreground tabular">{label}</div>
         </div>

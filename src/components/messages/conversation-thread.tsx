@@ -76,7 +76,7 @@ export function ConversationThread({ conversation, onSend, onBack, onViewProfile
             onClick={onBack}
             aria-label="Back to conversations"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
           </Button>
         )}
         <span

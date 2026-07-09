@@ -433,7 +433,7 @@ export function LabTestsTable({
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
             </Button>
             <span className="px-2 text-xs text-muted-foreground tabular">
               Page {pageIndex + 1} of {Math.max(1, table.getPageCount())}
@@ -445,7 +445,7 @@ export function LabTestsTable({
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4 rtl:rotate-180" />
             </Button>
           </div>
         </div>
