@@ -289,10 +289,16 @@ function ProfileBody({
           </Button>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2"
+            onClick={onMessage}
+            disabled={!onMessage}
+          >
             <MessageSquare className="h-4 w-4" /> Message
           </Button>
-          <Button size="sm" className="gap-2" onClick={() => onEdit(staff)}>
+          <Button size="sm" className="gap-2" onClick={onEdit}>
             <Pencil className="h-4 w-4" /> Edit Profile
           </Button>
         </div>
