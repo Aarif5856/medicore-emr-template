@@ -19,9 +19,11 @@ export const Route = createFileRoute("/_app/messages")({
 });
 
 function MessagesPage() {
+  const navigate = useNavigate();
   const [conversations, setConversations] = useState<Conversation[]>(CONVERSATIONS);
   const [activeId, setActiveId] = useState<string | null>(CONVERSATIONS[0]?.id ?? null);
   const [mobileView, setMobileView] = useState<"list" | "thread">("list");
+  const [staffProfile, setStaffProfile] = useState<StaffMember | null>(null);
 
   const active = useMemo(
     () => conversations.find((c) => c.id === activeId) ?? null,
