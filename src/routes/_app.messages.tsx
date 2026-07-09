@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { MessageSquare } from "lucide-react";
+import { z } from "zod";
 
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { PageHeader } from "@/components/coming-soon";
@@ -9,17 +10,29 @@ import { cn } from "@/lib/utils";
 import { ConversationList } from "@/components/messages/conversation-list";
 import { ConversationThread } from "@/components/messages/conversation-thread";
 import { StaffProfileSheet } from "@/components/staff/profile-sheet";
-import { STAFF, type StaffMember } from "@/data/staff";
+import { useStaff } from "@/components/staff/store";
+import { type StaffMember } from "@/data/staff";
 import { toast } from "sonner";
 import { CONVERSATIONS, type Conversation, type Message } from "@/data/messages";
 
+const searchSchema = z.object({
+  staffId: z.string().optional(),
+});
+
 export const Route = createFileRoute("/_app/messages")({
   head: () => ({ meta: [{ title: "Messages — MediCore EMR" }] }),
+  validateSearch: (search) => searchSchema.parse(search),
   component: MessagesPage,
 });
 
 function MessagesPage() {
   const navigate = useNavigate();
+  const { staffId } = Route.useSearch();
+  const { staff: staffList, updateStaff } = useStaff();
+  const managers = useMemo(
+    () => staffList.filter((s) => s.role === "Doctor" || s.role === "Admin"),
+    [staffList],
+  );
   const [conversations, setConversations] = useState<Conversation[]>(CONVERSATIONS);
   const [activeId, setActiveId] = useState<string | null>(CONVERSATIONS[0]?.id ?? null);
   const [mobileView, setMobileView] = useState<"list" | "thread">("list");
@@ -59,10 +72,42 @@ function MessagesPage() {
       navigate({ to: "/patients/$patientId", params: { patientId: active.refId } });
       return;
     }
-    const member = STAFF.find((s) => s.id === active.refId);
+    const member = staffList.find((s) => s.id === active.refId);
     if (member) setStaffProfile(member);
     else toast.error("Staff profile not found");
   };
+
+  const handleMessageStaff = (s: StaffMember) => {
+    // Close the sheet; if a conversation exists for this staff member, activate it.
+    const conv = conversations.find(
+      (c) => c.kind === "staff" && c.refId === s.id,
+    );
+    if (conv) {
+      setActiveId(conv.id);
+      setMobileView("thread");
+      setConversations((prev) =>
+        prev.map((c) => (c.id === conv.id ? { ...c, unread: 0 } : c)),
+      );
+    }
+    setStaffProfile(null);
+  };
+
+  // React to incoming ?staffId=… from other routes (e.g. /staff "Message").
+  useEffect(() => {
+    if (!staffId) return;
+    const conv = conversations.find(
+      (c) => c.kind === "staff" && c.refId === staffId,
+    );
+    if (conv) {
+      setActiveId(conv.id);
+      setMobileView("thread");
+      setConversations((prev) =>
+        prev.map((c) => (c.id === conv.id ? { ...c, unread: 0 } : c)),
+      );
+    }
+    navigate({ to: "/messages", search: {}, replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [staffId]);
 
   return (
     <div className="flex h-full min-h-0 flex-col space-y-4">
@@ -119,9 +164,14 @@ function MessagesPage() {
 
       <StaffProfileSheet
         staff={staffProfile}
-        allStaff={STAFF}
+        allStaff={staffList}
+        managers={managers}
         onOpenChange={(o) => !o && setStaffProfile(null)}
-        onEdit={() => {}}
+        onEditSubmit={(id, patch) => {
+          updateStaff(id, patch);
+          setStaffProfile((prev) => (prev && prev.id === id ? { ...prev, ...patch } : prev));
+        }}
+        onMessage={handleMessageStaff}
       />
     </div>
   );
