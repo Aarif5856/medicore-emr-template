@@ -21,6 +21,7 @@ interface Props {
   conversation: Conversation;
   onSend: (text: string) => void;
   onBack?: () => void;
+  onViewProfile?: () => void;
 }
 
 interface DayGroup {
