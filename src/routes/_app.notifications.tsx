@@ -176,7 +176,7 @@ function NotificationsPage() {
                       <span
                         aria-hidden
                         className={cn(
-                          "absolute left-1.5 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full",
+                          "absolute start-1.5 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full",
                           v.dotClass,
                         )}
                       />
@@ -184,7 +184,7 @@ function NotificationsPage() {
                     <button
                       type="button"
                       onClick={() => handleClick(n)}
-                      className="contents text-left"
+                      className="contents text-start"
                     >
                       <span
                         className={cn(

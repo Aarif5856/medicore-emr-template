@@ -76,7 +76,7 @@ export function ConversationThread({ conversation, onSend, onBack, onViewProfile
             onClick={onBack}
             aria-label="Back to conversations"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
           </Button>
         )}
         <span
@@ -158,8 +158,8 @@ export function ConversationThread({ conversation, onSend, onBack, onViewProfile
                       className={cn(
                         "max-w-[75%] rounded-2xl px-3.5 py-2 text-sm shadow-sm",
                         outgoing
-                          ? "rounded-br-sm bg-primary text-primary-foreground"
-                          : "rounded-bl-sm bg-muted text-foreground",
+                          ? "rounded-ee-sm bg-primary text-primary-foreground"
+                          : "rounded-es-sm bg-muted text-foreground",
                       )}
                     >
                       <div className="whitespace-pre-wrap break-words">{m.text}</div>

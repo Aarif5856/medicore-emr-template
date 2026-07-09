@@ -13,6 +13,7 @@ import {
   Eye,
   EyeOff,
   FileText,
+  Languages,
   Laptop,
   Monitor,
   Moon,
@@ -45,6 +46,7 @@ import {
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/hooks/use-theme";
+import { useDirection, type Direction } from "@/hooks/use-direction";
 
 export const Route = createFileRoute("/_app/settings")({
   head: () => ({
@@ -102,7 +104,7 @@ function SettingsPage() {
                   type="button"
                   onClick={() => setActive(s.key)}
                   className={cn(
-                    "flex items-center gap-2.5 rounded-md px-3 py-2 text-left text-sm transition-colors",
+                    "flex items-center gap-2.5 rounded-md px-3 py-2 text-start text-sm transition-colors",
                     isActive
                       ? "bg-primary/10 font-semibold text-primary"
                       : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
@@ -528,6 +530,7 @@ type ThemeChoice = "light" | "dark" | "system";
 
 function AppearanceSection() {
   const { theme, setTheme } = useTheme();
+  const { direction, setDirection } = useDirection();
   const [choice, setChoice] = useState<ThemeChoice>(theme);
   const [compact, setCompact] = useState(false);
 
@@ -584,7 +587,7 @@ function AppearanceSection() {
                   type="button"
                   onClick={() => handleSelect(opt.key)}
                   className={cn(
-                    "group flex flex-col gap-3 rounded-lg border p-3 text-left transition-all",
+                    "group flex flex-col gap-3 rounded-lg border p-3 text-start transition-all",
                     selected
                       ? "border-primary bg-primary/5 ring-2 ring-primary/40"
                       : "border-border hover:border-primary/40 hover:bg-muted/40",
@@ -614,6 +617,84 @@ function AppearanceSection() {
                 </button>
               );
             })}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="card-glass">
+        <CardHeader>
+          <CardTitle className="text-base">Language Direction</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <p className="text-xs text-muted-foreground">
+            Choose the writing direction. Right-to-left reorients the sidebar, tables, and
+            spacing for languages such as Arabic, Hebrew, Farsi, and Urdu.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {([
+              {
+                key: "ltr",
+                label: "LTR",
+                hint: "Left → Right (English, Spanish, French…)",
+                preview: "Aa",
+              },
+              {
+                key: "rtl",
+                label: "RTL",
+                hint: "Right → Left (العربية, עברית, فارسی…)",
+                preview: "أ",
+              },
+            ] as Array<{ key: Direction; label: string; hint: string; preview: string }>).map(
+              (opt) => {
+                const selected = direction === opt.key;
+                return (
+                  <button
+                    key={opt.key}
+                    type="button"
+                    onClick={() => setDirection(opt.key)}
+                    className={cn(
+                      "group flex items-start gap-3 rounded-lg border p-3 text-start transition-all",
+                      selected
+                        ? "border-primary bg-primary/5 ring-2 ring-primary/40"
+                        : "border-border hover:border-primary/40 hover:bg-muted/40",
+                    )}
+                    aria-pressed={selected}
+                  >
+                    <div
+                      className={cn(
+                        "grid h-11 w-11 shrink-0 place-items-center rounded-md border text-lg font-semibold",
+                        selected
+                          ? "border-primary/40 bg-primary/10 text-primary"
+                          : "border-border bg-muted/40 text-muted-foreground",
+                      )}
+                      aria-hidden
+                      dir={opt.key}
+                    >
+                      <Languages className="h-5 w-5" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-sm font-medium text-foreground">
+                          {opt.label}
+                        </span>
+                        <span
+                          className={cn(
+                            "h-3 w-3 rounded-full border",
+                            selected
+                              ? "border-primary bg-primary"
+                              : "border-border bg-transparent",
+                          )}
+                          aria-hidden
+                        />
+                      </div>
+                      <p className="mt-0.5 line-clamp-2 text-[11px] text-muted-foreground">
+                        {opt.hint}
+                      </p>
+                    </div>
+                  </button>
+                );
+              },
+            )}
           </div>
         </CardContent>
       </Card>
@@ -769,7 +850,7 @@ function SecuritySection() {
     <button
       type="button"
       onClick={() => setShow((s) => ({ ...s, [key]: !s[key] }))}
-      className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+      className="absolute end-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
       aria-label={show[key] ? "Hide password" : "Show password"}
     >
       {show[key] ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -796,7 +877,7 @@ function SecuritySection() {
                         <Input
                           type={show.current ? "text" : "password"}
                           autoComplete="current-password"
-                          className="pr-9"
+                          className="pe-9"
                           {...field}
                         />
                         {eyeButton("current")}
@@ -818,7 +899,7 @@ function SecuritySection() {
                           <Input
                             type={show.next ? "text" : "password"}
                             autoComplete="new-password"
-                            className="pr-9"
+                            className="pe-9"
                             {...field}
                           />
                           {eyeButton("next")}
@@ -839,7 +920,7 @@ function SecuritySection() {
                           <Input
                             type={show.confirm ? "text" : "password"}
                             autoComplete="new-password"
-                            className="pr-9"
+                            className="pe-9"
                             {...field}
                           />
                           {eyeButton("confirm")}
@@ -937,7 +1018,7 @@ function BillingSection() {
               </div>
               <p className="text-xs text-muted-foreground">Renews on August 12, 2026</p>
             </div>
-            <div className="text-right">
+            <div className="text-end">
               <div className="text-2xl font-semibold text-foreground tabular">$249</div>
               <div className="text-[11px] text-muted-foreground">/month · billed annually</div>
             </div>

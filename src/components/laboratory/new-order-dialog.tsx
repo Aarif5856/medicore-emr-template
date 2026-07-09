@@ -325,7 +325,7 @@ function PatientCombobox({
                 >
                   <Check
                     className={cn(
-                      "mr-2 h-4 w-4",
+                      "me-2 h-4 w-4",
                       value === p.id ? "opacity-100" : "opacity-0",
                     )}
                   />
@@ -399,7 +399,7 @@ function TestCombobox({
                   >
                     <Check
                       className={cn(
-                        "mr-2 h-4 w-4",
+                        "me-2 h-4 w-4",
                         value === t.name ? "opacity-100" : "opacity-0",
                       )}
                     />

@@ -56,7 +56,7 @@ export function DepartmentChart() {
               />
               <span className="flex-1 truncate text-foreground">{d.name}</span>
               <span className="text-muted-foreground tabular">{d.count}</span>
-              <span className="w-10 text-right font-semibold text-foreground tabular">
+              <span className="w-10 text-end font-semibold text-foreground tabular">
                 {d.value}%
               </span>
             </li>

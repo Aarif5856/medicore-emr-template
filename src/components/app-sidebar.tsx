@@ -27,6 +27,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useDirection } from "@/hooks/use-direction";
 
 type NavItem = { title: string; url: string; icon: LucideIcon };
 type NavSection = { label: string; items: NavItem[] };
@@ -66,11 +67,12 @@ const NAV: NavSection[] = [
 
 export function AppSidebar() {
   const { state } = useSidebar();
+  const { direction } = useDirection();
   const collapsed = state === "collapsed";
   const pathname = useRouterState({ select: (r) => r.location.pathname });
 
   return (
-    <Sidebar collapsible="icon" className="border-r">
+    <Sidebar collapsible="icon" side={direction === "rtl" ? "right" : "left"}>
       <SidebarHeader className="border-b">
         <div className="flex h-14 items-center gap-2.5 px-2">
           <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground glow-primary">
@@ -110,7 +112,7 @@ export function AppSidebar() {
                       >
                         <Link to={item.url} className="flex items-center gap-3">
                           {active && (
-                            <span className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r bg-primary" />
+                            <span className="absolute start-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-e bg-primary" />
                           )}
                           <item.icon className="h-4 w-4 shrink-0" />
                           <span className="truncate">{item.title}</span>

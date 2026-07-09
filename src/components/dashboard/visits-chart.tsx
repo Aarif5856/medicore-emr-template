@@ -80,7 +80,7 @@ export function VisitsChart() {
           ))}
         </div>
       </CardHeader>
-      <CardContent className="pl-2">
+      <CardContent className="ps-2">
         <div className="h-[280px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={VISITS_MONTHLY} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>

@@ -309,7 +309,7 @@ function AppointmentsTab() {
               <TableHead>Doctor</TableHead>
               <TableHead>Department</TableHead>
               <TableHead>Ref</TableHead>
-              <TableHead className="text-right">Status</TableHead>
+              <TableHead className="text-end">Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -321,7 +321,7 @@ function AppointmentsTab() {
                 <TableCell className="whitespace-nowrap text-sm text-foreground">{a.doctor}</TableCell>
                 <TableCell className="whitespace-nowrap text-sm text-muted-foreground">{a.department}</TableCell>
                 <TableCell className="whitespace-nowrap text-xs text-muted-foreground tabular">{a.id}</TableCell>
-                <TableCell className="text-right">
+                <TableCell className="text-end">
                   <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-semibold", APPT_STATUS_STYLES[a.status])}>
                     {a.status}
                   </span>
@@ -385,7 +385,7 @@ function HistoryTab() {
   return (
     <Card className="card-glass">
       <CardContent className="p-6">
-        <ol className="relative space-y-6 border-l border-border pl-6">
+        <ol className="relative space-y-6 border-s border-border ps-6">
           {MEDICAL_HISTORY.map((e) => {
             const Icon = HISTORY_ICONS[e.kind];
             return (
@@ -398,7 +398,7 @@ function HistoryTab() {
                   <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
                     {e.kind}
                   </span>
-                  <time className="ml-auto text-xs text-muted-foreground tabular">
+                  <time className="ms-auto text-xs text-muted-foreground tabular">
                     {formatDate(e.date)}
                   </time>
                 </div>
@@ -428,8 +428,8 @@ function BillingTab() {
               <TableHead>Invoice #</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Description</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
-              <TableHead className="text-right">Status</TableHead>
+              <TableHead className="text-end">Amount</TableHead>
+              <TableHead className="text-end">Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -438,8 +438,8 @@ function BillingTab() {
                 <TableCell className="whitespace-nowrap text-xs font-medium text-foreground tabular">{i.id}</TableCell>
                 <TableCell className="whitespace-nowrap text-sm text-muted-foreground tabular">{formatDate(i.date)}</TableCell>
                 <TableCell className="text-sm text-foreground">{i.description}</TableCell>
-                <TableCell className="whitespace-nowrap text-right text-sm font-semibold text-foreground tabular">{i.amount}</TableCell>
-                <TableCell className="text-right">
+                <TableCell className="whitespace-nowrap text-end text-sm font-semibold text-foreground tabular">{i.amount}</TableCell>
+                <TableCell className="text-end">
                   <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-semibold", INVOICE_STATUS_STYLES[i.status])}>
                     {i.status}
                   </span>

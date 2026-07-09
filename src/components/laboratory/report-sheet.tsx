@@ -168,7 +168,7 @@ function ResultTable({ test }: { test: LabTest }) {
             <TableHead className="h-9 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
               Reference Range
             </TableHead>
-            <TableHead className="h-9 text-right text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+            <TableHead className="h-9 text-end text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
               Flag
             </TableHead>
           </TableRow>
@@ -181,12 +181,12 @@ function ResultTable({ test }: { test: LabTest }) {
               </TableCell>
               <TableCell className="py-2 text-sm tabular text-foreground">
                 {p.value}
-                {p.unit && <span className="ml-1 text-muted-foreground">{p.unit}</span>}
+                {p.unit && <span className="ms-1 text-muted-foreground">{p.unit}</span>}
               </TableCell>
               <TableCell className="py-2 text-sm tabular text-muted-foreground">
                 {p.refLow}–{p.refHigh} {p.unit}
               </TableCell>
-              <TableCell className="py-2 text-right">
+              <TableCell className="py-2 text-end">
                 <FlagBadge flag={p.flag} />
               </TableCell>
             </TableRow>

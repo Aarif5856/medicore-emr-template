@@ -189,13 +189,13 @@ export function PrescriptionsTable({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-44">
                   <DropdownMenuItem onClick={() => onView(rx)}>
-                    <Eye className="mr-2 h-4 w-4" /> View Details
+                    <Eye className="me-2 h-4 w-4" /> View Details
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => onDispense(rx)}
                     disabled={!canDispense}
                   >
-                    <PackageCheck className="mr-2 h-4 w-4" /> Dispense
+                    <PackageCheck className="me-2 h-4 w-4" /> Dispense
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
@@ -203,7 +203,7 @@ export function PrescriptionsTable({
                     disabled={rx.status === "Cancelled"}
                     className="text-destructive focus:text-destructive"
                   >
-                    <Ban className="mr-2 h-4 w-4" /> Cancel
+                    <Ban className="me-2 h-4 w-4" /> Cancel
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -251,12 +251,12 @@ export function PrescriptionsTable({
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative min-w-[200px] flex-1 sm:max-w-xs">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search prescription, patient, medicine…"
-            className="h-9 pl-9"
+            className="h-9 ps-9"
           />
         </div>
         <Select
@@ -377,7 +377,7 @@ export function PrescriptionsTable({
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
             </Button>
             <span className="px-2 text-xs text-muted-foreground tabular">
               Page {pageIndex + 1} of {Math.max(1, table.getPageCount())}
@@ -389,7 +389,7 @@ export function PrescriptionsTable({
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4 rtl:rotate-180" />
             </Button>
           </div>
         </div>

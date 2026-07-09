@@ -66,17 +66,17 @@ export function AppHeader() {
 
       {/* Search */}
       <div className="relative hidden max-w-md flex-1 md:block">
-        <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <Search className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           placeholder="Search patients, doctors, records…"
-          className="h-9 bg-muted/60 pl-9 pr-16 text-sm focus-visible:bg-background"
+          className="h-9 bg-muted/60 ps-9 pe-16 text-sm focus-visible:bg-background"
         />
-        <kbd className="pointer-events-none absolute right-2 top-1/2 hidden -translate-y-1/2 select-none items-center gap-1 rounded border border-border bg-background px-1.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground sm:inline-flex">
+        <kbd className="pointer-events-none absolute end-2 top-1/2 hidden -translate-y-1/2 select-none items-center gap-1 rounded border border-border bg-background px-1.5 py-0.5 font-mono text-[10px] font-medium text-muted-foreground sm:inline-flex">
           ⌘K
         </kbd>
       </div>
 
-      <div className="ml-auto flex items-center gap-1">
+      <div className="ms-auto flex items-center gap-1">
         <Button
           variant="ghost"
           size="icon"
@@ -110,7 +110,7 @@ export function AppHeader() {
             >
               <Bell className="h-4 w-4" />
               {unreadCount > 0 && (
-                <span className="absolute right-1.5 top-1.5 grid h-4 min-w-4 place-items-center rounded-full bg-destructive px-1 text-[10px] font-semibold text-destructive-foreground tabular">
+                <span className="absolute end-1.5 top-1.5 grid h-4 min-w-4 place-items-center rounded-full bg-destructive px-1 text-[10px] font-semibold text-destructive-foreground tabular">
                   {unreadCount > 99 ? "99+" : unreadCount}
                 </span>
               )}
@@ -142,7 +142,7 @@ export function AppHeader() {
                         type="button"
                         onClick={() => handleItemClick(n)}
                         className={cn(
-                          "grid w-full grid-cols-[auto_minmax(0,1fr)] items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/40",
+                          "grid w-full grid-cols-[auto_minmax(0,1fr)] items-start gap-3 px-4 py-3 text-start transition-colors hover:bg-muted/40",
                           !n.read && "bg-primary/[0.04]",
                         )}
                       >
@@ -189,13 +189,13 @@ export function AppHeader() {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="ml-1 h-9 gap-2 px-1.5">
+            <Button variant="ghost" className="ms-1 h-9 gap-2 px-1.5">
               <Avatar className="h-7 w-7">
                 <AvatarFallback className="bg-primary text-primary-foreground text-[11px] font-semibold">
                   DR
                 </AvatarFallback>
               </Avatar>
-              <div className="hidden text-left leading-tight sm:block">
+              <div className="hidden text-start leading-tight sm:block">
                 <div className="text-xs font-semibold text-foreground">Dr. Reyes</div>
                 <div className="text-[10px] text-muted-foreground">Administrator</div>
               </div>
@@ -205,14 +205,14 @@ export function AppHeader() {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4" /> Profile
+              <User className="me-2 h-4 w-4" /> Profile
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <SettingsIcon className="mr-2 h-4 w-4" /> Settings
+              <SettingsIcon className="me-2 h-4 w-4" /> Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="text-destructive focus:text-destructive">
-              <LogOut className="mr-2 h-4 w-4" /> Logout
+              <LogOut className="me-2 h-4 w-4" /> Logout
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

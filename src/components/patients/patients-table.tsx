@@ -200,15 +200,15 @@ export function PatientsTable() {
                 <DropdownMenuContent align="end" className="w-40">
                   <DropdownMenuItem asChild>
                     <Link to="/patients/$patientId" params={{ patientId: p.id }}>
-                      <Eye className="mr-2 h-4 w-4" /> View
+                      <Eye className="me-2 h-4 w-4" /> View
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Pencil className="mr-2 h-4 w-4" /> Edit
+                    <Pencil className="me-2 h-4 w-4" /> Edit
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className="text-destructive focus:text-destructive">
-                    <Trash2 className="mr-2 h-4 w-4" /> Delete
+                    <Trash2 className="me-2 h-4 w-4" /> Delete
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -249,12 +249,12 @@ export function PatientsTable() {
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative min-w-[200px] flex-1 sm:max-w-xs">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={search}
             onChange={(e) => table.getColumn("patient")?.setFilterValue(e.target.value)}
             placeholder="Search patients…"
-            className="h-9 pl-9"
+            className="h-9 ps-9"
           />
         </div>
 
@@ -296,7 +296,7 @@ export function PatientsTable() {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="ml-auto h-9 gap-2">
+            <Button variant="outline" size="sm" className="ms-auto h-9 gap-2">
               <Columns3 className="h-4 w-4" />
               Columns
             </Button>
@@ -380,7 +380,7 @@ export function PatientsTable() {
           Showing <span className="font-medium text-foreground">{firstRow}-{lastRow}</span> of{" "}
           <span className="font-medium text-foreground">{totalRows}</span>
           {Object.keys(rowSelection).length > 0 && (
-            <span className="ml-3">
+            <span className="ms-3">
               · {Object.keys(rowSelection).length} selected
             </span>
           )}
@@ -454,7 +454,7 @@ function PageNumbers<TData>({
         onClick={() => table.previousPage()}
         disabled={!table.getCanPreviousPage()}
       >
-        <ChevronLeft className="h-4 w-4" />
+        <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
       </Button>
       {pages.map((p, i) =>
         p === "…" ? (
@@ -480,7 +480,7 @@ function PageNumbers<TData>({
         onClick={() => table.nextPage()}
         disabled={!table.getCanNextPage()}
       >
-        <ChevronRight className="h-4 w-4" />
+        <ChevronRight className="h-4 w-4 rtl:rotate-180" />
       </Button>
     </div>
   );

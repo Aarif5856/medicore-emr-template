@@ -46,7 +46,7 @@ export function RevenueMiniChart() {
           </div>
           <div className="mt-0.5 text-lg font-semibold text-foreground tabular">
             ${latest}k
-            <span className="ml-2 text-[11px] font-medium text-[color:var(--accent-teal)]">
+            <span className="ms-2 text-[11px] font-medium text-[color:var(--accent-teal)]">
               +{growth}% · 6mo
             </span>
           </div>

@@ -186,17 +186,17 @@ export function StaffTable({ staff, onView, onEdit, onDeactivate }: Props) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-44">
                   <DropdownMenuItem onClick={() => onView(s)}>
-                    <Eye className="mr-2 h-4 w-4" /> View Profile
+                    <Eye className="me-2 h-4 w-4" /> View Profile
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => onEdit(s)}>
-                    <Pencil className="mr-2 h-4 w-4" /> Edit
+                    <Pencil className="me-2 h-4 w-4" /> Edit
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onClick={() => onDeactivate(s)}
                     className="text-destructive focus:text-destructive"
                   >
-                    <UserMinus className="mr-2 h-4 w-4" />
+                    <UserMinus className="me-2 h-4 w-4" />
                     {s.status === "Inactive" ? "Reactivate" : "Deactivate"}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -282,12 +282,12 @@ export function StaffTable({ staff, onView, onEdit, onDeactivate }: Props) {
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative min-w-[200px] flex-1 sm:max-w-xs">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={search}
             onChange={(e) => table.getColumn("staff")?.setFilterValue(e.target.value)}
             placeholder="Search name or employee ID…"
-            className="h-9 pl-9"
+            className="h-9 ps-9"
           />
         </div>
 
@@ -415,7 +415,7 @@ export function StaffTable({ staff, onView, onEdit, onDeactivate }: Props) {
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
             </Button>
             <span className="px-2 text-xs text-muted-foreground tabular">
               Page {pageIndex + 1} of {Math.max(1, table.getPageCount())}
@@ -427,7 +427,7 @@ export function StaffTable({ staff, onView, onEdit, onDeactivate }: Props) {
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
             >
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4 rtl:rotate-180" />
             </Button>
           </div>
         </div>
