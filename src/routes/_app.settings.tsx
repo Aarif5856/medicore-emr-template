@@ -957,7 +957,13 @@ function BillingSection() {
           </ul>
         </div>
         <div className="flex justify-end">
-          <Button variant="outline" size="sm">Manage Subscription</Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => toast("Subscription management is available in the full version")}
+          >
+            Manage Subscription
+          </Button>
         </div>
       </CardContent>
     </Card>
