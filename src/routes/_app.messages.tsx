@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { MessageSquare } from "lucide-react";
 
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -8,6 +8,9 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { ConversationList } from "@/components/messages/conversation-list";
 import { ConversationThread } from "@/components/messages/conversation-thread";
+import { StaffProfileSheet } from "@/components/staff/profile-sheet";
+import { STAFF, type StaffMember } from "@/data/staff";
+import { toast } from "sonner";
 import { CONVERSATIONS, type Conversation, type Message } from "@/data/messages";
 
 export const Route = createFileRoute("/_app/messages")({
@@ -16,9 +19,11 @@ export const Route = createFileRoute("/_app/messages")({
 });
 
 function MessagesPage() {
+  const navigate = useNavigate();
   const [conversations, setConversations] = useState<Conversation[]>(CONVERSATIONS);
   const [activeId, setActiveId] = useState<string | null>(CONVERSATIONS[0]?.id ?? null);
   const [mobileView, setMobileView] = useState<"list" | "thread">("list");
+  const [staffProfile, setStaffProfile] = useState<StaffMember | null>(null);
 
   const active = useMemo(
     () => conversations.find((c) => c.id === activeId) ?? null,
@@ -46,6 +51,17 @@ function MessagesPage() {
         c.id === activeId ? { ...c, messages: [...c.messages, newMsg] } : c,
       ),
     );
+  };
+
+  const handleViewProfile = () => {
+    if (!active) return;
+    if (active.kind === "patient") {
+      navigate({ to: "/patients/$patientId", params: { patientId: active.refId } });
+      return;
+    }
+    const member = STAFF.find((s) => s.id === active.refId);
+    if (member) setStaffProfile(member);
+    else toast.error("Staff profile not found");
   };
 
   return (
@@ -82,6 +98,7 @@ function MessagesPage() {
                 conversation={active}
                 onSend={handleSend}
                 onBack={() => setMobileView("list")}
+                onViewProfile={handleViewProfile}
               />
             ) : (
               <div className="grid h-full place-items-center p-8 text-center">
@@ -99,6 +116,13 @@ function MessagesPage() {
           </section>
         </div>
       </Card>
+
+      <StaffProfileSheet
+        staff={staffProfile}
+        allStaff={STAFF}
+        onOpenChange={(o) => !o && setStaffProfile(null)}
+        onEdit={() => {}}
+      />
     </div>
   );
 }
