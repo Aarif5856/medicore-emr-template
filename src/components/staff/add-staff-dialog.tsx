@@ -193,9 +193,11 @@ export function AddStaffDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[92vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Add Staff Member</DialogTitle>
+          <DialogTitle>{isEdit ? "Edit Staff Member" : "Add Staff Member"}</DialogTitle>
           <DialogDescription>
-            Create a new staff record with personal and employment details.
+            {isEdit
+              ? "Update this staff member's personal and employment details."
+              : "Create a new staff record with personal and employment details."}
           </DialogDescription>
         </DialogHeader>
 
