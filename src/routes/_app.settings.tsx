@@ -309,6 +309,60 @@ function ClinicSection() {
     },
   });
 
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleFile = (file: File) => {
+    if (!["image/png", "image/svg+xml"].includes(file.type)) {
+      toast.error("Only PNG or SVG images are allowed");
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("Image must be smaller than 2 MB");
+      return;
+    }
+    if (logoPreview) {
+      URL.revokeObjectURL(logoPreview);
+    }
+    setLogoPreview(URL.createObjectURL(file));
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) handleFile(file);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleRemove = () => {
+    if (logoPreview) {
+      URL.revokeObjectURL(logoPreview);
+    }
+    setLogoPreview(null);
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) handleFile(file);
+  };
+
   const onSubmit = (values: ClinicForm) => {
     form.reset(values);
     toast.success("Clinic information saved");
@@ -393,14 +447,66 @@ function ClinicSection() {
 
             <div className="space-y-2">
               <Label>Logo</Label>
-              <div className="flex flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-border/70 bg-muted/30 px-4 py-8 text-center">
-                <div className="grid h-10 w-10 place-items-center rounded-full bg-muted text-muted-foreground">
-                  <Upload className="h-5 w-5" />
-                </div>
-                <div className="text-xs text-muted-foreground">
-                  Drop a logo image or <span className="text-primary">browse</span>
-                </div>
-                <div className="text-[10px] text-muted-foreground">PNG or SVG, up to 2 MB</div>
+              <div
+                onClick={() => inputRef.current?.click()}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                className={cn(
+                  "flex cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed px-4 py-8 text-center transition-colors",
+                  isDragging
+                    ? "border-primary bg-primary/5"
+                    : "border-border/70 bg-muted/30 hover:bg-muted/50",
+                )}
+                role="button"
+                aria-label="Upload clinic logo"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    inputRef.current?.click();
+                  }
+                }}
+              >
+                <input
+                  ref={inputRef}
+                  type="file"
+                  accept="image/png,image/svg+xml"
+                  className="sr-only"
+                  onChange={handleInputChange}
+                  aria-hidden="true"
+                />
+                {logoPreview ? (
+                  <div className="flex flex-col items-center gap-3">
+                    <img
+                      src={logoPreview}
+                      alt="Selected clinic logo preview"
+                      className="h-20 w-auto max-w-[12rem] object-contain"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemove();
+                      }}
+                      className="h-7 gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="h-3.5 w-3.5" /> Remove
+                    </Button>
+                  </div>
+                ) : (
+                  <>
+                    <div className="grid h-10 w-10 place-items-center rounded-full bg-muted text-muted-foreground">
+                      <Upload className="h-5 w-5" />
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      Drop a logo image or{" "}
+                      <span className="font-medium text-primary">browse</span>
+                    </div>
+                    <div className="text-[10px] text-muted-foreground">PNG or SVG, up to 2 MB</div>
+                  </>
+                )}
               </div>
             </div>
 
