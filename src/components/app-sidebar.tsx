@@ -27,6 +27,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useDirection } from "@/hooks/use-direction";
 
 type NavItem = { title: string; url: string; icon: LucideIcon };
 type NavSection = { label: string; items: NavItem[] };
