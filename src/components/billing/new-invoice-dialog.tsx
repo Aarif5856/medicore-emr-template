@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { format } from "date-fns";
@@ -30,15 +30,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Select,
@@ -75,7 +68,16 @@ const schema = z.object({
   lines: z.array(lineSchema).min(1, "At least one line item required"),
 });
 
-type FormValues = z.input<typeof schema>;
+type FormInputValues = z.input<typeof schema>;
+type FormSubmitValues = z.output<typeof schema>;
+
+type LineFieldError = {
+  description?: { message?: string };
+  qty?: { message?: string };
+  unitPrice?: { message?: string };
+};
+
+type LineInputValue = FormInputValues["lines"][number];
 
 interface Props {
   open: boolean;
@@ -84,7 +86,7 @@ interface Props {
 }
 
 export function NewInvoiceDialog({ open, onOpenChange, onCreate }: Props) {
-  const form = useForm<FormValues>({
+  const form = useForm<FormInputValues, undefined, FormSubmitValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       patientId: "",
@@ -116,8 +118,17 @@ export function NewInvoiceDialog({ open, onOpenChange, onCreate }: Props) {
     }
   }, [open, form]);
 
-  const watchedLines = form.watch("lines");
-  const watchedDiscount = form.watch("discount");
+  const watchedLines = useWatch({ control: form.control, name: "lines" }) ?? [];
+  const watchedPatientId = useWatch({ control: form.control, name: "patientId" }) ?? "";
+  const watchedService =
+    useWatch({ control: form.control, name: "service" }) ?? "Consultation";
+  const watchedIssueDate = useWatch({ control: form.control, name: "issueDate" }) ?? "";
+  const watchedDueDate = useWatch({ control: form.control, name: "dueDate" }) ?? "";
+  const watchedDiscount = useWatch({ control: form.control, name: "discount" }) ?? 0;
+  const lineItemsMessage =
+    typeof form.formState.errors.lines?.message === "string"
+      ? form.formState.errors.lines.message
+      : undefined;
 
   const totals = useMemo(() => {
     const subtotal = (watchedLines ?? []).reduce((s, l) => {
@@ -131,7 +142,7 @@ export function NewInvoiceDialog({ open, onOpenChange, onCreate }: Props) {
     return { subtotal: +subtotal.toFixed(2), tax, discount, total };
   }, [watchedLines, watchedDiscount]);
 
-  const onSubmit = (values: FormValues) => {
+  const onSubmit = (values: FormSubmitValues) => {
     const patient = PATIENTS.find((p) => p.id === values.patientId);
     if (!patient) return;
     const created = onCreate({
@@ -164,258 +175,274 @@ export function NewInvoiceDialog({ open, onOpenChange, onCreate }: Props) {
           </DialogDescription>
         </DialogHeader>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-            <FormField
-              control={form.control}
-              name="patientId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Patient</FormLabel>
-                  <PatientCombobox value={field.value} onChange={field.onChange} />
-                  <FormMessage />
-                </FormItem>
-              )}
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+          <div className="space-y-2">
+            <Label>Patient</Label>
+            <PatientCombobox
+              value={watchedPatientId}
+              onChange={(patientId) => {
+                form.setValue("patientId", patientId, { shouldValidate: true });
+              }}
             />
+            {form.formState.errors.patientId?.message && (
+              <p className="text-[0.8rem] font-medium text-destructive">
+                {form.formState.errors.patientId.message}
+              </p>
+            )}
+          </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-              <FormField
-                control={form.control}
-                name="service"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Service Type</FormLabel>
-                    <Select
-                      value={field.value}
-                      onValueChange={(v) => field.onChange(v as InvoiceService)}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="h-9">
-                          <SelectValue />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {INVOICE_SERVICES.map((s) => (
-                          <SelectItem key={s} value={s}>
-                            {s}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="issueDate"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>Issue Date</FormLabel>
-                    <DatePickerField value={field.value} onChange={field.onChange} />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="dueDate"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>Due Date</FormLabel>
-                    <DatePickerField value={field.value} onChange={field.onChange} />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="space-y-2">
+              <Label>Service Type</Label>
+              <Select
+                value={watchedService}
+                onValueChange={(v) => {
+                  form.setValue("service", v as InvoiceService, { shouldValidate: true });
+                }}
+              >
+                <SelectTrigger className="h-9">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {INVOICE_SERVICES.map((s) => (
+                    <SelectItem key={s} value={s}>
+                      {s}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {form.formState.errors.service?.message && (
+                <p className="text-[0.8rem] font-medium text-destructive">
+                  {form.formState.errors.service.message}
+                </p>
+              )}
             </div>
 
-            {/* Line items */}
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Line Items</span>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="h-8 gap-1"
-                  onClick={() => append({ description: "", qty: 1, unitPrice: 0 })}
-                >
-                  <Plus className="h-3.5 w-3.5" /> Add Line
-                </Button>
-              </div>
+              <Label>Issue Date</Label>
+              <DatePickerField
+                value={watchedIssueDate}
+                onChange={(iso) => {
+                  form.setValue("issueDate", iso, { shouldValidate: true });
+                }}
+              />
+              {form.formState.errors.issueDate?.message && (
+                <p className="text-[0.8rem] font-medium text-destructive">
+                  {form.formState.errors.issueDate.message}
+                </p>
+              )}
+            </div>
 
-              <div className="space-y-2 rounded-lg border bg-card p-2">
-                {fields.map((f, i) => (
+            <div className="space-y-2">
+              <Label>Due Date</Label>
+              <DatePickerField
+                value={watchedDueDate}
+                onChange={(iso) => {
+                  form.setValue("dueDate", iso, { shouldValidate: true });
+                }}
+              />
+              {form.formState.errors.dueDate?.message && (
+                <p className="text-[0.8rem] font-medium text-destructive">
+                  {form.formState.errors.dueDate.message}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Line items */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium">Line Items</span>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-8 gap-1"
+                onClick={() => append({ description: "", qty: 1, unitPrice: 0 })}
+              >
+                <Plus className="h-3.5 w-3.5" /> Add Line
+              </Button>
+            </div>
+
+            <div className="space-y-2 rounded-lg border bg-card p-2">
+              {fields.length === 0 ? (
+                <div className="rounded-md border border-dashed bg-muted/30 px-3 py-6 text-center text-sm text-muted-foreground">
+                  No line items added.
+                </div>
+              ) : (
+                fields.map((f, i) => {
+                  const lineValue: LineInputValue = watchedLines[i] ?? {
+                    description: "",
+                    qty: 1,
+                    unitPrice: 0,
+                  };
+                  const lineError = Array.isArray(form.formState.errors.lines)
+                    ? (form.formState.errors.lines[i] as LineFieldError | undefined)
+                    : undefined;
+                  return (
                   <div
                     key={f.id}
                     className="grid grid-cols-12 items-start gap-2"
                   >
-                    <FormField
-                      control={form.control}
-                      name={`lines.${i}.description`}
-                      render={({ field }) => (
-                        <FormItem className="col-span-6">
-                          <FormControl>
-                            <Input
-                              placeholder="Description"
-                              className="h-9"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
+                    <div className="col-span-6 space-y-2">
+                      <Input
+                        placeholder="Description"
+                        className="h-9"
+                        value={lineValue.description ?? ""}
+                        onChange={(event) => {
+                          form.setValue(`lines.${i}.description`, event.target.value, {
+                            shouldDirty: true,
+                            shouldValidate: false,
+                          });
+                        }}
+                      />
+                      {lineError?.description?.message && (
+                        <p className="text-[0.8rem] font-medium text-destructive">
+                          {lineError.description.message}
+                        </p>
                       )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`lines.${i}.qty`}
-                      render={({ field }) => (
-                        <FormItem className="col-span-2">
-                          <FormControl>
-                            <Input
-                              type="number"
-                              min={1}
-                              placeholder="Qty"
-                              className="h-9 tabular"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
+                    </div>
+                    <div className="col-span-2 space-y-2">
+                      <Input
+                        type="number"
+                        min={1}
+                        placeholder="Qty"
+                        className="h-9 tabular"
+                        value={lineValue.qty ?? ""}
+                        onChange={(event) => {
+                          form.setValue(`lines.${i}.qty`, event.target.valueAsNumber, {
+                            shouldDirty: true,
+                            shouldValidate: false,
+                          });
+                        }}
+                      />
+                      {lineError?.qty?.message && (
+                        <p className="text-[0.8rem] font-medium text-destructive">
+                          {lineError.qty.message}
+                        </p>
                       )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`lines.${i}.unitPrice`}
-                      render={({ field }) => (
-                        <FormItem className="col-span-3">
-                          <FormControl>
-                            <Input
-                              type="number"
-                              min={0}
-                              step="0.01"
-                              placeholder="Unit price"
-                              className="h-9 tabular"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
+                    </div>
+                    <div className="col-span-3 space-y-2">
+                      <Input
+                        type="number"
+                        min={0}
+                        step="0.01"
+                        placeholder="Unit price"
+                        className="h-9 tabular"
+                        value={lineValue.unitPrice ?? ""}
+                        onChange={(event) => {
+                          form.setValue(`lines.${i}.unitPrice`, event.target.valueAsNumber, {
+                            shouldDirty: true,
+                            shouldValidate: false,
+                          });
+                        }}
+                      />
+                      {lineError?.unitPrice?.message && (
+                        <p className="text-[0.8rem] font-medium text-destructive">
+                          {lineError.unitPrice.message}
+                        </p>
                       )}
-                    />
+                    </div>
                     <div className="col-span-1 flex justify-end">
                       <Button
                         type="button"
                         variant="ghost"
                         size="icon"
                         className="h-9 w-9 text-muted-foreground hover:text-destructive"
-                        onClick={() => fields.length > 1 && remove(i)}
-                        disabled={fields.length === 1}
+                        onClick={() => remove(i)}
                         aria-label="Remove line"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   </div>
-                ))}
-              </div>
+                  );
+                })
+              )}
+            </div>
 
-              {form.formState.errors.lines?.message && (
-                <p className="text-[11px] text-destructive">
-                  {form.formState.errors.lines.message as string}
+            {lineItemsMessage && (
+              <p className="text-[11px] text-destructive">{lineItemsMessage}</p>
+            )}
+          </div>
+
+          {/* Totals + discount */}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label>Discount ($)</Label>
+              <Input
+                type="number"
+                min={0}
+                step="0.01"
+                className="h-9 tabular"
+                {...form.register("discount")}
+              />
+              {form.formState.errors.discount?.message && (
+                <p className="text-[0.8rem] font-medium text-destructive">
+                  {form.formState.errors.discount.message}
                 </p>
               )}
             </div>
 
-            {/* Totals + discount */}
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <FormField
-                control={form.control}
-                name="discount"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Discount ($)</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        min={0}
-                        step="0.01"
-                        className="h-9 tabular"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+            <div className="rounded-lg border bg-muted/30 p-3 text-sm">
+              <dl className="space-y-1">
+                <div className="flex justify-between text-muted-foreground">
+                  <dt>Subtotal</dt>
+                  <dd className="tabular text-foreground">
+                    {formatCurrency(totals.subtotal)}
+                  </dd>
+                </div>
+                <div className="flex justify-between text-muted-foreground">
+                  <dt>Tax ({Math.round(TAX_RATE * 100)}%)</dt>
+                  <dd className="tabular text-foreground">
+                    {formatCurrency(totals.tax)}
+                  </dd>
+                </div>
+                {totals.discount > 0 && (
+                  <div className="flex justify-between text-muted-foreground">
+                    <dt>Discount</dt>
+                    <dd className="tabular text-[color:var(--accent-teal)]">
+                      −{formatCurrency(totals.discount)}
+                    </dd>
+                  </div>
                 )}
-              />
-
-              <div className="rounded-lg border bg-muted/30 p-3 text-sm">
-                <dl className="space-y-1">
-                  <div className="flex justify-between text-muted-foreground">
-                    <dt>Subtotal</dt>
-                    <dd className="tabular text-foreground">
-                      {formatCurrency(totals.subtotal)}
-                    </dd>
-                  </div>
-                  <div className="flex justify-between text-muted-foreground">
-                    <dt>Tax ({Math.round(TAX_RATE * 100)}%)</dt>
-                    <dd className="tabular text-foreground">
-                      {formatCurrency(totals.tax)}
-                    </dd>
-                  </div>
-                  {totals.discount > 0 && (
-                    <div className="flex justify-between text-muted-foreground">
-                      <dt>Discount</dt>
-                      <dd className="tabular text-[color:var(--accent-teal)]">
-                        −{formatCurrency(totals.discount)}
-                      </dd>
-                    </div>
-                  )}
-                  <div className="mt-1 flex justify-between border-t pt-1.5">
-                    <dt className="font-semibold text-foreground">Total</dt>
-                    <dd className="font-bold tabular text-foreground">
-                      {formatCurrency(totals.total)}
-                    </dd>
-                  </div>
-                </dl>
-              </div>
+                <div className="mt-1 flex justify-between border-t pt-1.5">
+                  <dt className="font-semibold text-foreground">Total</dt>
+                  <dd className="font-bold tabular text-foreground">
+                    {formatCurrency(totals.total)}
+                  </dd>
+                </div>
+              </dl>
             </div>
+          </div>
 
-            <FormField
-              control={form.control}
-              name="notes"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Notes</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Optional notes for the patient"
-                      rows={2}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+          <div className="space-y-2">
+            <Label>Notes</Label>
+            <Textarea
+              placeholder="Optional notes for the patient"
+              rows={2}
+              {...form.register("notes")}
             />
+            {form.formState.errors.notes?.message && (
+              <p className="text-[0.8rem] font-medium text-destructive">
+                {form.formState.errors.notes.message}
+              </p>
+            )}
+          </div>
 
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => onOpenChange(false)}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" className="glow-primary">
-                Create Invoice
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" className="glow-primary">
+              Create Invoice
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
@@ -432,19 +459,17 @@ function DatePickerField({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <FormControl>
-          <Button
-            type="button"
-            variant="outline"
-            className={cn(
-              "h-9 w-full justify-start text-left font-normal",
-              !value && "text-muted-foreground",
-            )}
-          >
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {date ? format(date, "PP") : "Pick a date"}
-          </Button>
-        </FormControl>
+        <Button
+          type="button"
+          variant="outline"
+          className={cn(
+            "h-9 w-full justify-start text-left font-normal",
+            !value && "text-muted-foreground",
+          )}
+        >
+          <CalendarIcon className="mr-2 h-4 w-4" />
+          {date ? format(date, "PP") : "Pick a date"}
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
