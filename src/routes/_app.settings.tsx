@@ -453,10 +453,12 @@ function AppearanceSection() {
   ];
 
   // Keep local "choice" reflecting external theme changes (e.g. header toggle)
-  // unless user picked "system", which we preserve.
-  if (choice !== "system" && choice !== theme) {
-    setChoice(theme);
-  }
+  // unless the user picked "system", which we preserve.
+  useEffect(() => {
+    if (choice !== "system" && choice !== theme) {
+      setChoice(theme);
+    }
+  }, [theme, choice]);
 
   return (
     <div className="space-y-6">
