@@ -40,7 +40,7 @@ function groupByDay(messages: Message[]): DayGroup[] {
   return groups;
 }
 
-export function ConversationThread({ conversation, onSend, onBack }: Props) {
+export function ConversationThread({ conversation, onSend, onBack, onViewProfile }: Props) {
   const [draft, setDraft] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const groups = useMemo(() => groupByDay(conversation.messages), [conversation.messages]);
