@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { MessageSquare } from "lucide-react";
+import { z } from "zod";
 
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { PageHeader } from "@/components/coming-soon";
@@ -9,12 +10,18 @@ import { cn } from "@/lib/utils";
 import { ConversationList } from "@/components/messages/conversation-list";
 import { ConversationThread } from "@/components/messages/conversation-thread";
 import { StaffProfileSheet } from "@/components/staff/profile-sheet";
-import { STAFF, type StaffMember } from "@/data/staff";
+import { useStaff } from "@/components/staff/store";
+import { type StaffMember } from "@/data/staff";
 import { toast } from "sonner";
 import { CONVERSATIONS, type Conversation, type Message } from "@/data/messages";
 
+const searchSchema = z.object({
+  staffId: z.string().optional(),
+});
+
 export const Route = createFileRoute("/_app/messages")({
   head: () => ({ meta: [{ title: "Messages — MediCore EMR" }] }),
+  validateSearch: (search) => searchSchema.parse(search),
   component: MessagesPage,
 });
 
