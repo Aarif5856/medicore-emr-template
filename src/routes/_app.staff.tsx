@@ -56,7 +56,17 @@ function StaffPage() {
   };
 
   const handleEdit = (s: StaffMember) => {
-    toast.message(`Editing ${fullName(s)} (demo)`);
+    // Row-level "Edit" opens the profile sheet; the sheet's "Edit Profile" button opens the edit form.
+    handleView(s);
+  };
+
+  const handleEditSubmit = (id: string, patch: Partial<StaffMember>) => {
+    updateStaff(id, patch);
+    setViewTarget((prev) => (prev && prev.id === id ? { ...prev, ...patch } : prev));
+  };
+
+  const handleMessage = (s: StaffMember) => {
+    navigate({ to: "/messages", search: { staffId: s.id } });
   };
 
   const handleDeactivate = (s: StaffMember) => {
