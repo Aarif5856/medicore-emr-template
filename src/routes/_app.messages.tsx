@@ -98,6 +98,7 @@ function MessagesPage() {
                 conversation={active}
                 onSend={handleSend}
                 onBack={() => setMobileView("list")}
+                onViewProfile={handleViewProfile}
               />
             ) : (
               <div className="grid h-full place-items-center p-8 text-center">
