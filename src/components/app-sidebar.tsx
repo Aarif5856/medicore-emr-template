@@ -11,8 +11,8 @@ import {
   MessageSquare,
   Bell,
   Settings,
-  Plus,
 } from "lucide-react";
+import { LogoMark } from "@/components/brand/logo-mark";
 import type { LucideIcon } from "lucide-react";
 
 import {
