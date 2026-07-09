@@ -53,6 +53,17 @@ function MessagesPage() {
     );
   };
 
+  const handleViewProfile = () => {
+    if (!active) return;
+    if (active.kind === "patient") {
+      navigate({ to: "/patients/$patientId", params: { patientId: active.refId } });
+      return;
+    }
+    const member = STAFF.find((s) => s.id === active.refId);
+    if (member) setStaffProfile(member);
+    else toast.error("Staff profile not found");
+  };
+
   return (
     <div className="flex h-full min-h-0 flex-col space-y-4">
       <Breadcrumbs />
