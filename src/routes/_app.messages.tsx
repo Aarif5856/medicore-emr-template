@@ -164,9 +164,14 @@ function MessagesPage() {
 
       <StaffProfileSheet
         staff={staffProfile}
-        allStaff={STAFF}
+        allStaff={staffList}
+        managers={managers}
         onOpenChange={(o) => !o && setStaffProfile(null)}
-        onEdit={() => {}}
+        onEditSubmit={(id, patch) => {
+          updateStaff(id, patch);
+          setStaffProfile((prev) => (prev && prev.id === id ? { ...prev, ...patch } : prev));
+        }}
+        onMessage={handleMessageStaff}
       />
     </div>
   );
