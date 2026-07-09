@@ -13,22 +13,24 @@ export const Route = createFileRoute("/_app")({
 function AppLayout() {
   return (
     <StaffProvider>
-      <SidebarProvider
-        style={
-          {
-            "--sidebar-width": "16.25rem", // 260px
-            "--sidebar-width-icon": "4.5rem", // 72px
-          } as React.CSSProperties
-        }
-      >
-        <AppSidebar />
-        <SidebarInset className="min-w-0 bg-background">
-          <AppHeader />
-          <main className="mx-auto w-full max-w-[1600px] flex-1 p-6">
-            <Outlet />
-          </main>
-        </SidebarInset>
-      </SidebarProvider>
+      <NotificationsProvider>
+        <SidebarProvider
+          style={
+            {
+              "--sidebar-width": "16.25rem", // 260px
+              "--sidebar-width-icon": "4.5rem", // 72px
+            } as React.CSSProperties
+          }
+        >
+          <AppSidebar />
+          <SidebarInset className="min-w-0 bg-background">
+            <AppHeader />
+            <main className="mx-auto w-full max-w-[1600px] flex-1 p-6">
+              <Outlet />
+            </main>
+          </SidebarInset>
+        </SidebarProvider>
+      </NotificationsProvider>
     </StaffProvider>
   );
 }
