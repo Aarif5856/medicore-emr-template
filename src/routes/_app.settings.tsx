@@ -46,6 +46,7 @@ import {
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/hooks/use-theme";
+import { useDirection, type Direction } from "@/hooks/use-direction";
 
 export const Route = createFileRoute("/_app/settings")({
   head: () => ({
