@@ -13,6 +13,7 @@ import {
   Eye,
   EyeOff,
   FileText,
+  Languages,
   Laptop,
   Monitor,
   Moon,
