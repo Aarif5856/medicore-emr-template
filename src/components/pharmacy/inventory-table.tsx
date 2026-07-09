@@ -157,17 +157,17 @@ export function InventoryTable({ medicines, onEdit, onRestock, onDelete }: Props
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-40">
                   <DropdownMenuItem onClick={() => onEdit(m)}>
-                    <Pencil className="mr-2 h-4 w-4" /> Edit
+                    <Pencil className="me-2 h-4 w-4" /> Edit
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => onRestock(m)}>
-                    <Package className="mr-2 h-4 w-4" /> Restock
+                    <Package className="me-2 h-4 w-4" /> Restock
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onClick={() => onDelete(m)}
                     className="text-destructive focus:text-destructive"
                   >
-                    <Trash2 className="mr-2 h-4 w-4" /> Delete
+                    <Trash2 className="me-2 h-4 w-4" /> Delete
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -214,12 +214,12 @@ export function InventoryTable({ medicines, onEdit, onRestock, onDelete }: Props
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative min-w-[200px] flex-1 sm:max-w-xs">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search medicine…"
-            className="h-9 pl-9"
+            className="h-9 ps-9"
           />
         </div>
 
@@ -240,7 +240,7 @@ export function InventoryTable({ medicines, onEdit, onRestock, onDelete }: Props
           </SelectContent>
         </Select>
 
-        <label className="ml-auto flex items-center gap-2 rounded-md border bg-card px-3 py-1.5">
+        <label className="ms-auto flex items-center gap-2 rounded-md border bg-card px-3 py-1.5">
           <Switch id="low-only" checked={lowOnly} onCheckedChange={setLowOnly} />
           <Label htmlFor="low-only" className="cursor-pointer text-xs font-medium">
             Low stock only

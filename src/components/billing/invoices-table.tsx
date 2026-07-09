@@ -226,19 +226,19 @@ export function InvoicesTable({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
                   <DropdownMenuItem onClick={() => onView(inv)}>
-                    <Eye className="mr-2 h-4 w-4" /> View Invoice
+                    <Eye className="me-2 h-4 w-4" /> View Invoice
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => onSendReminder(inv)}
                     disabled={!canRemind}
                   >
-                    <Send className="mr-2 h-4 w-4" /> Send Reminder
+                    <Send className="me-2 h-4 w-4" /> Send Reminder
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => onMarkPaid(inv)}
                     disabled={!canPay}
                   >
-                    <CheckCircle2 className="mr-2 h-4 w-4" /> Mark as Paid
+                    <CheckCircle2 className="me-2 h-4 w-4" /> Mark as Paid
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
@@ -246,7 +246,7 @@ export function InvoicesTable({
                     disabled={!canCancel}
                     className="text-destructive focus:text-destructive"
                   >
-                    <Ban className="mr-2 h-4 w-4" /> Cancel
+                    <Ban className="me-2 h-4 w-4" /> Cancel
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -329,12 +329,12 @@ export function InvoicesTable({
 
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative min-w-[200px] flex-1 sm:max-w-xs">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={search}
             onChange={(e) => table.getColumn("patient")?.setFilterValue(e.target.value)}
             placeholder="Search invoice # or patient…"
-            className="h-9 pl-9"
+            className="h-9 ps-9"
           />
         </div>
 

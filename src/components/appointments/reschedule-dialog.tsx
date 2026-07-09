@@ -79,7 +79,7 @@ export function RescheduleDialog({
                 <Button
                   variant="outline"
                   className={cn(
-                    "h-9 w-full justify-start gap-2 text-left font-normal",
+                    "h-9 w-full justify-start gap-2 text-start font-normal",
                     !date && "text-muted-foreground",
                   )}
                 >

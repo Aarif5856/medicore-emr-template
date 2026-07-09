@@ -121,7 +121,7 @@ function MessagesPage() {
         <div className="grid h-[calc(100vh-14rem)] min-h-[540px] grid-cols-1 md:grid-cols-[340px_minmax(0,1fr)]">
           <aside
             className={cn(
-              "min-h-0 border-r border-border/60 bg-card/40",
+              "min-h-0 border-e border-border/60 bg-card/40",
               mobileView === "thread" ? "hidden md:block" : "block",
             )}
           >

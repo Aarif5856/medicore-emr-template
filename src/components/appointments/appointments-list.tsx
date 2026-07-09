@@ -184,7 +184,7 @@ export function AppointmentsListTable({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-40">
                   <DropdownMenuItem onSelect={() => onView(a)}>
-                    <Eye className="mr-2 h-4 w-4" /> View
+                    <Eye className="me-2 h-4 w-4" /> View
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onSelect={() => onReschedule(a)}
@@ -198,7 +198,7 @@ export function AppointmentsListTable({
                     onSelect={() => onCancel(a)}
                     disabled={a.status === "Cancelled" || a.status === "Completed"}
                   >
-                    <X className="mr-2 h-4 w-4" /> Cancel
+                    <X className="me-2 h-4 w-4" /> Cancel
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -234,12 +234,12 @@ export function AppointmentsListTable({
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative min-w-[200px] flex-1 sm:max-w-xs">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={search}
             onChange={(e) => table.getColumn("patient")?.setFilterValue(e.target.value)}
             placeholder="Search patient, doctor…"
-            className="h-9 pl-9"
+            className="h-9 ps-9"
           />
         </div>
 
@@ -298,7 +298,7 @@ export function AppointmentsListTable({
                       setRange(undefined);
                     }
                   }}
-                  className="ml-1 rounded p-0.5 hover:bg-muted"
+                  className="ms-1 rounded p-0.5 hover:bg-muted"
                 >
                   <X className="h-3 w-3" />
                 </span>

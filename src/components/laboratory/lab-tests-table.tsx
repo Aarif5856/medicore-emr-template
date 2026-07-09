@@ -199,23 +199,23 @@ export function LabTestsTable({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-44">
                   <DropdownMenuItem onClick={() => onView(t)}>
-                    <Eye className="mr-2 h-4 w-4" /> View Report
+                    <Eye className="me-2 h-4 w-4" /> View Report
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => onUpload(t)}
                     disabled={!canUpload}
                   >
-                    <Upload className="mr-2 h-4 w-4" /> Upload Result
+                    <Upload className="me-2 h-4 w-4" /> Upload Result
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => onMarkCritical(t)}>
-                    <ShieldAlert className="mr-2 h-4 w-4" /> Mark Critical
+                    <ShieldAlert className="me-2 h-4 w-4" /> Mark Critical
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onClick={() => onCancel(t)}
                     className="text-destructive focus:text-destructive"
                   >
-                    <Ban className="mr-2 h-4 w-4" /> Cancel
+                    <Ban className="me-2 h-4 w-4" /> Cancel
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -301,12 +301,12 @@ export function LabTestsTable({
       {/* Toolbar */}
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative min-w-[200px] flex-1 sm:max-w-xs">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={search}
             onChange={(e) => table.getColumn("patient")?.setFilterValue(e.target.value)}
             placeholder="Search patient or test…"
-            className="h-9 pl-9"
+            className="h-9 ps-9"
           />
         </div>
 

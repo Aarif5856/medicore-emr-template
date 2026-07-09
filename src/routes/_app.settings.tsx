@@ -102,7 +102,7 @@ function SettingsPage() {
                   type="button"
                   onClick={() => setActive(s.key)}
                   className={cn(
-                    "flex items-center gap-2.5 rounded-md px-3 py-2 text-left text-sm transition-colors",
+                    "flex items-center gap-2.5 rounded-md px-3 py-2 text-start text-sm transition-colors",
                     isActive
                       ? "bg-primary/10 font-semibold text-primary"
                       : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
@@ -584,7 +584,7 @@ function AppearanceSection() {
                   type="button"
                   onClick={() => handleSelect(opt.key)}
                   className={cn(
-                    "group flex flex-col gap-3 rounded-lg border p-3 text-left transition-all",
+                    "group flex flex-col gap-3 rounded-lg border p-3 text-start transition-all",
                     selected
                       ? "border-primary bg-primary/5 ring-2 ring-primary/40"
                       : "border-border hover:border-primary/40 hover:bg-muted/40",
@@ -769,7 +769,7 @@ function SecuritySection() {
     <button
       type="button"
       onClick={() => setShow((s) => ({ ...s, [key]: !s[key] }))}
-      className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+      className="absolute end-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
       aria-label={show[key] ? "Hide password" : "Show password"}
     >
       {show[key] ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -796,7 +796,7 @@ function SecuritySection() {
                         <Input
                           type={show.current ? "text" : "password"}
                           autoComplete="current-password"
-                          className="pr-9"
+                          className="pe-9"
                           {...field}
                         />
                         {eyeButton("current")}
@@ -818,7 +818,7 @@ function SecuritySection() {
                           <Input
                             type={show.next ? "text" : "password"}
                             autoComplete="new-password"
-                            className="pr-9"
+                            className="pe-9"
                             {...field}
                           />
                           {eyeButton("next")}
@@ -839,7 +839,7 @@ function SecuritySection() {
                           <Input
                             type={show.confirm ? "text" : "password"}
                             autoComplete="new-password"
-                            className="pr-9"
+                            className="pe-9"
                             {...field}
                           />
                           {eyeButton("confirm")}
@@ -937,7 +937,7 @@ function BillingSection() {
               </div>
               <p className="text-xs text-muted-foreground">Renews on August 12, 2026</p>
             </div>
-            <div className="text-right">
+            <div className="text-end">
               <div className="text-2xl font-semibold text-foreground tabular">$249</div>
               <div className="text-[11px] text-muted-foreground">/month · billed annually</div>
             </div>

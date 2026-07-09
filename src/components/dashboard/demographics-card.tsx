@@ -65,7 +65,7 @@ export function DemographicsCard() {
                     style={{ width: `${(g.value / maxAge) * 100}%` }}
                   />
                 </div>
-                <span className="text-right text-[11px] font-semibold text-foreground tabular">
+                <span className="text-end text-[11px] font-semibold text-foreground tabular">
                   {g.value}%
                 </span>
               </li>

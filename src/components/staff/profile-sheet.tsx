@@ -222,7 +222,7 @@ function ProfileBody({
                     <TableHead className="h-9 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                       Check-out
                     </TableHead>
-                    <TableHead className="h-9 text-right text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                    <TableHead className="h-9 text-end text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                       Status
                     </TableHead>
                   </TableRow>
@@ -239,7 +239,7 @@ function ProfileBody({
                       <TableCell className="py-2 text-sm tabular text-foreground">
                         {a.checkOut}
                       </TableCell>
-                      <TableCell className="py-2 text-right">
+                      <TableCell className="py-2 text-end">
                         <AttendanceBadge status={a.status} />
                       </TableCell>
                     </TableRow>

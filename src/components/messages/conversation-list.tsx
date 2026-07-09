@@ -38,12 +38,12 @@ export function ConversationList({
     <div className="flex h-full flex-col">
       <div className="space-y-3 border-b border-border/60 p-3">
         <div className="relative">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Search className="pointer-events-none absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search conversations..."
-            className="pl-9"
+            className="ps-9"
           />
         </div>
         <Tabs value={filter} onValueChange={(v) => setFilter(v as Filter)}>
@@ -72,7 +72,7 @@ export function ConversationList({
                     type="button"
                     onClick={() => onSelect(c.id)}
                     className={cn(
-                      "grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3 px-3 py-3 text-left transition-colors",
+                      "grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3 px-3 py-3 text-start transition-colors",
                       active
                         ? "bg-primary/10"
                         : "hover:bg-muted/40",

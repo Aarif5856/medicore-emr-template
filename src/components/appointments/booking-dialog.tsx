@@ -223,7 +223,7 @@ export function BookingDialog({ open, onOpenChange, appointments, onCreate }: Pr
                           <Button
                             variant="outline"
                             className={cn(
-                              "h-9 justify-start gap-2 text-left font-normal",
+                              "h-9 justify-start gap-2 text-start font-normal",
                               !field.value && "text-muted-foreground",
                             )}
                           >
@@ -382,7 +382,7 @@ function PatientCombobox({
                 >
                   <Check
                     className={cn(
-                      "mr-2 h-4 w-4",
+                      "me-2 h-4 w-4",
                       value === p.id ? "opacity-100" : "opacity-0",
                     )}
                   />

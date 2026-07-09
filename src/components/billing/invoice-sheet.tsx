@@ -135,7 +135,7 @@ function InvoiceBody({
                 +1 (415) 555-0100 · billing@medicore.health
               </div>
             </div>
-            <div className="text-right text-[11px] text-muted-foreground">
+            <div className="text-end text-[11px] text-muted-foreground">
               <div className="font-semibold uppercase tracking-wide">Invoice</div>
               <div className="mt-1 tabular text-foreground">{invoice.id}</div>
             </div>
@@ -150,13 +150,13 @@ function InvoiceBody({
                 <TableHead className="h-9 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                   Description
                 </TableHead>
-                <TableHead className="h-9 text-right text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                <TableHead className="h-9 text-end text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                   Qty
                 </TableHead>
-                <TableHead className="h-9 text-right text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                <TableHead className="h-9 text-end text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                   Unit Price
                 </TableHead>
-                <TableHead className="h-9 text-right text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                <TableHead className="h-9 text-end text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                   Total
                 </TableHead>
               </TableRow>
@@ -167,13 +167,13 @@ function InvoiceBody({
                   <TableCell className="py-2 text-sm font-medium text-foreground">
                     {l.description}
                   </TableCell>
-                  <TableCell className="py-2 text-right text-sm tabular">
+                  <TableCell className="py-2 text-end text-sm tabular">
                     {l.qty}
                   </TableCell>
-                  <TableCell className="py-2 text-right text-sm tabular text-muted-foreground">
+                  <TableCell className="py-2 text-end text-sm tabular text-muted-foreground">
                     {formatCurrency(l.unitPrice)}
                   </TableCell>
-                  <TableCell className="py-2 text-right text-sm font-medium tabular">
+                  <TableCell className="py-2 text-end text-sm font-medium tabular">
                     {formatCurrency(l.qty * l.unitPrice)}
                   </TableCell>
                 </TableRow>

@@ -81,7 +81,7 @@ export function CalendarView({
           <Button variant="outline" size="icon" className="h-9 w-9" onClick={() => nav(1)}>
             <ChevronRight className="h-4 w-4" />
           </Button>
-          <div className="ml-2 text-sm font-semibold text-foreground tabular">{label}</div>
+          <div className="ms-2 text-sm font-semibold text-foreground tabular">{label}</div>
         </div>
 
         <div className="flex rounded-lg border bg-card p-0.5">
@@ -168,7 +168,7 @@ function MonthView({
             <div
               key={key}
               className={cn(
-                "min-h-[110px] border-b border-r p-1.5 [&:nth-child(7n)]:border-r-0",
+                "min-h-[110px] border-b border-e p-1.5 [&:nth-child(7n)]:border-e-0",
                 outside ? "bg-muted/20" : "bg-card",
               )}
             >
@@ -223,7 +223,7 @@ function MonthChip({
         <button
           type="button"
           className={cn(
-            "flex w-full items-center gap-1 truncate rounded-md border-l-[3px] px-1.5 py-0.5 text-left text-[10px] font-medium transition-colors hover:brightness-110",
+            "flex w-full items-center gap-1 truncate rounded-md border-l-[3px] px-1.5 py-0.5 text-start text-[10px] font-medium transition-colors hover:brightness-110",
             s.leftBorder,
             s.chip,
             appointment.status === "Cancelled" && "line-through opacity-70",
@@ -254,7 +254,7 @@ function DayOverflowPopover({
       <PopoverTrigger asChild>
         <button
           type="button"
-          className="w-full rounded-md bg-muted/70 px-1.5 py-0.5 text-left text-[10px] font-semibold text-muted-foreground transition-colors hover:bg-muted"
+          className="w-full rounded-md bg-muted/70 px-1.5 py-0.5 text-start text-[10px] font-semibold text-muted-foreground transition-colors hover:bg-muted"
         >
           {label}
         </button>
@@ -275,7 +275,7 @@ function DayOverflowPopover({
               <div
                 key={a.id}
                 className={cn(
-                  "flex items-center gap-2 rounded-md border-l-4 bg-muted/40 px-3 py-2",
+                  "flex items-center gap-2 rounded-md border-s-4 bg-muted/40 px-3 py-2",
                   s.leftBorder,
                 )}
               >
@@ -389,7 +389,7 @@ function WeekView({
                 <div
                   key={d.toISOString()}
                   className={cn(
-                    "border-l border-border/60 px-2 py-2 text-center",
+                    "border-s border-border/60 px-2 py-2 text-center",
                     today && "bg-primary/5",
                   )}
                 >
@@ -414,7 +414,7 @@ function WeekView({
               {hours.map((h) => (
                 <div
                   key={h}
-                  className="h-[60px] border-b border-border/60 pr-2 pt-1 text-right text-[10px] font-medium text-muted-foreground tabular"
+                  className="h-[60px] border-b border-border/60 pe-2 pt-1 text-end text-[10px] font-medium text-muted-foreground tabular"
                 >
                   {String(h).padStart(2, "0")}:00
                 </div>
@@ -423,7 +423,7 @@ function WeekView({
             {days.map((d) => {
               const items = byDay.get(format(d, "yyyy-MM-dd")) ?? [];
               return (
-                <div key={d.toISOString()} className="relative border-l border-border/60">
+                <div key={d.toISOString()} className="relative border-s border-border/60">
                   {hours.map((h) => (
                     <div key={h} className="h-[60px] border-b border-border/60" />
                   ))}
@@ -485,7 +485,7 @@ function WeekApptBlock({
         <button
           type="button"
           className={cn(
-            "absolute overflow-hidden rounded-md border-l-4 px-1.5 py-1 text-left shadow-sm transition-transform hover:z-20 hover:scale-[1.02]",
+            "absolute overflow-hidden rounded-md border-s-4 px-1.5 py-1 text-start shadow-sm transition-transform hover:z-20 hover:scale-[1.02]",
             s.leftBorder,
             s.chip,
             cancelled && "opacity-60",
@@ -562,13 +562,13 @@ function DayView({
             {hours.map((h) => (
               <div
                 key={h}
-                className="h-[84px] border-b border-border/60 pr-2 pt-1 text-right text-xs font-medium text-muted-foreground tabular"
+                className="h-[84px] border-b border-border/60 pe-2 pt-1 text-end text-xs font-medium text-muted-foreground tabular"
               >
                 {String(h).padStart(2, "0")}:00
               </div>
             ))}
           </div>
-          <div className="relative border-l border-border/60">
+          <div className="relative border-s border-border/60">
             {hours.map((h) => (
               <div key={h} className="h-[84px] border-b border-border/60" />
             ))}
@@ -626,7 +626,7 @@ function DayApptBlock({
         <button
           type="button"
           className={cn(
-            "absolute flex flex-col overflow-hidden rounded-lg border-l-4 px-3 py-2 text-left shadow-sm transition-transform hover:z-20 hover:scale-[1.01]",
+            "absolute flex flex-col overflow-hidden rounded-lg border-s-4 px-3 py-2 text-start shadow-sm transition-transform hover:z-20 hover:scale-[1.01]",
             s.leftBorder,
             s.chip,
             cancelled && "opacity-60",
@@ -660,7 +660,7 @@ function DayApptBlock({
             <AppointmentStatusBadge status={appointment.status} />
           </div>
           {height > 70 && appointment.reason && (
-            <div className="mt-1 truncate pl-8 text-[11px] text-muted-foreground">
+            <div className="mt-1 truncate ps-8 text-[11px] text-muted-foreground">
               {appointment.reason}
             </div>
           )}

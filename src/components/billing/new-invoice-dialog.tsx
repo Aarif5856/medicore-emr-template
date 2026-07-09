@@ -463,11 +463,11 @@ function DatePickerField({
           type="button"
           variant="outline"
           className={cn(
-            "h-9 w-full justify-start text-left font-normal",
+            "h-9 w-full justify-start text-start font-normal",
             !value && "text-muted-foreground",
           )}
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
+          <CalendarIcon className="me-2 h-4 w-4" />
           {date ? format(date, "PP") : "Pick a date"}
         </Button>
       </PopoverTrigger>
@@ -528,7 +528,7 @@ function PatientCombobox({
                 >
                   <Check
                     className={cn(
-                      "mr-2 h-4 w-4",
+                      "me-2 h-4 w-4",
                       value === p.id ? "opacity-100" : "opacity-0",
                     )}
                   />

@@ -142,10 +142,10 @@ export function PrescriptionSheet({
                     <TableHead className="h-9 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                       Duration
                     </TableHead>
-                    <TableHead className="h-9 text-right text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                    <TableHead className="h-9 text-end text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                       Qty
                     </TableHead>
-                    <TableHead className="h-9 text-right text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                    <TableHead className="h-9 text-end text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                       Status
                     </TableHead>
                   </TableRow>
@@ -169,10 +169,10 @@ export function PrescriptionSheet({
                         <TableCell className="py-2 text-sm">{l.dosage}</TableCell>
                         <TableCell className="py-2 text-sm">{l.frequency}</TableCell>
                         <TableCell className="py-2 text-sm">{l.duration}</TableCell>
-                        <TableCell className="py-2 text-right text-sm tabular">
+                        <TableCell className="py-2 text-end text-sm tabular">
                           {l.qty}
                         </TableCell>
-                        <TableCell className="py-2 text-right">
+                        <TableCell className="py-2 text-end">
                           <span
                             className={cn(
                               "inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-semibold",
@@ -231,14 +231,14 @@ export function PrescriptionSheet({
         <div className="border-t bg-background/50 p-4">
           <div className="flex flex-wrap items-center justify-end gap-2">
             <Button variant="ghost" onClick={handlePrint}>
-              <Printer className="mr-2 h-4 w-4" /> Print Prescription
+              <Printer className="me-2 h-4 w-4" /> Print Prescription
             </Button>
             <Button
               className="glow-primary"
               onClick={handleDispense}
               disabled={!canDispense}
             >
-              <PackageCheck className="mr-2 h-4 w-4" /> Dispense All
+              <PackageCheck className="me-2 h-4 w-4" /> Dispense All
             </Button>
           </div>
         </div>
