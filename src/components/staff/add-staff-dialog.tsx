@@ -64,66 +64,129 @@ interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   managers: StaffMember[];
-  onCreate: (
+  initialValue?: StaffMember | null;
+  onCreate?: (
     input: Omit<StaffMember, "id" | "weeklyShifts" | "attendance" | "documents">,
   ) => StaffMember;
+  onSave?: (id: string, patch: Partial<StaffMember>) => void;
 }
 
 const NONE = "__none__";
 
-export function AddStaffDialog({ open, onOpenChange, managers, onCreate }: Props) {
+const toDateInput = (iso: string): string => {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso.slice(0, 10);
+  return d.toISOString().slice(0, 10);
+};
+
+const emptyDefaults = (): FormValues => ({
+  firstName: "",
+  lastName: "",
+  dob: "",
+  gender: "Male",
+  phone: "",
+  email: "",
+  address: "",
+  role: "Nurse",
+  department: "General Medicine",
+  shift: "Morning",
+  joinedDate: new Date().toISOString().slice(0, 10),
+  reportingManagerId: undefined,
+  qualification: "",
+});
+
+const fromStaff = (s: StaffMember): FormValues => ({
+  firstName: s.firstName,
+  lastName: s.lastName,
+  dob: toDateInput(s.dob),
+  gender: s.gender,
+  phone: s.phone,
+  email: s.email,
+  address: s.address,
+  role: s.role,
+  department: s.department,
+  shift: s.shift,
+  joinedDate: toDateInput(s.joinedDate),
+  reportingManagerId: s.reportingManagerId,
+  qualification: s.qualification ?? "",
+});
+
+export function AddStaffDialog({
+  open,
+  onOpenChange,
+  managers,
+  initialValue,
+  onCreate,
+  onSave,
+}: Props) {
+  const isEdit = !!initialValue;
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      dob: "",
-      gender: "Male",
-      phone: "",
-      email: "",
-      address: "",
-      role: "Nurse",
-      department: "General Medicine",
-      shift: "Morning",
-      joinedDate: new Date().toISOString().slice(0, 10),
-      reportingManagerId: undefined,
-      qualification: "",
-    },
+    defaultValues: initialValue ? fromStaff(initialValue) : emptyDefaults(),
   });
 
   useEffect(() => {
-    if (!open) form.reset();
-  }, [open, form]);
+    if (open) {
+      form.reset(initialValue ? fromStaff(initialValue) : emptyDefaults());
+    }
+  }, [open, initialValue, form]);
 
   const role = form.watch("role");
   const showQualification = role === "Doctor" || role === "Nurse";
 
   const onSubmit = (values: FormValues) => {
-    const created = onCreate({
-      firstName: values.firstName.trim(),
-      lastName: values.lastName.trim(),
-      role: values.role,
-      department: values.department as StaffDepartment,
-      phone: values.phone.trim(),
-      email: values.email.trim(),
-      joinedDate: new Date(values.joinedDate).toISOString(),
-      shift: values.shift,
-      status: "Active",
-      gender: values.gender,
-      dob: new Date(values.dob).toISOString(),
-      address: values.address.trim(),
-      emergencyContactName: "—",
-      emergencyContactPhone: "—",
-      reportingManagerId:
-        values.reportingManagerId && values.reportingManagerId !== NONE
-          ? values.reportingManagerId
-          : undefined,
-      qualification: showQualification
-        ? values.qualification?.trim() || undefined
-        : undefined,
-    });
-    toast.success(`${fullName(created)} added to staff (${created.id})`);
-    onOpenChange(false);
+    const managerId =
+      values.reportingManagerId && values.reportingManagerId !== NONE
+        ? values.reportingManagerId
+        : undefined;
+    const qualification = showQualification
+      ? values.qualification?.trim() || undefined
+      : undefined;
+
+    if (isEdit && initialValue && onSave) {
+      onSave(initialValue.id, {
+        firstName: values.firstName.trim(),
+        lastName: values.lastName.trim(),
+        role: values.role,
+        department: values.department as StaffDepartment,
+        phone: values.phone.trim(),
+        email: values.email.trim(),
+        joinedDate: new Date(values.joinedDate).toISOString(),
+        shift: values.shift,
+        gender: values.gender,
+        dob: new Date(values.dob).toISOString(),
+        address: values.address.trim(),
+        reportingManagerId: managerId,
+        qualification,
+      });
+      toast.success("Staff profile updated");
+      onOpenChange(false);
+      return;
+    }
+
+    if (onCreate) {
+      const created = onCreate({
+        firstName: values.firstName.trim(),
+        lastName: values.lastName.trim(),
+        role: values.role,
+        department: values.department as StaffDepartment,
+        phone: values.phone.trim(),
+        email: values.email.trim(),
+        joinedDate: new Date(values.joinedDate).toISOString(),
+        shift: values.shift,
+        status: "Active",
+        gender: values.gender,
+        dob: new Date(values.dob).toISOString(),
+        address: values.address.trim(),
+        emergencyContactName: "—",
+        emergencyContactPhone: "—",
+        reportingManagerId: managerId,
+        qualification,
+      });
+      toast.success(`${fullName(created)} added to staff (${created.id})`);
+      onOpenChange(false);
+    }
   };
 
   return (
