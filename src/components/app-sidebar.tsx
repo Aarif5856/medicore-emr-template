@@ -75,9 +75,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" side={direction === "rtl" ? "right" : "left"}>
       <SidebarHeader className="border-b">
         <div className="flex h-14 items-center gap-2.5 px-2">
-          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground glow-primary">
-            <Plus className="h-5 w-5" strokeWidth={2.5} />
-          </div>
+          <LogoMark className="h-9 w-9 shrink-0 rounded-lg text-primary glow-primary" />
           {!collapsed && (
             <div className="min-w-0 leading-tight">
               <div className="truncate text-sm font-semibold text-foreground">MediCore</div>
