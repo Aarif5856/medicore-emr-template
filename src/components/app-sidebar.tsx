@@ -67,11 +67,12 @@ const NAV: NavSection[] = [
 
 export function AppSidebar() {
   const { state } = useSidebar();
+  const { direction } = useDirection();
   const collapsed = state === "collapsed";
   const pathname = useRouterState({ select: (r) => r.location.pathname });
 
   return (
-    <Sidebar collapsible="icon" className="border-r">
+    <Sidebar collapsible="icon" side={direction === "rtl" ? "right" : "left"}>
       <SidebarHeader className="border-b">
         <div className="flex h-14 items-center gap-2.5 px-2">
           <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground glow-primary">
