@@ -16,7 +16,5 @@ export default defineConfig({
   // the SSR handler is emitted as a Netlify Function and static assets land
   // in `dist/`. On the Lovable sandbox / Cloudflare deploy the wrapper's
   // default `cloudflare-module` preset is used instead.
-  nitro: process.env.NETLIFY
-    ? { preset: "netlify", output: { dir: "dist" } }
-    : undefined,
+  nitro: process.env.NETLIFY ? { preset: "netlify" } : undefined,
 });
