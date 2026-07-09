@@ -111,7 +111,7 @@ export function ConversationThread({ conversation, onSend, onBack, onViewProfile
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>View Profile</DropdownMenuItem>
+              <DropdownMenuItem onSelect={() => onViewProfile?.()}>View Profile</DropdownMenuItem>
               <DropdownMenuItem>Mark Unread</DropdownMenuItem>
               <DropdownMenuItem>Archive</DropdownMenuItem>
             </DropdownMenuContent>
