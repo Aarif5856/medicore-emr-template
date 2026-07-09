@@ -489,7 +489,7 @@ export function AddStaffDialog({
                 Cancel
               </Button>
               <Button type="submit" className="glow-primary">
-                Add Staff Member
+                {isEdit ? "Save Changes" : "Add Staff Member"}
               </Button>
             </DialogFooter>
           </form>
