@@ -530,6 +530,7 @@ type ThemeChoice = "light" | "dark" | "system";
 
 function AppearanceSection() {
   const { theme, setTheme } = useTheme();
+  const { direction, setDirection } = useDirection();
   const [choice, setChoice] = useState<ThemeChoice>(theme);
   const [compact, setCompact] = useState(false);
 
