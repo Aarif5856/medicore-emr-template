@@ -235,7 +235,7 @@ export function NewInvoiceDialog({ open, onOpenChange, onCreate }: Props) {
             {/* Line items */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <FormLabel className="text-sm">Line Items</FormLabel>
+                <span className="text-sm font-medium">Line Items</span>
                 <Button
                   type="button"
                   variant="outline"
