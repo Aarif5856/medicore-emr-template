@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { MessageSquare } from "lucide-react";
 
 import { Breadcrumbs } from "@/components/breadcrumbs";
@@ -8,6 +8,9 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { ConversationList } from "@/components/messages/conversation-list";
 import { ConversationThread } from "@/components/messages/conversation-thread";
+import { StaffProfileSheet } from "@/components/staff/profile-sheet";
+import { STAFF, type StaffMember } from "@/data/staff";
+import { toast } from "sonner";
 import { CONVERSATIONS, type Conversation, type Message } from "@/data/messages";
 
 export const Route = createFileRoute("/_app/messages")({
