@@ -116,6 +116,13 @@ function MessagesPage() {
           </section>
         </div>
       </Card>
+
+      <StaffProfileSheet
+        staff={staffProfile}
+        allStaff={STAFF}
+        onOpenChange={(o) => !o && setStaffProfile(null)}
+        onEdit={() => {}}
+      />
     </div>
   );
 }
