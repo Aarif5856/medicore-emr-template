@@ -33,6 +33,7 @@ function AppLayout() {
           </SidebarInset>
         </SidebarProvider>
       </NotificationsProvider>
+     </DoctorsProvider>
     </StaffProvider>
   );
 }
