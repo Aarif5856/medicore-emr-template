@@ -12,4 +12,11 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // On Netlify (or any non-Cloudflare deploy) use the Netlify nitro preset so
+  // the SSR handler is emitted as a Netlify Function and static assets land
+  // in `dist/`. On the Lovable sandbox / Cloudflare deploy the wrapper's
+  // default `cloudflare-module` preset is used instead.
+  nitro: process.env.NETLIFY
+    ? { preset: "netlify", output: { dir: "dist" } }
+    : undefined,
 });
