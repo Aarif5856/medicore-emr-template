@@ -35,7 +35,7 @@ export function Breadcrumbs() {
         const isLast = i === segments.length - 1;
         return (
           <div key={i} className="flex items-center gap-1.5">
-            <ChevronRight className="h-3.5 w-3.5 opacity-60" />
+            <ChevronRight className="h-3.5 w-3.5 opacity-60 rtl:rotate-180" />
             {isLast ? (
               <span className="font-medium text-foreground">{toLabel(seg)}</span>
             ) : (
