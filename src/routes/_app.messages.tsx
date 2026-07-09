@@ -72,10 +72,42 @@ function MessagesPage() {
       navigate({ to: "/patients/$patientId", params: { patientId: active.refId } });
       return;
     }
-    const member = STAFF.find((s) => s.id === active.refId);
+    const member = staffList.find((s) => s.id === active.refId);
     if (member) setStaffProfile(member);
     else toast.error("Staff profile not found");
   };
+
+  const handleMessageStaff = (s: StaffMember) => {
+    // Close the sheet; if a conversation exists for this staff member, activate it.
+    const conv = conversations.find(
+      (c) => c.kind === "staff" && c.refId === s.id,
+    );
+    if (conv) {
+      setActiveId(conv.id);
+      setMobileView("thread");
+      setConversations((prev) =>
+        prev.map((c) => (c.id === conv.id ? { ...c, unread: 0 } : c)),
+      );
+    }
+    setStaffProfile(null);
+  };
+
+  // React to incoming ?staffId=… from other routes (e.g. /staff "Message").
+  useEffect(() => {
+    if (!staffId) return;
+    const conv = conversations.find(
+      (c) => c.kind === "staff" && c.refId === staffId,
+    );
+    if (conv) {
+      setActiveId(conv.id);
+      setMobileView("thread");
+      setConversations((prev) =>
+        prev.map((c) => (c.id === conv.id ? { ...c, unread: 0 } : c)),
+      );
+    }
+    navigate({ to: "/messages", search: {}, replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [staffId]);
 
   return (
     <div className="flex h-full min-h-0 flex-col space-y-4">
