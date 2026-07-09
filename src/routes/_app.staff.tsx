@@ -136,8 +136,10 @@ function StaffPage() {
       <StaffProfileSheet
         staff={viewTarget}
         allStaff={staff}
+        managers={managers}
         onOpenChange={(o) => !o && setViewTarget(null)}
-        onEdit={handleEdit}
+        onEditSubmit={handleEditSubmit}
+        onMessage={handleMessage}
       />
 
       <AddStaffDialog
