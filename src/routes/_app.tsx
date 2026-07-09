@@ -4,6 +4,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { AppHeader } from "@/components/app-header";
 import { StaffProvider } from "@/components/staff/store";
+import { DoctorsProvider } from "@/components/doctors/store";
 import { NotificationsProvider } from "@/components/notifications/store";
 
 export const Route = createFileRoute("/_app")({
@@ -13,6 +14,7 @@ export const Route = createFileRoute("/_app")({
 function AppLayout() {
   return (
     <StaffProvider>
+     <DoctorsProvider>
       <NotificationsProvider>
         <SidebarProvider
           style={
