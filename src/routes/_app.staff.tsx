@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Download, Plus } from "lucide-react";
 import { toast } from "sonner";
 
@@ -8,7 +8,7 @@ import { PageHeader } from "@/components/coming-soon";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { StaffProvider, useStaff } from "@/components/staff/store";
+import { useStaff } from "@/components/staff/store";
 import { StaffTable } from "@/components/staff/staff-table";
 import { StaffProfileSheet } from "@/components/staff/profile-sheet";
 import { AddStaffDialog } from "@/components/staff/add-staff-dialog";
@@ -16,16 +16,8 @@ import { fullName, type StaffMember } from "@/data/staff";
 
 export const Route = createFileRoute("/_app/staff")({
   head: () => ({ meta: [{ title: "Staff — MediCore EMR" }] }),
-  component: StaffRoute,
+  component: StaffPage,
 });
-
-function StaffRoute() {
-  return (
-    <StaffProvider>
-      <StaffPage />
-    </StaffProvider>
-  );
-}
 
 const TONE_STYLES = {
   primary: "bg-primary",
