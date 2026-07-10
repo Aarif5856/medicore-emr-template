@@ -65,8 +65,12 @@ export function StatCard({ data }: { data: StatCardData }) {
           </div>
         </div>
 
-        {spark && (
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 opacity-70">
+        {spark && data.sparkline && (
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-10 opacity-70"
+            role="img"
+            aria-label={`${data.label} trend, from ${data.sparkline[0]} to ${data.sparkline[data.sparkline.length - 1]} over ${data.sparkline.length} periods.`}
+          >
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={spark} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                 <defs>
