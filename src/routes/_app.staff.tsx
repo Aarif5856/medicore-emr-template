@@ -73,9 +73,8 @@ function StaffPage() {
     );
   };
 
-  const handleExport = () => {
-    toast.success("Exporting staff directory (demo)…");
-  };
+  const exportRef = useRef<(() => void) | null>(null);
+  const handleExport = () => exportRef.current?.();
 
   return (
     <div className="space-y-6">
