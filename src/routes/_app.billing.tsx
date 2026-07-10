@@ -171,6 +171,7 @@ function BillingPage() {
         onSendReminder={handleSendReminder}
         onMarkPaid={handleMarkPaid}
         onCancel={handleCancel}
+        exportRef={exportRef}
       />
 
       <InvoiceSheet
