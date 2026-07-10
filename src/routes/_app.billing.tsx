@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Download, Plus } from "lucide-react";
 import { toast } from "sonner";
