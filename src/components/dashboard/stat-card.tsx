@@ -29,8 +29,14 @@ export function StatCard({ data }: { data: StatCardData }) {
 
   const spark = data.sparkline?.map((v, i) => ({ i, v }));
 
-  return (
-    <Card className="card-glass group relative overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+  const cardInner = (
+    <Card
+      className={cn(
+        "card-glass group relative overflow-hidden transition-all duration-150",
+        data.href &&
+          "hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-md",
+      )}
+    >
       <CardContent className="p-5">
         <div className="flex items-start justify-between gap-3">
           <div
@@ -94,4 +100,18 @@ export function StatCard({ data }: { data: StatCardData }) {
       </CardContent>
     </Card>
   );
+
+  if (data.href) {
+    return (
+      <Link
+        to={data.href}
+        aria-label={`${data.label}: ${data.value}${data.linkLabel ? `, ${data.linkLabel}` : ""}`}
+        className="block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      >
+        {cardInner}
+      </Link>
+    );
+  }
+
+  return cardInner;
 }
