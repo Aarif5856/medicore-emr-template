@@ -8,6 +8,7 @@ import { PageHeader } from "@/components/coming-soon";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { MiniStatCard } from "@/components/ui/mini-stat-card";
 import { Input } from "@/components/ui/input";
 import {
   Select,
