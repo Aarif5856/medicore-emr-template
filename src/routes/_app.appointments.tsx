@@ -13,15 +13,14 @@ import { toast } from "sonner";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { PageHeader } from "@/components/coming-soon";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { MiniStatCard } from "@/components/ui/mini-stat-card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
 import { CalendarView } from "@/components/appointments/calendar-view";
 import { AppointmentsListTable } from "@/components/appointments/appointments-list";
 import { BookingDialog } from "@/components/appointments/booking-dialog";
