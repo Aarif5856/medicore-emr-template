@@ -44,23 +44,13 @@ function PatientsPage() {
         {PATIENTS_SUMMARY.map((s) => {
           const semantic = s.tone === "warning" || s.tone === "destructive";
           return (
-            <Card key={s.label} className="card-glass p-4">
-              <div className="flex items-center gap-3">
-                {semantic && (
-                  <span
-                    aria-hidden
-                    className={cn(
-                      "h-2.5 w-2.5 shrink-0 rounded-full",
-                      TONE_STYLES[s.tone].split(" ")[0],
-                    )}
-                  />
-                )}
-                <div className="min-w-0">
-                  <div className="text-[11px] font-medium text-muted-foreground">{s.label}</div>
-                  <div className="text-lg font-semibold text-foreground tabular">{s.value}</div>
-                </div>
-              </div>
-            </Card>
+            <MiniStatCard
+              key={s.label}
+              label={s.label}
+              value={s.value}
+              tone={s.tone}
+              showDot={semantic}
+            />
           );
         })}
       </div>
