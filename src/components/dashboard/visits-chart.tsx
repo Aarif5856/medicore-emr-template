@@ -113,7 +113,7 @@ export function VisitsChart() {
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
               <XAxis
-                dataKey="month"
+                dataKey="label"
                 stroke="var(--muted-foreground)"
                 fontSize={11}
                 tickLine={false}
