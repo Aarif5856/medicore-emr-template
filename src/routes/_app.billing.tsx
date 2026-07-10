@@ -45,6 +45,7 @@ function BillingPage() {
   const [newOpen, setNewOpen] = useState(false);
   const [viewTarget, setViewTarget] = useState<Invoice | null>(null);
   const [payTarget, setPayTarget] = useState<Invoice | null>(null);
+  const exportRef = useRef<(() => void) | null>(null);
 
   const stats = useMemo(() => {
     let revenueThisMonth = 0;
