@@ -55,7 +55,8 @@ function ChartTooltip({
 
 export function VisitsChart() {
   const [range, setRange] = useState<VisitsRange>("Monthly");
-  const { data, isLoading, isError, refetch } = useMockQuery(VISITS_MONTHLY);
+  const dataset = VISITS_BY_RANGE[range];
+  const { data, isLoading, isError, refetch } = useMockQuery(dataset);
 
   return (
     <Card className="card-glass h-full">
@@ -63,7 +64,7 @@ export function VisitsChart() {
         <div className="min-w-0">
           <CardTitle className="text-base">Patient Visits Overview</CardTitle>
           <p className="mt-0.5 text-xs text-muted-foreground">
-            In-patient vs Out-patient · last 12 months
+            In-patient vs Out-patient · last {VISITS_RANGE_UNIT[range]}
           </p>
         </div>
         <div className="inline-flex shrink-0 items-center rounded-md border bg-muted/50 p-0.5">
