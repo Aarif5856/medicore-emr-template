@@ -309,6 +309,24 @@ export function InvoicesTable({
     setDateRange("All time");
   };
 
+  if (exportRef) {
+    exportRef.current = () => {
+      const rows = table.getFilteredRowModel().rows.map((r) => r.original);
+      const columns: CsvColumn<Invoice>[] = [
+        { header: "Invoice #", value: (i) => i.id },
+        { header: "Patient ID", value: (i) => i.patientId },
+        { header: "Patient Name", value: (i) => i.patientName },
+        { header: "Service", value: (i) => i.service },
+        { header: "Issue Date", value: (i) => i.issueDate },
+        { header: "Due Date", value: (i) => i.dueDate },
+        { header: "Amount", value: (i) => totalsOf(i).total.toFixed(2) },
+        { header: "Status", value: (i) => i.status },
+      ];
+      exportToCsv("medicore-invoices.csv", rows, columns);
+      toast.success(`Exported ${rows.length} ${rows.length === 1 ? "invoice" : "invoices"}`);
+    };
+  }
+
   const counts = useMemo(() => {
     const c: Record<StatusTab, number> = {
       All: source.length,
