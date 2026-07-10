@@ -74,7 +74,7 @@ export function DoctorAvailability() {
                 >
                   <div className="flex min-w-0 items-center gap-3">
                     <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-primary/10 text-[11px] font-semibold text-primary">
+                      <AvatarFallback className="bg-muted text-[11px] font-semibold text-muted-foreground">
                         {initials(d.name)}
                       </AvatarFallback>
                     </Avatar>
