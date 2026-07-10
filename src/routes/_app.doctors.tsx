@@ -47,12 +47,6 @@ export const Route = createFileRoute("/_app/doctors")({
   component: DoctorsPage,
 });
 
-const TONE_STYLES = {
-  primary: "bg-primary",
-  teal: "bg-[color:var(--accent-teal)]",
-  warning: "bg-warning",
-  destructive: "bg-destructive",
-} as const;
 
 const ALL = "__all__";
 
