@@ -10,7 +10,7 @@ export interface StatCardData {
   label: string;
   value: string;
   icon: LucideIcon;
-  tone: "primary" | "teal" | "warning" | "destructive";
+  tone: "primary" | "teal" | "warning" | "destructive" | "neutral";
   trend?: Trend;
   meta?: string;
   sparkline?: number[];
