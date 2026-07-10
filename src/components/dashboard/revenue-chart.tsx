@@ -106,7 +106,7 @@ export function RevenueChart() {
                 dataKey="consultations"
                 name="Consultations"
                 stackId="rev"
-                fill="var(--chart-1)"
+                fill="var(--chart-5)"
                 radius={[0, 0, 0, 0]}
               />
               <Bar
