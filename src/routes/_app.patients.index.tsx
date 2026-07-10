@@ -13,12 +13,6 @@ export const Route = createFileRoute("/_app/patients/")({
   component: PatientsPage,
 });
 
-const TONE_STYLES: Record<string, string> = {
-  primary: "bg-primary/10 text-primary",
-  teal: "bg-[color:var(--accent-teal)]/10 text-[color:var(--accent-teal)]",
-  warning: "bg-warning/10 text-warning",
-  destructive: "bg-destructive/10 text-destructive",
-};
 
 function PatientsPage() {
   const navigate = useNavigate();
