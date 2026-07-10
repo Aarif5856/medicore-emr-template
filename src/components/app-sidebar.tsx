@@ -119,7 +119,7 @@ export function AppSidebar() {
                         tooltip={item.title}
                         className="relative h-9 rounded-md data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[active=true]:font-medium"
                       >
-                        <Link to={item.url} className="flex items-center gap-3">
+                        <Link to={item.url} onClick={handleNavClick} className="flex items-center gap-3">
                           {active && (
                             <span className="absolute start-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-e bg-primary" />
                           )}
