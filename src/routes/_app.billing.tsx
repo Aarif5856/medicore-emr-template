@@ -153,24 +153,17 @@ function BillingPage() {
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-4">
         <div className="grid grid-cols-2 gap-3 lg:col-span-3 lg:grid-cols-4">
           {stats.map((s) => (
-            <Card key={s.label} className="card-glass p-4">
-              <div className="flex items-center gap-3">
-                <span
-                  className={cn(
-                    "h-2.5 w-2.5 shrink-0 rounded-full",
-                    TONE_STYLES[s.tone],
-                  )}
-                />
-                <div className="min-w-0">
-                  <div className="text-[11px] font-medium text-muted-foreground">
-                    {s.label}
-                  </div>
-                  <div className="text-lg font-semibold text-foreground tabular">
-                    {s.value}
-                  </div>
-                </div>
-              </div>
-            </Card>
+            <MiniStatCard
+              key={s.label}
+              label={s.label}
+              value={s.value}
+              tone={s.tone}
+              title={
+                s.label === "Revenue (Month)"
+                  ? `Total Revenue (This Month): ${s.value}`
+                  : `${s.label}: ${s.value}`
+              }
+            />
           ))}
         </div>
         <div className="lg:col-span-1">
