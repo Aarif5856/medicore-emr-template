@@ -33,12 +33,6 @@ function BillingRoute() {
   );
 }
 
-const TONE_STYLES = {
-  primary: "bg-primary",
-  teal: "bg-[color:var(--accent-teal)]",
-  warning: "bg-warning",
-  destructive: "bg-destructive",
-} as const;
 
 function isSameMonth(iso: string): boolean {
   const d = new Date(iso);
