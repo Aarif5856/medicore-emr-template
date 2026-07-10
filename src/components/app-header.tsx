@@ -42,7 +42,14 @@ export function AppHeader() {
   const { notifications, unreadCount, markRead } = useNotifications();
   const navigate = useNavigate();
 
+  const [logoutOpen, setLogoutOpen] = useState(false);
+
   const recent = notifications.slice(0, 5);
+
+  const handleSignOut = () => {
+    setLogoutOpen(false);
+    toast.success("Signed out (demo)");
+  };
 
   const handleItemClick = (n: NotificationItem) => {
     if (!n.read) markRead(n.id);
