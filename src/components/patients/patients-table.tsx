@@ -262,6 +262,28 @@ export function PatientsTable({ exportRef }: PatientsTableProps = {}) {
     table.getColumn("gender")?.setFilterValue(undefined);
   };
 
+  if (exportRef) {
+    exportRef.current = () => {
+      const rows = table.getFilteredRowModel().rows.map((r) => r.original);
+      const columns: CsvColumn<Patient>[] = [
+        { header: "Patient ID", value: (p) => p.id },
+        { header: "First Name", value: (p) => p.firstName },
+        { header: "Last Name", value: (p) => p.lastName },
+        { header: "Gender", value: (p) => p.gender },
+        { header: "Age", value: (p) => p.age },
+        { header: "Blood Group", value: (p) => p.bloodGroup },
+        { header: "Phone", value: (p) => p.phone },
+        { header: "Email", value: (p) => p.email },
+        { header: "Last Visit", value: (p) => p.lastVisit },
+        { header: "Doctor", value: (p) => p.doctor },
+        { header: "Status", value: (p) => p.status },
+      ];
+      exportToCsv("medicore-patients.csv", rows, columns);
+      toast.success(`Exported ${rows.length} ${rows.length === 1 ? "patient" : "patients"}`);
+    };
+  }
+
+
   return (
     <div className="space-y-3">
       {/* Toolbar */}
