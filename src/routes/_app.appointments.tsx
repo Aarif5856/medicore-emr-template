@@ -106,7 +106,7 @@ function AppointmentsPage() {
           <MiniStatCard
             key={s.label}
             label={s.label}
-            value={s.value}
+            value={String(s.value)}
             tone={s.tone}
           />
         ))}
