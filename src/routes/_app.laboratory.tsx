@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Download, Plus } from "lucide-react";
 import { toast } from "sonner";
@@ -33,6 +33,7 @@ function LaboratoryPage() {
   const [newOrderOpen, setNewOrderOpen] = useState(false);
   const [viewTarget, setViewTarget] = useState<LabTest | null>(null);
   const [uploadTarget, setUploadTarget] = useState<LabTest | null>(null);
+  const exportRef = useRef<(() => void) | null>(null);
 
   const stats = useMemo(() => {
     const today = new Date();
@@ -96,9 +97,7 @@ function LaboratoryPage() {
     });
   };
 
-  const handleExport = () => {
-    toast.success("Exporting lab report (demo)…");
-  };
+  const handleExport = () => exportRef.current?.();
 
   return (
     <div className="space-y-6">
@@ -139,6 +138,7 @@ function LaboratoryPage() {
         onUpload={handleUpload}
         onMarkCritical={handleMarkCritical}
         onCancel={handleCancel}
+        exportRef={exportRef}
       />
 
       <ReportSheet

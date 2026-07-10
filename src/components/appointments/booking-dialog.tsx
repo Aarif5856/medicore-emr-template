@@ -69,14 +69,21 @@ interface Props {
   onOpenChange: (open: boolean) => void;
   appointments: Appointment[];
   onCreate: (a: Omit<Appointment, "id">) => Appointment;
+  defaultPatientId?: string;
 }
 
-export function BookingDialog({ open, onOpenChange, appointments, onCreate }: Props) {
+export function BookingDialog({
+  open,
+  onOpenChange,
+  appointments,
+  onCreate,
+  defaultPatientId,
+}: Props) {
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     mode: "onBlur",
     defaultValues: {
-      patientId: "",
+      patientId: defaultPatientId ?? "",
       department: "",
       doctorId: "",
       date: undefined as unknown as Date,
@@ -87,8 +94,20 @@ export function BookingDialog({ open, onOpenChange, appointments, onCreate }: Pr
   });
 
   useEffect(() => {
-    if (!open) form.reset();
-  }, [open, form]);
+    if (!open) {
+      form.reset({
+        patientId: defaultPatientId ?? "",
+        department: "",
+        doctorId: "",
+        date: undefined as unknown as Date,
+        timeSlot: "",
+        type: "In-person",
+        reason: "",
+      });
+    } else if (defaultPatientId) {
+      form.setValue("patientId", defaultPatientId);
+    }
+  }, [open, form, defaultPatientId]);
 
   const department = form.watch("department");
   const doctorId = form.watch("doctorId");

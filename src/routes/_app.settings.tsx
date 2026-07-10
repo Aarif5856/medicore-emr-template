@@ -181,6 +181,23 @@ function ProfileSection() {
     },
   });
 
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const photoInputRef = useRef<HTMLInputElement>(null);
+
+  const handlePhotoFile = (file: File) => {
+    if (!["image/png", "image/jpeg", "image/svg+xml"].includes(file.type)) {
+      toast.error("Only PNG, JPEG or SVG images are allowed");
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("Image must be smaller than 2 MB");
+      return;
+    }
+    if (photoPreview) URL.revokeObjectURL(photoPreview);
+    setPhotoPreview(URL.createObjectURL(file));
+    toast.success("Photo updated (demo)");
+  };
+
   const onSubmit = (values: ProfileForm) => {
     form.reset(values);
     toast.success("Profile updated");
@@ -196,16 +213,42 @@ function ProfileSection() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
             <div className="flex flex-wrap items-center gap-4">
               <Avatar className="h-16 w-16">
-                <AvatarFallback className="bg-primary text-lg font-semibold text-primary-foreground">
-                  DR
-                </AvatarFallback>
+                {photoPreview ? (
+                  <img
+                    src={photoPreview}
+                    alt="Selected profile photo preview"
+                    className="h-full w-full rounded-full object-cover"
+                  />
+                ) : (
+                  <AvatarFallback className="bg-primary text-lg font-semibold text-primary-foreground">
+                    DR
+                  </AvatarFallback>
+                )}
               </Avatar>
               <div className="min-w-0 space-y-2">
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-medium text-foreground">Dr. Elena Reyes</span>
                   <Badge variant="secondary" className="text-[10px]">Administrator</Badge>
                 </div>
-                <Button type="button" variant="ghost" size="sm" className="gap-2">
+                <input
+                  ref={photoInputRef}
+                  type="file"
+                  accept="image/png,image/jpeg,image/svg+xml"
+                  className="sr-only"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handlePhotoFile(file);
+                    if (photoInputRef.current) photoInputRef.current.value = "";
+                  }}
+                  aria-hidden="true"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="gap-2"
+                  onClick={() => photoInputRef.current?.click()}
+                >
                   <Upload className="h-3.5 w-3.5" /> Change Photo
                 </Button>
               </div>

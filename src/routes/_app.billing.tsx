@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Download, Plus } from "lucide-react";
 import { toast } from "sonner";
@@ -45,6 +45,7 @@ function BillingPage() {
   const [newOpen, setNewOpen] = useState(false);
   const [viewTarget, setViewTarget] = useState<Invoice | null>(null);
   const [payTarget, setPayTarget] = useState<Invoice | null>(null);
+  const exportRef = useRef<(() => void) | null>(null);
 
   const stats = useMemo(() => {
     let revenueThisMonth = 0;
@@ -120,7 +121,7 @@ function BillingPage() {
     setViewTarget((prev) => (prev && prev.id === inv.id ? { ...prev, status: "Cancelled" } : prev));
   };
 
-  const handleExport = () => toast.success("Exporting invoices (demo)…");
+  const handleExport = () => exportRef.current?.();
   const handleDownload = (inv: Invoice) =>
     toast.success(`Downloading ${inv.id}.pdf (demo)…`);
   const handlePrint = (inv: Invoice) => toast.success(`Printing ${inv.id} (demo)…`);
@@ -170,6 +171,7 @@ function BillingPage() {
         onSendReminder={handleSendReminder}
         onMarkPaid={handleMarkPaid}
         onCancel={handleCancel}
+        exportRef={exportRef}
       />
 
       <InvoiceSheet

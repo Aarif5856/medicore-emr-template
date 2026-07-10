@@ -70,6 +70,8 @@ import { ErrorState } from "@/components/ui/error-state";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useMockQuery } from "@/lib/mock-query";
 import { UserPlus } from "lucide-react";
+import { toast } from "sonner";
+import { exportToCsv, type CsvColumn } from "@/lib/export-csv";
 
 type RoleTab = "All" | StaffRole;
 const ROLE_TABS: RoleTab[] = ["All", "Doctor", "Nurse", "Admin", "Support"];
@@ -79,9 +81,10 @@ interface Props {
   onView: (s: StaffMember) => void;
   onEdit: (s: StaffMember) => void;
   onDeactivate: (s: StaffMember) => void;
+  exportRef?: React.MutableRefObject<(() => void) | null>;
 }
 
-export function StaffTable({ staff, onView, onEdit, onDeactivate }: Props) {
+export function StaffTable({ staff, onView, onEdit, onDeactivate, exportRef }: Props) {
   const { data, isLoading, isError, refetch } = useMockQuery(staff);
   const source = data ?? [];
   const [sorting, setSorting] = useState<SortingState>([{ id: "joinedDate", desc: true }]);
@@ -252,6 +255,25 @@ export function StaffTable({ staff, onView, onEdit, onDeactivate }: Props) {
     setDepartment("All");
     setShift("All");
   };
+
+  if (exportRef) {
+    exportRef.current = () => {
+      const rows = table.getFilteredRowModel().rows.map((r) => r.original);
+      const columns: CsvColumn<StaffMember>[] = [
+        { header: "Staff ID", value: (s) => s.id },
+        { header: "Name", value: (s) => fullName(s) },
+        { header: "Role", value: (s) => s.role },
+        { header: "Department", value: (s) => s.department },
+        { header: "Phone", value: (s) => s.phone },
+        { header: "Email", value: (s) => s.email },
+        { header: "Shift", value: (s) => s.shift },
+        { header: "Status", value: (s) => s.status },
+        { header: "Joined", value: (s) => s.joinedDate },
+      ];
+      exportToCsv("medicore-staff.csv", rows, columns);
+      toast.success(`Exported ${rows.length} staff ${rows.length === 1 ? "member" : "members"}`);
+    };
+  }
 
   const counts = useMemo(() => {
     const c: Record<RoleTab, number> = {

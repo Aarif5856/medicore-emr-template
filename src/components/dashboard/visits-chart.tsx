@@ -15,7 +15,7 @@ import { ChartSkeleton } from "@/components/ui/table-skeleton";
 import { ErrorState } from "@/components/ui/error-state";
 import { cn } from "@/lib/utils";
 import { useMockQuery } from "@/lib/mock-query";
-import { VISITS_MONTHLY, VISITS_RANGES, type VisitsRange } from "@/data/dashboard";
+import { VISITS_BY_RANGE, VISITS_RANGES, VISITS_RANGE_UNIT, type VisitsRange } from "@/data/dashboard";
 
 interface TooltipItem {
   name?: string;
@@ -55,7 +55,8 @@ function ChartTooltip({
 
 export function VisitsChart() {
   const [range, setRange] = useState<VisitsRange>("Monthly");
-  const { data, isLoading, isError, refetch } = useMockQuery(VISITS_MONTHLY);
+  const dataset = VISITS_BY_RANGE[range];
+  const { data, isLoading, isError, refetch } = useMockQuery(dataset);
 
   return (
     <Card className="card-glass h-full">
@@ -63,7 +64,7 @@ export function VisitsChart() {
         <div className="min-w-0">
           <CardTitle className="text-base">Patient Visits Overview</CardTitle>
           <p className="mt-0.5 text-xs text-muted-foreground">
-            In-patient vs Out-patient · last 12 months
+            In-patient vs Out-patient · last {VISITS_RANGE_UNIT[range]}
           </p>
         </div>
         <div className="inline-flex shrink-0 items-center rounded-md border bg-muted/50 p-0.5">
@@ -94,7 +95,7 @@ export function VisitsChart() {
         ) : (() => {
           const last = data[data.length - 1];
           const first = data[0];
-          const summary = `Patient visits over the last 12 months. In-patient rose from ${first.inPatient} in ${first.month} to ${last.inPatient} in ${last.month}. Out-patient rose from ${first.outPatient} to ${last.outPatient}.`;
+          const summary = `Patient visits over the last ${VISITS_RANGE_UNIT[range]}. In-patient went from ${first.inPatient} in ${first.label} to ${last.inPatient} in ${last.label}. Out-patient went from ${first.outPatient} to ${last.outPatient}.`;
           return (
         <figure className="m-0 h-[280px] w-full" role="img" aria-label={summary}>
           <figcaption className="sr-only">{summary}</figcaption>
@@ -112,7 +113,7 @@ export function VisitsChart() {
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
               <XAxis
-                dataKey="month"
+                dataKey="label"
                 stroke="var(--muted-foreground)"
                 fontSize={11}
                 tickLine={false}

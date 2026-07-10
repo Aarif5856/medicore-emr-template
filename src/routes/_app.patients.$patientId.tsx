@@ -1,4 +1,5 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
   Activity,
   Calendar,
@@ -19,6 +20,7 @@ import {
   User,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { toast } from "sonner";
 
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { PageHeader } from "@/components/coming-soon";
@@ -40,32 +42,69 @@ import {
   initials,
   PatientStatusBadge,
 } from "@/components/patients/status-badge";
+import { EditPatientDialog } from "@/components/patients/edit-patient-dialog";
 import { getPatientById, PATIENTS } from "@/data/patients";
 import {
-  ALLERGIES,
-  BASIC_INFO,
-  DOCUMENTS,
-  INVOICES,
-  MEDICAL_HISTORY,
-  MEDICATIONS,
-  PATIENT_APPOINTMENTS,
-  PATIENT_LABS,
-  VITALS,
+  getAllergies,
+  getAppointments,
+  getBasicInfo,
+  getDocuments,
+  getHistory,
+  getInvoices,
+  getLabs,
+  getMedications,
+  getVitals,
   type ApptStatus,
+  type BasicInfo,
+  type DocFile,
+  type HistoryEvent,
   type HistoryKind,
+  type Invoice,
   type InvoiceStatus,
   type LabResultStatus,
+  type Medication,
+  type PatientAppointment,
+  type PatientLab,
+  type Vital,
 } from "@/data/patient-detail";
+import {
+  AppointmentsProvider,
+  useAppointments,
+} from "@/components/appointments/store";
+import { BookingDialog } from "@/components/appointments/booking-dialog";
 
 export const Route = createFileRoute("/_app/patients/$patientId")({
   head: () => ({ meta: [{ title: "Patient Profile · MediCore EMR" }] }),
-  component: PatientProfilePage,
+  component: PatientProfileRoute,
 });
+
+function PatientProfileRoute() {
+  return (
+    <AppointmentsProvider>
+      <PatientProfilePage />
+    </AppointmentsProvider>
+  );
+}
 
 function PatientProfilePage() {
   const { patientId } = Route.useParams();
   const navigate = useNavigate();
   const patient = getPatientById(patientId) ?? PATIENTS[0];
+
+  const basic = useMemo(() => getBasicInfo(patient), [patient]);
+  const vitals = useMemo(() => getVitals(patient), [patient]);
+  const allergies = useMemo(() => getAllergies(patient), [patient]);
+  const medications = useMemo(() => getMedications(patient), [patient]);
+  const appointments = useMemo(() => getAppointments(patient), [patient]);
+  const labs = useMemo(() => getLabs(patient), [patient]);
+  const history = useMemo(() => getHistory(patient), [patient]);
+  const invoices = useMemo(() => getInvoices(patient), [patient]);
+  const documents = useMemo(() => getDocuments(patient), [patient]);
+
+  const [editOpen, setEditOpen] = useState(false);
+  const [bookingOpen, setBookingOpen] = useState(false);
+
+  const { appointments: bookedAppointments, addAppointment } = useAppointments();
 
   return (
     <div className="space-y-6">
@@ -109,10 +148,19 @@ function PatientProfilePage() {
             </div>
 
             <div className="flex flex-wrap gap-2 md:flex-nowrap md:justify-end">
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="gap-2"
+                onClick={() => setEditOpen(true)}
+              >
                 <Pencil className="h-4 w-4" /> Edit Profile
               </Button>
-              <Button size="sm" className="gap-2 glow-primary">
+              <Button
+                size="sm"
+                className="gap-2 glow-primary"
+                onClick={() => setBookingOpen(true)}
+              >
                 <CalendarPlus className="h-4 w-4" /> New Appointment
               </Button>
             </div>
@@ -134,24 +182,49 @@ function PatientProfilePage() {
         </div>
 
         <TabsContent value="overview" className="space-y-4">
-          <OverviewTab />
+          <OverviewTab
+            basic={basic}
+            vitals={vitals}
+            allergies={allergies}
+            medications={medications}
+          />
         </TabsContent>
         <TabsContent value="appointments">
-          <AppointmentsTab />
+          <AppointmentsTab appointments={appointments} />
         </TabsContent>
         <TabsContent value="labs">
-          <LabsTab />
+          <LabsTab labs={labs} />
         </TabsContent>
         <TabsContent value="history">
-          <HistoryTab />
+          <HistoryTab history={history} />
         </TabsContent>
         <TabsContent value="billing">
-          <BillingTab />
+          <BillingTab invoices={invoices} />
         </TabsContent>
         <TabsContent value="documents">
-          <DocumentsTab />
+          <DocumentsTab documents={documents} />
         </TabsContent>
       </Tabs>
+
+      <EditPatientDialog
+        patient={patient}
+        open={editOpen}
+        onOpenChange={setEditOpen}
+      />
+
+      <BookingDialog
+        open={bookingOpen}
+        onOpenChange={setBookingOpen}
+        appointments={bookedAppointments}
+        onCreate={(a) => {
+          const created = addAppointment(a);
+          toast.success("Appointment booked", {
+            description: `Scheduled for ${patient.firstName} ${patient.lastName}.`,
+          });
+          return created;
+        }}
+        defaultPatientId={patient.id}
+      />
     </div>
   );
 }
@@ -167,7 +240,17 @@ function InfoChip({ icon: Icon, label }: { icon: LucideIcon; label: string }) {
   );
 }
 
-function OverviewTab() {
+function OverviewTab({
+  basic,
+  vitals,
+  allergies,
+  medications,
+}: {
+  basic: BasicInfo;
+  vitals: Vital[];
+  allergies: string[];
+  medications: Medication[];
+}) {
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
       {/* Basic Info */}
@@ -177,16 +260,16 @@ function OverviewTab() {
         </CardHeader>
         <CardContent>
           <dl className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
-            <InfoRow icon={Calendar} label="Date of Birth" value={formatDate(BASIC_INFO.dob)} />
-            <InfoRow icon={User} label="Gender" value={BASIC_INFO.gender} />
-            <InfoRow icon={User} label="Marital Status" value={BASIC_INFO.maritalStatus} />
-            <InfoRow icon={Phone} label="Phone" value={BASIC_INFO.phone} />
-            <InfoRow icon={Mail} label="Email" value={BASIC_INFO.email} />
-            <InfoRow icon={MapPin} label="Address" value={BASIC_INFO.address} className="sm:col-span-2" />
+            <InfoRow icon={Calendar} label="Date of Birth" value={formatDate(basic.dob)} />
+            <InfoRow icon={User} label="Gender" value={basic.gender} />
+            <InfoRow icon={User} label="Marital Status" value={basic.maritalStatus} />
+            <InfoRow icon={Phone} label="Phone" value={basic.phone} />
+            <InfoRow icon={Mail} label="Email" value={basic.email} />
+            <InfoRow icon={MapPin} label="Address" value={basic.address} className="sm:col-span-2" />
             <InfoRow
               icon={User}
               label="Emergency Contact"
-              value={`${BASIC_INFO.emergencyContact} · ${BASIC_INFO.emergencyPhone}`}
+              value={`${basic.emergencyContact} · ${basic.emergencyPhone}`}
               className="sm:col-span-2"
             />
           </dl>
@@ -200,7 +283,7 @@ function OverviewTab() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {VITALS.map((v) => (
+            {vitals.map((v) => (
               <div
                 key={v.label}
                 className="rounded-lg border bg-background/60 p-3 transition-colors hover:bg-muted/50"
@@ -230,7 +313,7 @@ function OverviewTab() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-2">
-            {ALLERGIES.map((a) => (
+            {allergies.map((a) => (
               <span
                 key={a}
                 className="inline-flex items-center gap-1.5 rounded-full bg-destructive/10 px-2.5 py-1 text-xs font-medium text-destructive"
@@ -250,7 +333,7 @@ function OverviewTab() {
         </CardHeader>
         <CardContent className="p-2">
           <ul className="divide-y divide-border">
-            {MEDICATIONS.map((m) => (
+            {medications.map((m) => (
               <li key={m.name} className="flex items-center gap-3 rounded-md px-2 py-2.5">
                 <div className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-primary/10 text-primary">
                   <Pill className="h-4 w-4" />
@@ -298,7 +381,7 @@ const APPT_STATUS_STYLES: Record<ApptStatus, string> = {
   Cancelled: "bg-destructive/10 text-destructive",
 };
 
-function AppointmentsTab() {
+function AppointmentsTab({ appointments }: { appointments: PatientAppointment[] }) {
   return (
     <Card className="card-glass overflow-hidden">
       <div className="overflow-x-auto">
@@ -313,7 +396,7 @@ function AppointmentsTab() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {PATIENT_APPOINTMENTS.map((a) => (
+            {appointments.map((a) => (
               <TableRow key={a.id}>
                 <TableCell className="whitespace-nowrap text-sm text-muted-foreground tabular">
                   {formatDate(a.date)}
@@ -341,12 +424,12 @@ const LAB_STATUS_STYLES: Record<LabResultStatus, string> = {
   Critical: "bg-destructive/10 text-destructive",
 };
 
-function LabsTab() {
+function LabsTab({ labs }: { labs: PatientLab[] }) {
   return (
     <Card className="card-glass">
       <CardContent className="p-2">
         <ul className="divide-y divide-border">
-          {PATIENT_LABS.map((r) => (
+          {labs.map((r) => (
             <li key={r.id} className="flex items-center gap-3 rounded-md px-3 py-3">
               <div className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-primary/10 text-primary">
                 <FlaskConical className="h-4 w-4" />
@@ -381,12 +464,12 @@ const HISTORY_ICONS: Record<HistoryKind, LucideIcon> = {
   consultation: HeartPulse,
 };
 
-function HistoryTab() {
+function HistoryTab({ history }: { history: HistoryEvent[] }) {
   return (
     <Card className="card-glass">
       <CardContent className="p-6">
         <ol className="relative space-y-6 border-s border-border ps-6">
-          {MEDICAL_HISTORY.map((e) => {
+          {history.map((e) => {
             const Icon = HISTORY_ICONS[e.kind];
             return (
               <li key={e.id} className="relative">
@@ -418,7 +501,7 @@ const INVOICE_STATUS_STYLES: Record<InvoiceStatus, string> = {
   Overdue: "bg-destructive/10 text-destructive",
 };
 
-function BillingTab() {
+function BillingTab({ invoices }: { invoices: Invoice[] }) {
   return (
     <Card className="card-glass overflow-hidden">
       <div className="overflow-x-auto">
@@ -433,7 +516,7 @@ function BillingTab() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {INVOICES.map((i) => (
+            {invoices.map((i) => (
               <TableRow key={i.id}>
                 <TableCell className="whitespace-nowrap text-xs font-medium text-foreground tabular">{i.id}</TableCell>
                 <TableCell className="whitespace-nowrap text-sm text-muted-foreground tabular">{formatDate(i.date)}</TableCell>
@@ -464,10 +547,10 @@ const DOC_TONES: Record<"pdf" | "image" | "doc", string> = {
   doc: "bg-[color:var(--accent-teal)]/10 text-[color:var(--accent-teal)]",
 };
 
-function DocumentsTab() {
+function DocumentsTab({ documents }: { documents: DocFile[] }) {
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-      {DOCUMENTS.map((d) => {
+      {documents.map((d) => {
         const Icon = DOC_ICONS[d.kind];
         return (
           <Card key={d.id} className="card-glass p-4 transition-colors hover:bg-muted/40">

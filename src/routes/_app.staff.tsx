@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Download, Plus } from "lucide-react";
 import { toast } from "sonner";
@@ -73,9 +73,8 @@ function StaffPage() {
     );
   };
 
-  const handleExport = () => {
-    toast.success("Exporting staff directory (demo)…");
-  };
+  const exportRef = useRef<(() => void) | null>(null);
+  const handleExport = () => exportRef.current?.();
 
   return (
     <div className="space-y-6">
@@ -115,6 +114,7 @@ function StaffPage() {
         onView={handleView}
         onEdit={handleEdit}
         onDeactivate={handleDeactivate}
+        exportRef={exportRef}
       />
 
       <StaffProfileSheet

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Download } from "lucide-react";
+import { toast } from "sonner";
 
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { PageHeader } from "@/components/coming-soon";
@@ -7,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorState } from "@/components/ui/error-state";
-import { STAT_CARDS } from "@/data/dashboard";
+import { STAT_CARDS, VISITS_MONTHLY } from "@/data/dashboard";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { VisitsChart } from "@/components/dashboard/visits-chart";
 import { DepartmentChart } from "@/components/dashboard/department-chart";
@@ -17,6 +18,35 @@ import { LabResultsCard } from "@/components/dashboard/lab-results-card";
 import { RevenueChart } from "@/components/dashboard/revenue-chart";
 import { DoctorAvailability } from "@/components/dashboard/doctor-availability";
 import { useMockQuery } from "@/lib/mock-query";
+
+
+function handleDownloadReport() {
+  const kpiSection = "KPI Summary\r\n" +
+    "Metric,Value,Trend,Note\r\n" +
+    STAT_CARDS.map((s) => {
+      const trend = s.trend ? `${s.trend.direction === "up" ? "+" : s.trend.direction === "down" ? "-" : ""}${s.trend.value} ${s.trend.label}` : "";
+      const note = s.meta ?? "";
+      const esc = (v: string) => (/[",\r\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);
+      return [s.label, s.value, trend, note].map(esc).join(",");
+    }).join("\r\n");
+
+  const visitsSection = "Visits by Month (last 12)\r\n" +
+    "Month,In-patient,Out-patient\r\n" +
+    VISITS_MONTHLY.map((p) => `${p.label},${p.inPatient},${p.outPatient}`).join("\r\n");
+
+  const csv = `\uFEFFMediCore Dashboard Report\r\nGenerated,${new Date().toISOString()}\r\n\r\n${kpiSection}\r\n\r\n${visitsSection}\r\n`;
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "medicore-dashboard-report.csv";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  toast.success("Report downloaded");
+}
+
 
 export const Route = createFileRoute("/_app/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard · MediCore EMR" }] }),
@@ -92,7 +122,7 @@ function DashboardPage() {
         title="Dashboard"
         description="Real-time overview of clinical operations and revenue."
         actions={
-          <Button variant="outline" size="sm" className="gap-2">
+          <Button variant="outline" size="sm" className="gap-2" onClick={handleDownloadReport}>
             <Download className="h-4 w-4" />
             Download Report
           </Button>
