@@ -279,6 +279,26 @@ export function LabTestsTable({
     setDateRange("All time");
   };
 
+  if (exportRef) {
+    exportRef.current = () => {
+      const rows = table.getFilteredRowModel().rows.map((r) => r.original);
+      const columns: CsvColumn<LabTest>[] = [
+        { header: "Test ID", value: (t) => t.id },
+        { header: "Patient ID", value: (t) => t.patientId },
+        { header: "Patient Name", value: (t) => t.patientName },
+        { header: "Test", value: (t) => t.testName },
+        { header: "Category", value: (t) => t.category },
+        { header: "Priority", value: (t) => t.priority },
+        { header: "Ordered By", value: (t) => t.orderedBy },
+        { header: "Ordered Date", value: (t) => t.orderedDate },
+        { header: "Completed Date", value: (t) => t.completedDate ?? "" },
+        { header: "Status", value: (t) => t.status },
+      ];
+      exportToCsv("medicore-lab-tests.csv", rows, columns);
+      toast.success(`Exported ${rows.length} lab ${rows.length === 1 ? "test" : "tests"}`);
+    };
+  }
+
   const counts = useMemo(() => {
     const c: Record<StatusTab, number> = {
       All: source.length,
