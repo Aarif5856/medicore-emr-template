@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Download, Plus } from "lucide-react";
 
@@ -16,6 +17,7 @@ export const Route = createFileRoute("/_app/patients/")({
 
 function PatientsPage() {
   const navigate = useNavigate();
+  const exportRef = useRef<(() => void) | null>(null);
 
   return (
     <div className="space-y-6">
@@ -25,7 +27,12 @@ function PatientsPage() {
         description="Search, filter, and manage every patient record in your clinic."
         actions={
           <>
-            <Button variant="outline" size="sm" className="gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-2"
+              onClick={() => exportRef.current?.()}
+            >
               <Download className="h-4 w-4" /> Export
             </Button>
             <Button
@@ -55,7 +62,8 @@ function PatientsPage() {
         })}
       </div>
 
-      <PatientsTable />
+      <PatientsTable exportRef={exportRef} />
     </div>
   );
 }
+
