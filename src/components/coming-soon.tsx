@@ -14,12 +14,18 @@ export function PageHeader({
   actions?: ReactNode;
 }) {
   return (
-    <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 sm:flex sm:flex-wrap sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-3 md:flex-row md:flex-wrap md:items-center md:justify-between md:gap-4">
       <div className="min-w-0 space-y-1">
-        <h1 className="truncate">{title}</h1>
-        {description && <p className="text-sm text-muted-foreground">{description}</p>}
+        <h1 className="break-words md:truncate">{title}</h1>
+        {description && (
+          <p className="text-sm text-muted-foreground">{description}</p>
+        )}
       </div>
-      {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
+      {actions && (
+        <div className="flex flex-wrap items-center gap-2 md:shrink-0">
+          {actions}
+        </div>
+      )}
     </div>
   );
 }
