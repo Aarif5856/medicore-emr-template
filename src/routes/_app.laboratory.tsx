@@ -16,7 +16,7 @@ import { UploadResultDialog } from "@/components/laboratory/upload-result-dialog
 import type { LabResult, LabTest } from "@/data/lab-tests";
 
 export const Route = createFileRoute("/_app/laboratory")({
-  head: () => ({ meta: [{ title: "Laboratory — MediCore EMR" }] }),
+  head: () => ({ meta: [{ title: "Laboratory · MediCore EMR" }] }),
   component: LaboratoryRoute,
 });
 

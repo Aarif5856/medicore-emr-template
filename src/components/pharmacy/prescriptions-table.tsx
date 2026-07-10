@@ -152,7 +152,7 @@ export function PrescriptionsTable({
         header: "Medicines",
         cell: ({ row }) => {
           const rx = row.original;
-          const first = rx.lines[0]?.medicineName ?? "—";
+          const first = rx.lines[0]?.medicineName ?? "-";
           const extra = rx.lines.length - 1;
           return (
             <div className="flex items-center gap-2">

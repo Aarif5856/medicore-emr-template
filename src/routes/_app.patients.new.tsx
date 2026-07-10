@@ -28,7 +28,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 
 export const Route = createFileRoute("/_app/patients/new")({
-  head: () => ({ meta: [{ title: "Add Patient — MediCore EMR" }] }),
+  head: () => ({ meta: [{ title: "Add Patient · MediCore EMR" }] }),
   component: NewPatientPage,
 });
 
@@ -85,7 +85,7 @@ function NewPatientPage() {
   });
 
   const onSubmit = (values: PatientFormValues) => {
-    // Simulated save — this is a template shell.
+    // Simulated save - this is a template shell.
     toast.success("Patient added", {
       description: `${values.firstName} ${values.lastName} has been created.`,
     });

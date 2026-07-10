@@ -236,7 +236,7 @@ function InvoiceBody({
               <div>
                 <div className="text-muted-foreground">Transaction Ref</div>
                 <div className="mt-1 font-medium tabular text-foreground">
-                  {invoice.payment.transactionRef ?? "—"}
+                  {invoice.payment.transactionRef ?? "-"}
                 </div>
               </div>
             </div>

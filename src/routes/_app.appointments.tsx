@@ -35,7 +35,7 @@ import {
 import type { Appointment } from "@/data/appointments";
 
 export const Route = createFileRoute("/_app/appointments")({
-  head: () => ({ meta: [{ title: "Appointments — MediCore EMR" }] }),
+  head: () => ({ meta: [{ title: "Appointments · MediCore EMR" }] }),
   component: AppointmentsRoute,
 });
 

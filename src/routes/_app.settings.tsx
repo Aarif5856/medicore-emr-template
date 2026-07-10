@@ -51,7 +51,7 @@ import { useDirection, type Direction } from "@/hooks/use-direction";
 export const Route = createFileRoute("/_app/settings")({
   head: () => ({
     meta: [
-      { title: "Settings — MediCore EMR" },
+      { title: "Settings · MediCore EMR" },
       {
         name: "description",
         content: "Manage profile, clinic, appearance, notifications and security preferences.",
@@ -92,7 +92,7 @@ function SettingsPage() {
       />
 
       <div className="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)]">
-        {/* Left nav — desktop */}
+        {/* Left nav - desktop */}
         <aside className="hidden lg:block">
           <nav className="sticky top-20 flex flex-col gap-1">
             {SECTIONS.map((s) => {
@@ -118,7 +118,7 @@ function SettingsPage() {
           </nav>
         </aside>
 
-        {/* Tab strip — mobile */}
+        {/* Tab strip - mobile */}
         <div className="-mx-6 overflow-x-auto px-6 lg:hidden">
           <div className="flex gap-1 border-b border-border/60 pb-1">
             {SECTIONS.map((s) => {

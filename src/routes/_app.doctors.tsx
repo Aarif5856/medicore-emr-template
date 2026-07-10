@@ -42,7 +42,7 @@ import {
 } from "@/data/doctors";
 
 export const Route = createFileRoute("/_app/doctors")({
-  head: () => ({ meta: [{ title: "Doctors — MediCore EMR" }] }),
+  head: () => ({ meta: [{ title: "Doctors · MediCore EMR" }] }),
   component: DoctorsPage,
 });
 
@@ -112,7 +112,7 @@ function DoctorsPage() {
     if (d.staffId) {
       navigate({ to: "/messages", search: { staffId: d.staffId } });
     } else {
-      toast("No linked staff record — open Messages directly.");
+      toast("No linked staff record - open Messages directly.");
       navigate({ to: "/messages", search: {} });
     }
   };

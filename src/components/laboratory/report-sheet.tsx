@@ -91,7 +91,7 @@ function ReportBody({
           <div>
             <dt className="text-muted-foreground">Completed</dt>
             <dd className="font-medium text-foreground tabular">
-              {test.completedDate ? formatLabDateTime(test.completedDate) : "—"}
+              {test.completedDate ? formatLabDateTime(test.completedDate) : "-"}
             </dd>
           </div>
         </dl>

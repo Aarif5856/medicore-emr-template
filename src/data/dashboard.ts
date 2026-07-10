@@ -195,6 +195,6 @@ export const DOCTOR_AVAILABILITY: DoctorRow[] = [
   { id: "d1", name: "Dr. Aisha Patel", specialty: "Cardiology", hours: "09:00 – 17:00", status: "Available" },
   { id: "d2", name: "Dr. Kenji Nakamura", specialty: "Orthopedics", hours: "08:00 – 16:00", status: "In surgery" },
   { id: "d3", name: "Dr. Elena Reyes", specialty: "Pediatrics", hours: "10:00 – 18:00", status: "Available" },
-  { id: "d4", name: "Dr. Omar Hassan", specialty: "Neurology", hours: "—", status: "Off" },
+  { id: "d4", name: "Dr. Omar Hassan", specialty: "Neurology", hours: "-", status: "Off" },
   { id: "d5", name: "Dr. Marta Kowalski", specialty: "General Medicine", hours: "09:00 – 15:00", status: "Available" },
 ];

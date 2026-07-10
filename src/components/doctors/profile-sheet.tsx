@@ -38,7 +38,7 @@ interface Props {
   onEdit?: (d: Doctor) => void;
 }
 
-// Cached mock appointment data — same source as the /appointments page.
+// Cached mock appointment data - same source as the /appointments page.
 let CACHED_APPTS: Appointment[] | null = null;
 function apptsFor(doctorId: string): Appointment[] {
   if (!CACHED_APPTS) CACHED_APPTS = generateInitialAppointments();
@@ -233,7 +233,7 @@ function Body({
                           {a.patientName}
                         </TableCell>
                         <TableCell className="py-2 text-sm text-muted-foreground">
-                          {a.reason ?? "—"}
+                          {a.reason ?? "-"}
                         </TableCell>
                         <TableCell className="py-2 text-end text-[11px] font-medium text-foreground">
                           {a.status}

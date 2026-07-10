@@ -84,7 +84,7 @@ export function UploadResultDialog({ test, onOpenChange, onSubmit }: Props) {
     } else {
       onSubmit(test.id, { findings: findings.trim() });
     }
-    toast.success(`Result saved for ${test.patientName} — ${test.testName}`);
+    toast.success(`Result saved for ${test.patientName} - ${test.testName}`);
     onOpenChange(false);
   };
 
@@ -92,7 +92,7 @@ export function UploadResultDialog({ test, onOpenChange, onSubmit }: Props) {
     <Dialog open={test !== null} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Upload Result — {test.testName}</DialogTitle>
+          <DialogTitle>Upload Result - {test.testName}</DialogTitle>
           <DialogDescription>
             {test.id} · {test.patientName}
           </DialogDescription>
@@ -132,11 +132,11 @@ export function UploadResultDialog({ test, onOpenChange, onSubmit }: Props) {
                           setValues((v) => ({ ...v, [p.name]: e.target.value }))
                         }
                         className="h-8 w-28 tabular"
-                        placeholder="—"
+                        placeholder="-"
                       />
                     </TableCell>
                     <TableCell className="py-2 text-xs text-muted-foreground">
-                      {p.unit || "—"}
+                      {p.unit || "-"}
                     </TableCell>
                     <TableCell className="py-2 text-xs tabular text-muted-foreground">
                       {p.refLow}–{p.refHigh}
