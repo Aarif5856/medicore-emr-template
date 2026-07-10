@@ -123,7 +123,18 @@ function DoctorsPage() {
   };
 
   const handleExport = () => {
-    toast.success("Exporting doctor directory (demo)…");
+    const rows = filtered;
+    const columns: CsvColumn<Doctor>[] = [
+      { header: "Doctor ID", value: (d) => d.id },
+      { header: "Name", value: (d) => doctorFullName(d) },
+      { header: "Specialty", value: (d) => d.specialty },
+      { header: "Department", value: (d) => d.department },
+      { header: "Qualification", value: (d) => d.qualification },
+      { header: "Experience (years)", value: (d) => d.experienceYears },
+      { header: "Availability", value: (d) => d.availability },
+    ];
+    exportToCsv("medicore-doctors.csv", rows, columns);
+    toast.success(`Exported ${rows.length} ${rows.length === 1 ? "doctor" : "doctors"}`);
   };
 
   return (
