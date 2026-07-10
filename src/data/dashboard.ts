@@ -244,3 +244,10 @@ export const DOCTOR_AVAILABILITY: DoctorRow[] = [
   { id: "d4", name: "Dr. Omar Hassan", specialty: "Neurology", hours: "-", status: "Off" },
   { id: "d5", name: "Dr. Marta Kowalski", specialty: "General Medicine", hours: "09:00 – 15:00", status: "Available" },
 ];
+
+/* ---------------- Alert strip counts ---------------- */
+
+export const DASHBOARD_ALERTS = {
+  criticalLabResults: 3,
+  overdueInvoices: 9,
+} as const;

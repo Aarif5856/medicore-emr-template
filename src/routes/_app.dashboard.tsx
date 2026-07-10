@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Download } from "lucide-react";
+import { CalendarPlus, Download, UserPlus, X, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
+import { useState } from "react";
 
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { PageHeader } from "@/components/coming-soon";
@@ -8,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorState } from "@/components/ui/error-state";
-import { STAT_CARDS, VISITS_MONTHLY } from "@/data/dashboard";
+import { STAT_CARDS, VISITS_MONTHLY, DASHBOARD_ALERTS } from "@/data/dashboard";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { VisitsChart } from "@/components/dashboard/visits-chart";
 import { DepartmentChart } from "@/components/dashboard/department-chart";
@@ -18,7 +19,13 @@ import { LabResultsCard } from "@/components/dashboard/lab-results-card";
 import { RevenueChart } from "@/components/dashboard/revenue-chart";
 import { DoctorAvailability } from "@/components/dashboard/doctor-availability";
 import { useMockQuery } from "@/lib/mock-query";
-
+import { BookingDialog } from "@/components/appointments/booking-dialog";
+import { AddPatientDialog } from "@/components/patients/add-patient-dialog";
+import {
+  AppointmentsProvider,
+  useAppointments,
+} from "@/components/appointments/store";
+import { Link } from "@tanstack/react-router";
 
 function handleDownloadReport() {
   const kpiSection = "KPI Summary\r\n" +
@@ -47,11 +54,18 @@ function handleDownloadReport() {
   toast.success("Report downloaded");
 }
 
-
 export const Route = createFileRoute("/_app/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard · MediCore EMR" }] }),
-  component: DashboardPage,
+  component: DashboardRoute,
 });
+
+function DashboardRoute() {
+  return (
+    <AppointmentsProvider>
+      <DashboardPage />
+    </AppointmentsProvider>
+  );
+}
 
 function KpiSkeletonCard() {
   return (
@@ -114,7 +128,51 @@ function KpiRow() {
   );
 }
 
+function AlertStrip() {
+  const [dismissed, setDismissed] = useState(false);
+
+  if (dismissed) return null;
+
+  return (
+    <div
+      className="flex items-start gap-3 rounded-lg border border-warning/30 bg-warning/10 px-4 py-3 text-sm text-warning-foreground"
+      role="alert"
+    >
+      <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-warning" aria-hidden />
+      <div className="flex-1">
+        <Link
+          to="/laboratory"
+          className="font-medium underline-offset-2 hover:text-warning hover:underline focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warning/50"
+        >
+          {DASHBOARD_ALERTS.criticalLabResults} critical lab results awaiting review
+        </Link>
+        <span className="mx-1.5 text-muted-foreground">·</span>
+        <Link
+          to="/billing"
+          className="font-medium underline-offset-2 hover:text-warning hover:underline focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-warning/50"
+        >
+          {DASHBOARD_ALERTS.overdueInvoices} overdue invoices
+        </Link>
+      </div>
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        aria-label="Dismiss alerts"
+        onClick={() => setDismissed(true)}
+        className="-me-1 -mt-1 h-7 w-7 shrink-0 text-muted-foreground hover:text-foreground focus-visible:ring-warning/50"
+      >
+        <X className="h-4 w-4" />
+      </Button>
+    </div>
+  );
+}
+
 function DashboardPage() {
+  const [bookingOpen, setBookingOpen] = useState(false);
+  const [addPatientOpen, setAddPatientOpen] = useState(false);
+  const { appointments, addAppointment } = useAppointments();
+
   return (
     <div className="space-y-6">
       <Breadcrumbs />
@@ -122,12 +180,38 @@ function DashboardPage() {
         title="Dashboard"
         description="Real-time overview of clinical operations and revenue."
         actions={
-          <Button variant="outline" size="sm" className="gap-2" onClick={handleDownloadReport}>
-            <Download className="h-4 w-4" />
-            Download Report
-          </Button>
+          <>
+            <Button
+              size="sm"
+              className="gap-2 glow-primary"
+              onClick={() => setBookingOpen(true)}
+            >
+              <CalendarPlus className="h-4 w-4" />
+              New Appointment
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="gap-2"
+              onClick={() => setAddPatientOpen(true)}
+            >
+              <UserPlus className="h-4 w-4" />
+              Add Patient
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="gap-2"
+              onClick={handleDownloadReport}
+            >
+              <Download className="h-4 w-4" />
+              Download Report
+            </Button>
+          </>
         }
       />
+
+      <AlertStrip />
 
       {/* Bento grid - 12 cols on md+, single column on mobile */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
@@ -161,6 +245,15 @@ function DashboardPage() {
           <DoctorAvailability />
         </div>
       </div>
+
+      <BookingDialog
+        open={bookingOpen}
+        onOpenChange={setBookingOpen}
+        appointments={appointments}
+        onCreate={addAppointment}
+      />
+
+      <AddPatientDialog open={addPatientOpen} onOpenChange={setAddPatientOpen} />
     </div>
   );
 }
