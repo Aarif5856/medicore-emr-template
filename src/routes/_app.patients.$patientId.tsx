@@ -569,6 +569,3 @@ function DocumentsTab({ documents }: { documents: DocFile[] }) {
     </div>
   );
 }
-
-// Silence unused import lints (Patient type is exported implicitly through helpers).
-export type _PatientRef = Patient;
