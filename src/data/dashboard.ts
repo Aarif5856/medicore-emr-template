@@ -14,6 +14,8 @@ export interface StatCardData {
   trend?: Trend;
   meta?: string;
   sparkline?: number[];
+  href?: string;
+  linkLabel?: string;
 }
 
 export const STAT_CARDS: StatCardData[] = [
@@ -24,6 +26,8 @@ export const STAT_CARDS: StatCardData[] = [
     icon: Users,
     tone: "primary",
     trend: { value: "+12.5%", direction: "up", label: "vs last month" },
+    href: "/patients",
+    linkLabel: "view patients",
   },
   {
     id: "appointments",
@@ -32,6 +36,8 @@ export const STAT_CARDS: StatCardData[] = [
     icon: CalendarCheck,
     tone: "neutral",
     meta: "6 pending confirmation",
+    href: "/appointments",
+    linkLabel: "view appointments",
   },
   {
     id: "revenue",
@@ -41,6 +47,8 @@ export const STAT_CARDS: StatCardData[] = [
     tone: "teal",
     trend: { value: "+8.2%", direction: "up", label: "vs last month" },
     sparkline: [42, 48, 44, 52, 58, 55, 63, 61, 70, 68, 74, 82],
+    href: "/billing",
+    linkLabel: "view billing",
   },
   {
     id: "doctors",
@@ -49,6 +57,8 @@ export const STAT_CARDS: StatCardData[] = [
     icon: Stethoscope,
     tone: "neutral",
     meta: "3 on leave",
+    href: "/doctors",
+    linkLabel: "view doctors",
   },
 ];
 

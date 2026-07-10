@@ -55,21 +55,27 @@ export function useMockQuery<T>(
   );
 
   const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
+  const [isError, setIsError] = useState(forced === "error");
   const [tick, setTick] = useState(0);
 
   useEffect(() => {
+    // Forced states are unconditional so QA can inspect them indefinitely.
+    if (forced === "loading") {
+      setIsLoading(true);
+      setIsError(false);
+      return;
+    }
+    if (forced === "error") {
+      setIsLoading(false);
+      setIsError(true);
+      return;
+    }
     let cancelled = false;
     setIsLoading(true);
     setIsError(false);
     const t = setTimeout(() => {
       if (cancelled) return;
-      if (forced === "error") {
-        setIsError(true);
-        setIsLoading(false);
-      } else {
-        setIsLoading(false);
-      }
+      setIsLoading(false);
     }, initialDelay.current);
     return () => {
       cancelled = true;
