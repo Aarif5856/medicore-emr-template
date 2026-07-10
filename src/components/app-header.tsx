@@ -1,5 +1,17 @@
+import { useState } from "react";
 import { Bell, Moon, Search, Sun, User, LogOut, Settings as SettingsIcon } from "lucide-react";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
@@ -30,7 +42,14 @@ export function AppHeader() {
   const { notifications, unreadCount, markRead } = useNotifications();
   const navigate = useNavigate();
 
+  const [logoutOpen, setLogoutOpen] = useState(false);
+
   const recent = notifications.slice(0, 5);
+
+  const handleSignOut = () => {
+    setLogoutOpen(false);
+    toast.success("Signed out (demo)");
+  };
 
   const handleItemClick = (n: NotificationItem) => {
     if (!n.read) markRead(n.id);
@@ -204,18 +223,39 @@ export function AppHeader() {
           <DropdownMenuContent align="end" className="w-52">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => navigate({ to: "/settings" })}>
               <User className="me-2 h-4 w-4" /> Profile
             </DropdownMenuItem>
-            <DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => navigate({ to: "/settings" })}>
               <SettingsIcon className="me-2 h-4 w-4" /> Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive focus:text-destructive">
+            <DropdownMenuItem
+              onSelect={(e) => {
+                e.preventDefault();
+                setLogoutOpen(true);
+              }}
+              className="text-destructive focus:text-destructive"
+            >
               <LogOut className="me-2 h-4 w-4" /> Logout
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <AlertDialog open={logoutOpen} onOpenChange={setLogoutOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Sign out of MediCore?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This is a demo. No session will be ended.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleSignOut}>Sign out</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </header>
   );

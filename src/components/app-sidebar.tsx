@@ -85,7 +85,12 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" side={direction === "rtl" ? "right" : "left"}>
       <SidebarHeader className="border-b">
-        <div className="flex h-14 items-center gap-2.5 px-2">
+        <Link
+          to="/dashboard"
+          onClick={handleNavClick}
+          aria-label="MediCore EMR, go to dashboard"
+          className="flex h-14 items-center gap-2.5 rounded-md px-2 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar"
+        >
           <LogoMark className="h-9 w-9 shrink-0 rounded-lg text-primary glow-primary" />
           {!collapsed && (
             <div className="min-w-0 leading-tight">
@@ -95,7 +100,7 @@ export function AppSidebar() {
               </div>
             </div>
           )}
-        </div>
+        </Link>
       </SidebarHeader>
 
       <SidebarContent className="gap-1 pt-2">
