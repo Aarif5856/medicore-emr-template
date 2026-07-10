@@ -71,8 +71,13 @@ export function RevenueChart() {
           <div className="h-[280px]">
             <ErrorState title="Couldn't load revenue" onRetry={refetch} />
           </div>
-        ) : (
-        <div className="h-[280px] w-full">
+        ) : (() => {
+          const last = data[data.length - 1];
+          const lastTotal = last.consultations + last.procedures + last.pharmacy + last.lab;
+          const summary = `Revenue breakdown by service line for the last 6 months. Latest month ${last.month}: $${lastTotal}k total (procedures $${last.procedures}k, consultations $${last.consultations}k, pharmacy $${last.pharmacy}k, lab $${last.lab}k).`;
+          return (
+        <figure className="m-0 h-[280px] w-full" role="img" aria-label={summary}>
+          <figcaption className="sr-only">{summary}</figcaption>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
