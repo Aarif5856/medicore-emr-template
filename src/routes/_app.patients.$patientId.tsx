@@ -43,7 +43,7 @@ import {
   PatientStatusBadge,
 } from "@/components/patients/status-badge";
 import { EditPatientDialog } from "@/components/patients/edit-patient-dialog";
-import { getPatientById, PATIENTS, type Patient } from "@/data/patients";
+import { getPatientById, PATIENTS } from "@/data/patients";
 import {
   getAllergies,
   getAppointments,
