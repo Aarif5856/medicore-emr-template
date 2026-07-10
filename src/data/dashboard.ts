@@ -30,7 +30,7 @@ export const STAT_CARDS: StatCardData[] = [
     label: "Appointments Today",
     value: "48",
     icon: CalendarCheck,
-    tone: "teal",
+    tone: "neutral",
     meta: "6 pending confirmation",
   },
   {
@@ -38,7 +38,7 @@ export const STAT_CARDS: StatCardData[] = [
     label: "Revenue (This Month)",
     value: "$128,450",
     icon: DollarSign,
-    tone: "warning",
+    tone: "teal",
     trend: { value: "+8.2%", direction: "up", label: "vs last month" },
     sparkline: [42, 48, 44, 52, 58, 55, 63, 61, 70, 68, 74, 82],
   },
@@ -47,7 +47,7 @@ export const STAT_CARDS: StatCardData[] = [
     label: "Available Doctors",
     value: "24",
     icon: Stethoscope,
-    tone: "primary",
+    tone: "neutral",
     meta: "3 on leave",
   },
 ];
