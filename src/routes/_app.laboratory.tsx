@@ -27,12 +27,6 @@ function LaboratoryRoute() {
   );
 }
 
-const TONE_STYLES = {
-  primary: "bg-primary",
-  teal: "bg-[color:var(--accent-teal)]",
-  warning: "bg-warning",
-  destructive: "bg-destructive",
-} as const;
 
 function LaboratoryPage() {
   const { tests, addTest, updateTest } = useLab();
