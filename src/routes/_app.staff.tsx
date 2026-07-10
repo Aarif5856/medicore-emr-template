@@ -114,6 +114,7 @@ function StaffPage() {
         onView={handleView}
         onEdit={handleEdit}
         onDeactivate={handleDeactivate}
+        exportRef={exportRef}
       />
 
       <StaffProfileSheet
