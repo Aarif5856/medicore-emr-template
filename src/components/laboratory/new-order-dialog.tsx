@@ -79,6 +79,7 @@ interface Props {
 export function NewOrderDialog({ open, onOpenChange, onCreate }: Props) {
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
+    mode: "onBlur",
     defaultValues: {
       patientId: "",
       testName: "",

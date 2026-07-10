@@ -74,6 +74,7 @@ interface Props {
 export function BookingDialog({ open, onOpenChange, appointments, onCreate }: Props) {
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
+    mode: "onBlur",
     defaultValues: {
       patientId: "",
       department: "",

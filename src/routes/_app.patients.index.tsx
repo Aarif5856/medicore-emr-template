@@ -48,22 +48,28 @@ function PatientsPage() {
 
       {/* Summary strip */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        {PATIENTS_SUMMARY.map((s) => (
-          <Card key={s.label} className="card-glass p-4">
-            <div className="flex items-center gap-3">
-              <span
-                className={cn(
-                  "h-2.5 w-2.5 shrink-0 rounded-full",
-                  TONE_STYLES[s.tone].split(" ")[0],
+        {PATIENTS_SUMMARY.map((s) => {
+          const semantic = s.tone === "warning" || s.tone === "destructive";
+          return (
+            <Card key={s.label} className="card-glass p-4">
+              <div className="flex items-center gap-3">
+                {semantic && (
+                  <span
+                    aria-hidden
+                    className={cn(
+                      "h-2.5 w-2.5 shrink-0 rounded-full",
+                      TONE_STYLES[s.tone].split(" ")[0],
+                    )}
+                  />
                 )}
-              />
-              <div className="min-w-0">
-                <div className="text-[11px] font-medium text-muted-foreground">{s.label}</div>
-                <div className="text-lg font-semibold text-foreground tabular">{s.value}</div>
+                <div className="min-w-0">
+                  <div className="text-[11px] font-medium text-muted-foreground">{s.label}</div>
+                  <div className="text-lg font-semibold text-foreground tabular">{s.value}</div>
+                </div>
               </div>
-            </div>
-          </Card>
-        ))}
+            </Card>
+          );
+        })}
       </div>
 
       <PatientsTable />

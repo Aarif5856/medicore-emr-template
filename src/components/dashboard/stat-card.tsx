@@ -10,6 +10,7 @@ const TONE_MAP: Record<StatCardData["tone"], { bg: string; fg: string }> = {
   teal: { bg: "bg-[color:var(--accent-teal)]/10", fg: "text-[color:var(--accent-teal)]" },
   warning: { bg: "bg-warning/10", fg: "text-warning" },
   destructive: { bg: "bg-destructive/10", fg: "text-destructive" },
+  neutral: { bg: "bg-muted", fg: "text-muted-foreground" },
 };
 
 export function StatCard({ data }: { data: StatCardData }) {
@@ -33,7 +34,8 @@ export function StatCard({ data }: { data: StatCardData }) {
         <div className="flex items-start justify-between gap-3">
           <div
             className={cn(
-              "grid h-10 w-10 shrink-0 place-items-center rounded-lg glow-primary",
+              "grid h-10 w-10 shrink-0 place-items-center rounded-lg",
+              data.tone === "primary" && "glow-primary",
               tone.bg,
               tone.fg,
             )}
@@ -63,20 +65,24 @@ export function StatCard({ data }: { data: StatCardData }) {
           </div>
         </div>
 
-        {spark && (
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 opacity-70">
+        {spark && data.sparkline && (
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-10 opacity-70"
+            role="img"
+            aria-label={`${data.label} trend, from ${data.sparkline[0]} to ${data.sparkline[data.sparkline.length - 1]} over ${data.sparkline.length} periods.`}
+          >
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={spark} margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id={`sp-${data.id}`} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="var(--chart-3)" stopOpacity={0.5} />
-                    <stop offset="100%" stopColor="var(--chart-3)" stopOpacity={0} />
+                    <stop offset="0%" stopColor="var(--chart-2)" stopOpacity={0.5} />
+                    <stop offset="100%" stopColor="var(--chart-2)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <Area
                   type="monotone"
                   dataKey="v"
-                  stroke="var(--chart-3)"
+                  stroke="var(--chart-2)"
                   strokeWidth={1.5}
                   fill={`url(#sp-${data.id})`}
                 />

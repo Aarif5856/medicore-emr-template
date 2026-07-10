@@ -91,18 +91,23 @@ export function VisitsChart() {
           <div className="h-[280px]">
             <ErrorState title="Couldn't load visits" onRetry={refetch} />
           </div>
-        ) : (
-        <div className="h-[280px] w-full">
+        ) : (() => {
+          const last = data[data.length - 1];
+          const first = data[0];
+          const summary = `Patient visits over the last 12 months. In-patient rose from ${first.inPatient} in ${first.month} to ${last.inPatient} in ${last.month}. Out-patient rose from ${first.outPatient} to ${last.outPatient}.`;
+          return (
+        <figure className="m-0 h-[280px] w-full" role="img" aria-label={summary}>
+          <figcaption className="sr-only">{summary}</figcaption>
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={data} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="visits-in" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="var(--chart-1)" stopOpacity={0.35} />
-                  <stop offset="100%" stopColor="var(--chart-1)" stopOpacity={0} />
-                </linearGradient>
-                <linearGradient id="visits-out" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="var(--chart-2)" stopOpacity={0.35} />
                   <stop offset="100%" stopColor="var(--chart-2)" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="visits-out" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="var(--muted-foreground)" stopOpacity={0.25} />
+                  <stop offset="100%" stopColor="var(--muted-foreground)" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
@@ -132,7 +137,7 @@ export function VisitsChart() {
                 type="monotone"
                 name="Out-patient"
                 dataKey="outPatient"
-                stroke="var(--chart-2)"
+                stroke="var(--muted-foreground)"
                 strokeWidth={2}
                 fill="url(#visits-out)"
               />
@@ -140,14 +145,15 @@ export function VisitsChart() {
                 type="monotone"
                 name="In-patient"
                 dataKey="inPatient"
-                stroke="var(--chart-1)"
+                stroke="var(--chart-2)"
                 strokeWidth={2}
                 fill="url(#visits-in)"
               />
             </AreaChart>
           </ResponsiveContainer>
-        </div>
-        )}
+        </figure>
+          );
+        })()}
       </CardContent>
     </Card>
   );
