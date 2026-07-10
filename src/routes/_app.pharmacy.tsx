@@ -7,6 +7,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { PageHeader } from "@/components/coming-soon";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { MiniStatCard } from "@/components/ui/mini-stat-card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { PharmacyProvider, usePharmacy } from "@/components/pharmacy/store";
