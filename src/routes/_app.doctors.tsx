@@ -41,6 +41,7 @@ import {
   type DoctorAvailability,
   type DoctorSpecialty,
 } from "@/data/doctors";
+import { exportToCsv, type CsvColumn } from "@/lib/export-csv";
 
 export const Route = createFileRoute("/_app/doctors")({
   head: () => ({ meta: [{ title: "Doctors · MediCore EMR" }] }),
