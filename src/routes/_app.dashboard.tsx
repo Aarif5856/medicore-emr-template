@@ -18,6 +18,35 @@ import { LabResultsCard } from "@/components/dashboard/lab-results-card";
 import { RevenueChart } from "@/components/dashboard/revenue-chart";
 import { DoctorAvailability } from "@/components/dashboard/doctor-availability";
 import { useMockQuery } from "@/lib/mock-query";
+import { exportToCsv } from "@/lib/export-csv";
+
+function handleDownloadReport() {
+  const kpiSection = "KPI Summary\r\n" +
+    "Metric,Value,Trend,Note\r\n" +
+    STAT_CARDS.map((s) => {
+      const trend = s.trend ? `${s.trend.direction === "up" ? "+" : s.trend.direction === "down" ? "-" : ""}${s.trend.value} ${s.trend.label}` : "";
+      const note = s.meta ?? "";
+      const esc = (v: string) => (/[",\r\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v);
+      return [s.label, s.value, trend, note].map(esc).join(",");
+    }).join("\r\n");
+
+  const visitsSection = "Visits by Month (last 12)\r\n" +
+    "Month,In-patient,Out-patient\r\n" +
+    VISITS_MONTHLY.map((p) => `${p.label},${p.inPatient},${p.outPatient}`).join("\r\n");
+
+  const csv = `\uFEFFMediCore Dashboard Report\r\nGenerated,${new Date().toISOString()}\r\n\r\n${kpiSection}\r\n\r\n${visitsSection}\r\n`;
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "medicore-dashboard-report.csv";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  toast.success("Report downloaded");
+}
+
 
 export const Route = createFileRoute("/_app/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard · MediCore EMR" }] }),
