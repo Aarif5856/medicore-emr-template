@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Download } from "lucide-react";
+import { CalendarPlus, Download, UserPlus } from "lucide-react";
 import { toast } from "sonner";
+import { useState } from "react";
 
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { PageHeader } from "@/components/coming-soon";
@@ -8,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorState } from "@/components/ui/error-state";
-import { STAT_CARDS, VISITS_MONTHLY } from "@/data/dashboard";
+import { STAT_CARDS, VISITS_MONTHLY, DASHBOARD_ALERTS } from "@/data/dashboard";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { VisitsChart } from "@/components/dashboard/visits-chart";
 import { DepartmentChart } from "@/components/dashboard/department-chart";
@@ -18,6 +19,10 @@ import { LabResultsCard } from "@/components/dashboard/lab-results-card";
 import { RevenueChart } from "@/components/dashboard/revenue-chart";
 import { DoctorAvailability } from "@/components/dashboard/doctor-availability";
 import { useMockQuery } from "@/lib/mock-query";
+import { BookingDialog } from "@/components/appointments/booking-dialog";
+import { AppointmentsProvider, useAppointments } from "@/components/appointments/store";
+import { Link } from "@tanstack/react-router";
+import { X, AlertTriangle } from "lucide-react";
 
 
 function handleDownloadReport() {
