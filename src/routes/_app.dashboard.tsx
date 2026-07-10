@@ -18,7 +18,7 @@ import { LabResultsCard } from "@/components/dashboard/lab-results-card";
 import { RevenueChart } from "@/components/dashboard/revenue-chart";
 import { DoctorAvailability } from "@/components/dashboard/doctor-availability";
 import { useMockQuery } from "@/lib/mock-query";
-import { exportToCsv } from "@/lib/export-csv";
+
 
 function handleDownloadReport() {
   const kpiSection = "KPI Summary\r\n" +
