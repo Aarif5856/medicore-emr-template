@@ -1,5 +1,6 @@
 import { ArrowDownRight, ArrowUpRight, Minus } from "lucide-react";
 import { Area, AreaChart, ResponsiveContainer } from "recharts";
+import { Link } from "@tanstack/react-router";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
