@@ -97,9 +97,7 @@ function LaboratoryPage() {
     });
   };
 
-  const handleExport = () => {
-    toast.success("Exporting lab report (demo)…");
-  };
+  const handleExport = () => exportRef.current?.();
 
   return (
     <div className="space-y-6">
