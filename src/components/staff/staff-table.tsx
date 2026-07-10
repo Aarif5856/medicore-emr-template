@@ -70,6 +70,8 @@ import { ErrorState } from "@/components/ui/error-state";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useMockQuery } from "@/lib/mock-query";
 import { UserPlus } from "lucide-react";
+import { toast } from "sonner";
+import { exportToCsv, type CsvColumn } from "@/lib/export-csv";
 
 type RoleTab = "All" | StaffRole;
 const ROLE_TABS: RoleTab[] = ["All", "Doctor", "Nurse", "Admin", "Support"];
@@ -79,9 +81,10 @@ interface Props {
   onView: (s: StaffMember) => void;
   onEdit: (s: StaffMember) => void;
   onDeactivate: (s: StaffMember) => void;
+  exportRef?: React.MutableRefObject<(() => void) | null>;
 }
 
-export function StaffTable({ staff, onView, onEdit, onDeactivate }: Props) {
+export function StaffTable({ staff, onView, onEdit, onDeactivate, exportRef }: Props) {
   const { data, isLoading, isError, refetch } = useMockQuery(staff);
   const source = data ?? [];
   const [sorting, setSorting] = useState<SortingState>([{ id: "joinedDate", desc: true }]);
