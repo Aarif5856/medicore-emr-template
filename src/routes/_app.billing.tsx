@@ -74,7 +74,7 @@ function BillingPage() {
     // Blend seed baseline with live data for a realistic-looking KPI.
     return [
       {
-        label: "Total Revenue (This Month)",
+        label: "Revenue (Month)",
         value: formatCurrency(128450 + revenueThisMonth),
         tone: "primary" as const,
       },
