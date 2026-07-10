@@ -132,7 +132,7 @@ export function AddDoctorDialog({ open, onOpenChange, onCreate }: Props) {
                     <FormItem>
                       <FormLabel>First name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Jane" className="h-9" {...field} />
+                        <Input placeholder="Aisha" className="h-9" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -145,7 +145,7 @@ export function AddDoctorDialog({ open, onOpenChange, onCreate }: Props) {
                     <FormItem>
                       <FormLabel>Last name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Doe" className="h-9" {...field} />
+                        <Input placeholder="Patel" className="h-9" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -173,7 +173,7 @@ export function AddDoctorDialog({ open, onOpenChange, onCreate }: Props) {
                       <FormControl>
                         <Input
                           type="email"
-                          placeholder="jane.doe@medicore.io"
+                          placeholder="a.patel@medicore.io"
                           className="h-9"
                           {...field}
                         />
