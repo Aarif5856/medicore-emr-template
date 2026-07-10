@@ -56,6 +56,10 @@ import {
   type MedicineCategory,
 } from "@/data/pharmacy";
 import { CategoryBadge, StockBar } from "@/components/pharmacy/badges";
+import { EmptyState } from "@/components/ui/empty-state";
+import { ErrorState } from "@/components/ui/error-state";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
+import { useMockQuery } from "@/lib/mock-query";
 
 interface Props {
   medicines: Medicine[];
@@ -65,6 +69,8 @@ interface Props {
 }
 
 export function InventoryTable({ medicines, onEdit, onRestock, onDelete }: Props) {
+  const { data, isLoading, isError, refetch } = useMockQuery(medicines);
+  const source = data ?? [];
   const [sorting, setSorting] = useState<SortingState>([{ id: "name", desc: false }]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState<MedicineCategory | "All">("All");
@@ -181,7 +187,7 @@ export function InventoryTable({ medicines, onEdit, onRestock, onDelete }: Props
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return medicines.filter((m) => {
+    return source.filter((m) => {
       if (category !== "All" && m.category !== category) return false;
       if (lowOnly && m.stockQty >= m.reorderThreshold) return false;
       if (!q) return true;
@@ -191,7 +197,7 @@ export function InventoryTable({ medicines, onEdit, onRestock, onDelete }: Props
         m.id.toLowerCase().includes(q)
       );
     });
-  }, [medicines, search, category, lowOnly]);
+  }, [source, search, category, lowOnly]);
 
   const table = useReactTable({
     data: filtered,
@@ -209,6 +215,12 @@ export function InventoryTable({ medicines, onEdit, onRestock, onDelete }: Props
   const { pageIndex } = table.getState().pagination;
   const first = total === 0 ? 0 : pageIndex * pageSize + 1;
   const last = Math.min((pageIndex + 1) * pageSize, total);
+  const hasActiveFilters = Boolean(search) || category !== "All" || lowOnly;
+  const clearFilters = () => {
+    setSearch("");
+    setCategory("All");
+    setLowOnly(false);
+  };
 
   return (
     <div className="space-y-3">
@@ -248,6 +260,13 @@ export function InventoryTable({ medicines, onEdit, onRestock, onDelete }: Props
         </label>
       </div>
 
+      {isLoading ? (
+        <TableSkeleton columns={["w-40", "w-24", "w-16", "w-32", "w-20", "w-24", "w-8"]} />
+      ) : isError ? (
+        <div className="overflow-hidden rounded-lg border bg-card">
+          <ErrorState title="Couldn't load inventory" onRetry={refetch} />
+        </div>
+      ) : (
       <div className="overflow-hidden rounded-lg border bg-card">
         <div className="overflow-x-auto">
           <Table>
@@ -270,11 +289,21 @@ export function InventoryTable({ medicines, onEdit, onRestock, onDelete }: Props
             <TableBody>
               {table.getRowModel().rows.length === 0 ? (
                 <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center text-sm text-muted-foreground"
-                  >
-                    No medicines match your filters.
+                  <TableCell colSpan={columns.length} className="p-0">
+                    {hasActiveFilters ? (
+                      <EmptyState
+                        icon={Search}
+                        title="No matching medicines"
+                        description="Adjust your search or filters to see more results."
+                        action={{ label: "Clear filters", onClick: clearFilters }}
+                      />
+                    ) : (
+                      <EmptyState
+                        icon={Package}
+                        title="Inventory is empty"
+                        description="Add medicines to start tracking stock levels."
+                      />
+                    )}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -292,6 +321,7 @@ export function InventoryTable({ medicines, onEdit, onRestock, onDelete }: Props
           </Table>
         </div>
       </div>
+      )}
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="text-xs text-muted-foreground tabular">

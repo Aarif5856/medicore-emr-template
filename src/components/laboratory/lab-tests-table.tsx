@@ -60,6 +60,11 @@ import {
   formatLabDate,
   initialsFromName,
 } from "@/components/laboratory/status-badge";
+import { EmptyState } from "@/components/ui/empty-state";
+import { ErrorState } from "@/components/ui/error-state";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
+import { useMockQuery } from "@/lib/mock-query";
+import { FlaskConical } from "lucide-react";
 
 type StatusTab = "All" | LabStatus;
 
@@ -93,6 +98,8 @@ export function LabTestsTable({
   onMarkCritical,
   onCancel,
 }: Props) {
+  const { data, isLoading, isError, refetch } = useMockQuery(tests);
+  const source = data ?? [];
   const [sorting, setSorting] = useState<SortingState>([
     { id: "orderedDate", desc: true },
   ]);
@@ -229,13 +236,13 @@ export function LabTestsTable({
 
   // apply status tab + category + date range as pre-filter
   const filteredData = useMemo(() => {
-    return tests.filter((t) => {
+    return source.filter((t) => {
       if (tab !== "All" && t.status !== tab) return false;
       if (category !== "All" && t.category !== category) return false;
       if (!withinRange(t.orderedDate, dateRange)) return false;
       return true;
     });
-  }, [tests, tab, category, dateRange]);
+  }, [source, tab, category, dateRange]);
 
   const table = useReactTable({
     data: filteredData,
@@ -256,18 +263,29 @@ export function LabTestsTable({
   const { pageIndex } = table.getState().pagination;
   const firstRow = totalRows === 0 ? 0 : pageIndex * pageSize + 1;
   const lastRow = Math.min((pageIndex + 1) * pageSize, totalRows);
+  const hasActiveFilters =
+    Boolean(search) ||
+    tab !== "All" ||
+    category !== "All" ||
+    dateRange !== "All time";
+  const clearFilters = () => {
+    table.getColumn("patient")?.setFilterValue("");
+    setTab("All");
+    setCategory("All");
+    setDateRange("All time");
+  };
 
   const counts = useMemo(() => {
     const c: Record<StatusTab, number> = {
-      All: tests.length,
+      All: source.length,
       Pending: 0,
       "In Progress": 0,
       Completed: 0,
       Critical: 0,
     };
-    for (const t of tests) c[t.status]++;
+    for (const t of source) c[t.status]++;
     return c;
-  }, [tests]);
+  }, [source]);
 
   return (
     <div className="space-y-3">
@@ -342,6 +360,13 @@ export function LabTestsTable({
       </div>
 
       {/* Table */}
+      {isLoading ? (
+        <TableSkeleton columns={["w-20", "w-32", "w-40", "w-24", "w-24", "w-24", "w-24", "w-8"]} />
+      ) : isError ? (
+        <div className="overflow-hidden rounded-lg border bg-card">
+          <ErrorState title="Couldn't load lab tests" onRetry={refetch} />
+        </div>
+      ) : (
       <div className="overflow-hidden rounded-lg border bg-card">
         <div className="overflow-x-auto">
           <Table>
@@ -364,11 +389,21 @@ export function LabTestsTable({
             <TableBody>
               {table.getRowModel().rows.length === 0 ? (
                 <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center text-sm text-muted-foreground"
-                  >
-                    No lab tests match your filters.
+                  <TableCell colSpan={columns.length} className="p-0">
+                    {hasActiveFilters ? (
+                      <EmptyState
+                        icon={Search}
+                        title="No matching lab tests"
+                        description="Adjust your search or filters to see more results."
+                        action={{ label: "Clear filters", onClick: clearFilters }}
+                      />
+                    ) : (
+                      <EmptyState
+                        icon={FlaskConical}
+                        title="No lab tests ordered"
+                        description="New orders and results will appear here."
+                      />
+                    )}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -390,6 +425,7 @@ export function LabTestsTable({
           </Table>
         </div>
       </div>
+      )}
 
       {/* Footer */}
       <div className="flex flex-wrap items-center justify-between gap-3">

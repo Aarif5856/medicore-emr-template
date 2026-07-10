@@ -64,6 +64,11 @@ import {
   ServiceBadge,
   initialsFromName,
 } from "@/components/billing/badges";
+import { EmptyState } from "@/components/ui/empty-state";
+import { ErrorState } from "@/components/ui/error-state";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
+import { useMockQuery } from "@/lib/mock-query";
+import { Receipt } from "lucide-react";
 
 type StatusTab = "All" | InvoiceStatus;
 const TABS: StatusTab[] = ["All", "Paid", "Pending", "Overdue", "Cancelled"];
@@ -97,6 +102,8 @@ export function InvoicesTable({
   onMarkPaid,
   onCancel,
 }: Props) {
+  const { data, isLoading, isError, refetch } = useMockQuery(invoices);
+  const source = data ?? [];
   const [sorting, setSorting] = useState<SortingState>([
     { id: "issueDate", desc: true },
   ]);
@@ -259,13 +266,13 @@ export function InvoicesTable({
   );
 
   const filteredData = useMemo(() => {
-    return invoices.filter((inv) => {
+    return source.filter((inv) => {
       if (tab !== "All" && inv.status !== tab) return false;
       if (service !== "All" && inv.service !== service) return false;
       if (!withinRange(inv.issueDate, dateRange)) return false;
       return true;
     });
-  }, [invoices, tab, service, dateRange]);
+  }, [source, tab, service, dateRange]);
 
   const table = useReactTable({
     data: filteredData,
@@ -286,18 +293,29 @@ export function InvoicesTable({
   const { pageIndex } = table.getState().pagination;
   const firstRow = totalRows === 0 ? 0 : pageIndex * pageSize + 1;
   const lastRow = Math.min((pageIndex + 1) * pageSize, totalRows);
+  const hasActiveFilters =
+    Boolean(search) ||
+    tab !== "All" ||
+    service !== "All" ||
+    dateRange !== "All time";
+  const clearFilters = () => {
+    table.getColumn("patient")?.setFilterValue("");
+    setTab("All");
+    setService("All");
+    setDateRange("All time");
+  };
 
   const counts = useMemo(() => {
     const c: Record<StatusTab, number> = {
-      All: invoices.length,
+      All: source.length,
       Paid: 0,
       Pending: 0,
       Overdue: 0,
       Cancelled: 0,
     };
-    for (const inv of invoices) c[inv.status]++;
+    for (const inv of source) c[inv.status]++;
     return c;
-  }, [invoices]);
+  }, [source]);
 
   return (
     <div className="space-y-3">
@@ -369,6 +387,13 @@ export function InvoicesTable({
         </Select>
       </div>
 
+      {isLoading ? (
+        <TableSkeleton columns={["w-20", "w-40", "w-20", "w-24", "w-24", "w-16", "w-20", "w-20", "w-8"]} />
+      ) : isError ? (
+        <div className="overflow-hidden rounded-lg border bg-card">
+          <ErrorState title="Couldn't load invoices" onRetry={refetch} />
+        </div>
+      ) : (
       <div className="overflow-hidden rounded-lg border bg-card">
         <div className="overflow-x-auto">
           <Table>
@@ -391,11 +416,21 @@ export function InvoicesTable({
             <TableBody>
               {table.getRowModel().rows.length === 0 ? (
                 <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center text-sm text-muted-foreground"
-                  >
-                    No invoices match your filters.
+                  <TableCell colSpan={columns.length} className="p-0">
+                    {hasActiveFilters ? (
+                      <EmptyState
+                        icon={Search}
+                        title="No matching invoices"
+                        description="Adjust your search or filters to see more results."
+                        action={{ label: "Clear filters", onClick: clearFilters }}
+                      />
+                    ) : (
+                      <EmptyState
+                        icon={Receipt}
+                        title="No invoices yet"
+                        description="Create your first invoice to start tracking billing."
+                      />
+                    )}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -417,6 +452,7 @@ export function InvoicesTable({
           </Table>
         </div>
       </div>
+      )}
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="text-xs text-muted-foreground tabular">

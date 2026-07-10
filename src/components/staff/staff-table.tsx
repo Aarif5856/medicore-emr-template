@@ -65,6 +65,11 @@ import {
   ShiftBadge,
   StatusBadge,
 } from "@/components/staff/badges";
+import { EmptyState } from "@/components/ui/empty-state";
+import { ErrorState } from "@/components/ui/error-state";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
+import { useMockQuery } from "@/lib/mock-query";
+import { UserPlus } from "lucide-react";
 
 type RoleTab = "All" | StaffRole;
 const ROLE_TABS: RoleTab[] = ["All", "Doctor", "Nurse", "Admin", "Support"];
@@ -77,6 +82,8 @@ interface Props {
 }
 
 export function StaffTable({ staff, onView, onEdit, onDeactivate }: Props) {
+  const { data, isLoading, isError, refetch } = useMockQuery(staff);
+  const source = data ?? [];
   const [sorting, setSorting] = useState<SortingState>([{ id: "joinedDate", desc: true }]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [tab, setTab] = useState<RoleTab>("All");
@@ -210,13 +217,13 @@ export function StaffTable({ staff, onView, onEdit, onDeactivate }: Props) {
   );
 
   const filteredData = useMemo(() => {
-    return staff.filter((s) => {
+    return source.filter((s) => {
       if (tab !== "All" && s.role !== tab) return false;
       if (department !== "All" && s.department !== department) return false;
       if (shift !== "All" && s.shift !== shift) return false;
       return true;
     });
-  }, [staff, tab, department, shift]);
+  }, [source, tab, department, shift]);
 
   const table = useReactTable({
     data: filteredData,
@@ -237,18 +244,26 @@ export function StaffTable({ staff, onView, onEdit, onDeactivate }: Props) {
   const { pageIndex } = table.getState().pagination;
   const firstRow = totalRows === 0 ? 0 : pageIndex * pageSize + 1;
   const lastRow = Math.min((pageIndex + 1) * pageSize, totalRows);
+  const hasActiveFilters =
+    Boolean(search) || tab !== "All" || department !== "All" || shift !== "All";
+  const clearFilters = () => {
+    table.getColumn("staff")?.setFilterValue("");
+    setTab("All");
+    setDepartment("All");
+    setShift("All");
+  };
 
   const counts = useMemo(() => {
     const c: Record<RoleTab, number> = {
-      All: staff.length,
+      All: source.length,
       Doctor: 0,
       Nurse: 0,
       Admin: 0,
       Support: 0,
     };
-    for (const s of staff) c[s.role]++;
+    for (const s of source) c[s.role]++;
     return c;
-  }, [staff]);
+  }, [source]);
 
   return (
     <div className="space-y-3">
@@ -324,6 +339,13 @@ export function StaffTable({ staff, onView, onEdit, onDeactivate }: Props) {
       </div>
 
       {/* Table */}
+      {isLoading ? (
+        <TableSkeleton columns={["w-40", "w-20", "w-24", "w-24", "w-32", "w-16", "w-20", "w-20", "w-8"]} />
+      ) : isError ? (
+        <div className="overflow-hidden rounded-lg border bg-card">
+          <ErrorState title="Couldn't load staff" onRetry={refetch} />
+        </div>
+      ) : (
       <div className="overflow-hidden rounded-lg border bg-card">
         <div className="overflow-x-auto">
           <Table>
@@ -346,11 +368,21 @@ export function StaffTable({ staff, onView, onEdit, onDeactivate }: Props) {
             <TableBody>
               {table.getRowModel().rows.length === 0 ? (
                 <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center text-sm text-muted-foreground"
-                  >
-                    No staff members match your filters.
+                  <TableCell colSpan={columns.length} className="p-0">
+                    {hasActiveFilters ? (
+                      <EmptyState
+                        icon={Search}
+                        title="No matching staff"
+                        description="Adjust your search or filters to see more results."
+                        action={{ label: "Clear filters", onClick: clearFilters }}
+                      />
+                    ) : (
+                      <EmptyState
+                        icon={UserPlus}
+                        title="No staff yet"
+                        description="Add clinical and admin staff to build your roster."
+                      />
+                    )}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -372,6 +404,7 @@ export function StaffTable({ staff, onView, onEdit, onDeactivate }: Props) {
           </Table>
         </div>
       </div>
+      )}
 
       {/* Footer */}
       <div className="flex flex-wrap items-center justify-between gap-3">

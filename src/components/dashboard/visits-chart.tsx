@@ -11,7 +11,10 @@ import {
 } from "recharts";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChartSkeleton } from "@/components/ui/table-skeleton";
+import { ErrorState } from "@/components/ui/error-state";
 import { cn } from "@/lib/utils";
+import { useMockQuery } from "@/lib/mock-query";
 import { VISITS_MONTHLY, VISITS_RANGES, type VisitsRange } from "@/data/dashboard";
 
 interface TooltipItem {
@@ -52,6 +55,7 @@ function ChartTooltip({
 
 export function VisitsChart() {
   const [range, setRange] = useState<VisitsRange>("Monthly");
+  const { data, isLoading, isError, refetch } = useMockQuery(VISITS_MONTHLY);
 
   return (
     <Card className="card-glass h-full">
@@ -81,9 +85,16 @@ export function VisitsChart() {
         </div>
       </CardHeader>
       <CardContent className="ps-2">
+        {isLoading ? (
+          <ChartSkeleton height={280} />
+        ) : isError || !data ? (
+          <div className="h-[280px]">
+            <ErrorState title="Couldn't load visits" onRetry={refetch} />
+          </div>
+        ) : (
         <div className="h-[280px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={VISITS_MONTHLY} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
+            <AreaChart data={data} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
               <defs>
                 <linearGradient id="visits-in" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="var(--chart-1)" stopOpacity={0.35} />
@@ -136,6 +147,7 @@ export function VisitsChart() {
             </AreaChart>
           </ResponsiveContainer>
         </div>
+        )}
       </CardContent>
     </Card>
   );
