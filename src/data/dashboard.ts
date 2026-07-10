@@ -65,28 +65,64 @@ export const STAT_CARDS: StatCardData[] = [
 /* ---------------- Visits chart ---------------- */
 
 export interface VisitsPoint {
-  month: string;
+  label: string;
   inPatient: number;
   outPatient: number;
 }
 
 export const VISITS_MONTHLY: VisitsPoint[] = [
-  { month: "Jan", inPatient: 320, outPatient: 640 },
-  { month: "Feb", inPatient: 280, outPatient: 720 },
-  { month: "Mar", inPatient: 360, outPatient: 810 },
-  { month: "Apr", inPatient: 410, outPatient: 780 },
-  { month: "May", inPatient: 390, outPatient: 860 },
-  { month: "Jun", inPatient: 450, outPatient: 920 },
-  { month: "Jul", inPatient: 470, outPatient: 980 },
-  { month: "Aug", inPatient: 500, outPatient: 1040 },
-  { month: "Sep", inPatient: 480, outPatient: 1010 },
-  { month: "Oct", inPatient: 530, outPatient: 1120 },
-  { month: "Nov", inPatient: 560, outPatient: 1180 },
-  { month: "Dec", inPatient: 610, outPatient: 1260 },
+  { label: "Jan", inPatient: 320, outPatient: 640 },
+  { label: "Feb", inPatient: 280, outPatient: 720 },
+  { label: "Mar", inPatient: 360, outPatient: 810 },
+  { label: "Apr", inPatient: 410, outPatient: 780 },
+  { label: "May", inPatient: 390, outPatient: 860 },
+  { label: "Jun", inPatient: 450, outPatient: 920 },
+  { label: "Jul", inPatient: 470, outPatient: 980 },
+  { label: "Aug", inPatient: 500, outPatient: 1040 },
+  { label: "Sep", inPatient: 480, outPatient: 1010 },
+  { label: "Oct", inPatient: 530, outPatient: 1120 },
+  { label: "Nov", inPatient: 560, outPatient: 1180 },
+  { label: "Dec", inPatient: 610, outPatient: 1260 },
+];
+
+export const VISITS_WEEKLY: VisitsPoint[] = [
+  { label: "W1", inPatient: 118, outPatient: 242 },
+  { label: "W2", inPatient: 132, outPatient: 268 },
+  { label: "W3", inPatient: 124, outPatient: 254 },
+  { label: "W4", inPatient: 141, outPatient: 289 },
+  { label: "W5", inPatient: 137, outPatient: 296 },
+  { label: "W6", inPatient: 149, outPatient: 312 },
+  { label: "W7", inPatient: 143, outPatient: 305 },
+  { label: "W8", inPatient: 158, outPatient: 327 },
+  { label: "W9", inPatient: 152, outPatient: 318 },
+  { label: "W10", inPatient: 164, outPatient: 341 },
+  { label: "W11", inPatient: 171, outPatient: 356 },
+  { label: "W12", inPatient: 168, outPatient: 372 },
+];
+
+export const VISITS_YEARLY: VisitsPoint[] = [
+  { label: "2022", inPatient: 4280, outPatient: 9640 },
+  { label: "2023", inPatient: 4720, outPatient: 10480 },
+  { label: "2024", inPatient: 5140, outPatient: 11320 },
+  { label: "2025", inPatient: 5580, outPatient: 12470 },
+  { label: "2026", inPatient: 5960, outPatient: 13210 },
 ];
 
 export type VisitsRange = "Weekly" | "Monthly" | "Yearly";
 export const VISITS_RANGES: VisitsRange[] = ["Weekly", "Monthly", "Yearly"];
+
+export const VISITS_BY_RANGE: Record<VisitsRange, VisitsPoint[]> = {
+  Weekly: VISITS_WEEKLY,
+  Monthly: VISITS_MONTHLY,
+  Yearly: VISITS_YEARLY,
+};
+
+export const VISITS_RANGE_UNIT: Record<VisitsRange, string> = {
+  Weekly: "12 weeks",
+  Monthly: "12 months",
+  Yearly: "5 years",
+};
+
 
 /* ---------------- Departments ---------------- */
 
