@@ -80,6 +80,7 @@ const defaults = (): FormValues => ({
 export function AddDoctorDialog({ open, onOpenChange, onCreate }: Props) {
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
+    mode: "onBlur",
     defaultValues: defaults(),
   });
 

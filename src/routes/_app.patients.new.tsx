@@ -69,6 +69,7 @@ function NewPatientPage() {
   const navigate = useNavigate();
   const form = useForm<PatientFormValues>({
     resolver: zodResolver(patientSchema),
+    mode: "onBlur",
     defaultValues: {
       firstName: "",
       lastName: "",

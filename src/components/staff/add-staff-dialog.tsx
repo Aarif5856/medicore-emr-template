@@ -123,6 +123,7 @@ export function AddStaffDialog({
   const isEdit = !!initialValue;
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
+    mode: "onBlur",
     defaultValues: initialValue ? fromStaff(initialValue) : emptyDefaults(),
   });
 

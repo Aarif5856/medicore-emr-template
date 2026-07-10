@@ -88,6 +88,7 @@ interface Props {
 export function NewInvoiceDialog({ open, onOpenChange, onCreate }: Props) {
   const form = useForm<FormInputValues, undefined, FormSubmitValues>({
     resolver: zodResolver(schema),
+    mode: "onBlur",
     defaultValues: {
       patientId: "",
       service: "Consultation",
