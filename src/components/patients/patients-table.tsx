@@ -60,6 +60,8 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorState } from "@/components/ui/error-state";
 import { TableSkeleton } from "@/components/ui/table-skeleton";
 import { useMockQuery } from "@/lib/mock-query";
+import { exportToCsv, type CsvColumn } from "@/lib/export-csv";
+import { toast } from "sonner";
 
 const STATUS_OPTIONS: (PatientStatus | "All")[] = [
   "All",
@@ -70,7 +72,11 @@ const STATUS_OPTIONS: (PatientStatus | "All")[] = [
 ];
 const GENDER_OPTIONS = ["All", "Male", "Female", "Other"] as const;
 
-export function PatientsTable() {
+interface PatientsTableProps {
+  exportRef?: React.MutableRefObject<(() => void) | null>;
+}
+
+export function PatientsTable({ exportRef }: PatientsTableProps = {}) {
   const navigate = useNavigate();
   const { data, isLoading, isError, refetch } = useMockQuery(PATIENTS);
   const [sorting, setSorting] = useState<SortingState>([]);
