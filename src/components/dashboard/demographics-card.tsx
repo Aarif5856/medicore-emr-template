@@ -34,8 +34,15 @@ export function DemographicsCard() {
           </>
         ) : isError ? (
           <ErrorState compact title="Couldn't load demographics" onRetry={refetch} />
-        ) : (
-          <>
+        ) : (() => {
+          const summary = `Patient demographics. Gender split: ${gender
+            .map((g) => `${g.name} ${g.value}%`)
+            .join(", ")}. Largest age group ${
+            ages.reduce((a, b) => (b.value > a.value ? b : a), ages[0] ?? { label: "", value: 0 }).label
+          } at ${maxAge}%.`;
+          return (
+          <figure className="m-0" role="img" aria-label={summary}>
+            <figcaption className="sr-only">{summary}</figcaption>
             <div className="flex items-center gap-4">
               <div className="relative h-[120px] w-[120px] shrink-0">
                 <ResponsiveContainer width="100%" height="100%">
@@ -74,7 +81,7 @@ export function DemographicsCard() {
               </ul>
             </div>
 
-            <div>
+            <div className="mt-4">
               <div className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
                 Age groups
               </div>
@@ -84,7 +91,7 @@ export function DemographicsCard() {
                     <span className="text-[11px] text-muted-foreground">{g.label}</span>
                     <div className="h-1.5 overflow-hidden rounded-full bg-muted">
                       <div
-                        className="h-full rounded-full bg-primary"
+                        className="h-full rounded-full bg-muted-foreground/60"
                         style={{ width: `${(g.value / maxAge) * 100}%` }}
                       />
                     </div>
@@ -95,8 +102,9 @@ export function DemographicsCard() {
                 ))}
               </ul>
             </div>
-          </>
-        )}
+          </figure>
+          );
+        })()}
       </CardContent>
     </Card>
   );
