@@ -10,6 +10,7 @@ const TONE_MAP: Record<StatCardData["tone"], { bg: string; fg: string }> = {
   teal: { bg: "bg-[color:var(--accent-teal)]/10", fg: "text-[color:var(--accent-teal)]" },
   warning: { bg: "bg-warning/10", fg: "text-warning" },
   destructive: { bg: "bg-destructive/10", fg: "text-destructive" },
+  neutral: { bg: "bg-muted", fg: "text-muted-foreground" },
 };
 
 export function StatCard({ data }: { data: StatCardData }) {
