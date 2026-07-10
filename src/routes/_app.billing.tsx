@@ -121,7 +121,7 @@ function BillingPage() {
     setViewTarget((prev) => (prev && prev.id === inv.id ? { ...prev, status: "Cancelled" } : prev));
   };
 
-  const handleExport = () => toast.success("Exporting invoices (demo)…");
+  const handleExport = () => exportRef.current?.();
   const handleDownload = (inv: Invoice) =>
     toast.success(`Downloading ${inv.id}.pdf (demo)…`);
   const handlePrint = (inv: Invoice) => toast.success(`Printing ${inv.id} (demo)…`);
