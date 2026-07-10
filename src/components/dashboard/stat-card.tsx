@@ -34,7 +34,8 @@ export function StatCard({ data }: { data: StatCardData }) {
         <div className="flex items-start justify-between gap-3">
           <div
             className={cn(
-              "grid h-10 w-10 shrink-0 place-items-center rounded-lg glow-primary",
+              "grid h-10 w-10 shrink-0 place-items-center rounded-lg",
+              data.tone === "primary" && "glow-primary",
               tone.bg,
               tone.fg,
             )}
