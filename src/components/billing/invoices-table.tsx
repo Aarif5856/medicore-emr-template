@@ -95,6 +95,7 @@ interface Props {
   onSendReminder: (i: Invoice) => void;
   onMarkPaid: (i: Invoice) => void;
   onCancel: (i: Invoice) => void;
+  exportRef?: React.MutableRefObject<(() => void) | null>;
 }
 
 export function InvoicesTable({
@@ -103,6 +104,7 @@ export function InvoicesTable({
   onSendReminder,
   onMarkPaid,
   onCancel,
+  exportRef,
 }: Props) {
   const { data, isLoading, isError, refetch } = useMockQuery(invoices);
   const source = data ?? [];
