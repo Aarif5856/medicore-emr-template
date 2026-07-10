@@ -252,6 +252,8 @@ function DashboardPage() {
         appointments={appointments}
         onCreate={addAppointment}
       />
+
+      <AddPatientDialog open={addPatientOpen} onOpenChange={setAddPatientOpen} />
     </div>
   );
 }
