@@ -15,7 +15,7 @@ import { ChartSkeleton } from "@/components/ui/table-skeleton";
 import { ErrorState } from "@/components/ui/error-state";
 import { cn } from "@/lib/utils";
 import { useMockQuery } from "@/lib/mock-query";
-import { VISITS_MONTHLY, VISITS_RANGES, type VisitsRange } from "@/data/dashboard";
+import { VISITS_BY_RANGE, VISITS_RANGES, VISITS_RANGE_UNIT, type VisitsRange } from "@/data/dashboard";
 
 interface TooltipItem {
   name?: string;
