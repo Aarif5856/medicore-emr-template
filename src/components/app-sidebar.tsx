@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard,
@@ -66,10 +67,20 @@ const NAV: NavSection[] = [
 ];
 
 export function AppSidebar() {
-  const { state } = useSidebar();
+  const { state, isMobile, setOpenMobile } = useSidebar();
   const { direction } = useDirection();
   const collapsed = state === "collapsed";
   const pathname = useRouterState({ select: (r) => r.location.pathname });
+
+  // Safety net: close the mobile sheet on any route change (deep links,
+  // programmatic navigation, etc.) so the body isn't left scroll-locked.
+  useEffect(() => {
+    if (isMobile) setOpenMobile(false);
+  }, [pathname, isMobile, setOpenMobile]);
+
+  const handleNavClick = () => {
+    if (isMobile) setOpenMobile(false);
+  };
 
   return (
     <Sidebar collapsible="icon" side={direction === "rtl" ? "right" : "left"}>
@@ -108,7 +119,7 @@ export function AppSidebar() {
                         tooltip={item.title}
                         className="relative h-9 rounded-md data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[active=true]:font-medium"
                       >
-                        <Link to={item.url} className="flex items-center gap-3">
+                        <Link to={item.url} onClick={handleNavClick} className="flex items-center gap-3">
                           {active && (
                             <span className="absolute start-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-e bg-primary" />
                           )}
