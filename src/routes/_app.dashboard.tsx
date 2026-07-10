@@ -122,7 +122,7 @@ function DashboardPage() {
         title="Dashboard"
         description="Real-time overview of clinical operations and revenue."
         actions={
-          <Button variant="outline" size="sm" className="gap-2">
+          <Button variant="outline" size="sm" className="gap-2" onClick={handleDownloadReport}>
             <Download className="h-4 w-4" />
             Download Report
           </Button>
