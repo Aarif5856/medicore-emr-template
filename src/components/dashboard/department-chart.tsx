@@ -27,8 +27,15 @@ export function DepartmentChart() {
             <ErrorState compact title="Couldn't load departments" onRetry={refetch} />
           </div>
         ) : (
-          <>
-            <div className="relative h-[180px] w-full">
+          <figure className="m-0">
+            <figcaption className="sr-only">
+              Appointments by department this week, {total} total.
+              {items
+                .slice(0, 3)
+                .map((d) => ` ${d.name} ${d.value}% (${d.count} visits).`)
+                .join("")}
+            </figcaption>
+            <div className="relative h-[180px] w-full" role="img" aria-hidden>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
