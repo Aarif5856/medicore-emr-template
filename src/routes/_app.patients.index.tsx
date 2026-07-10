@@ -4,8 +4,7 @@ import { Download, Plus } from "lucide-react";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { PageHeader } from "@/components/coming-soon";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { MiniStatCard } from "@/components/ui/mini-stat-card";
 import { PATIENTS_SUMMARY } from "@/data/patients";
 import { PatientsTable } from "@/components/patients/patients-table";
 
