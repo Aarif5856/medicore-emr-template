@@ -67,10 +67,20 @@ const NAV: NavSection[] = [
 ];
 
 export function AppSidebar() {
-  const { state } = useSidebar();
+  const { state, isMobile, setOpenMobile } = useSidebar();
   const { direction } = useDirection();
   const collapsed = state === "collapsed";
   const pathname = useRouterState({ select: (r) => r.location.pathname });
+
+  // Safety net: close the mobile sheet on any route change (deep links,
+  // programmatic navigation, etc.) so the body isn't left scroll-locked.
+  useEffect(() => {
+    if (isMobile) setOpenMobile(false);
+  }, [pathname, isMobile, setOpenMobile]);
+
+  const handleNavClick = () => {
+    if (isMobile) setOpenMobile(false);
+  };
 
   return (
     <Sidebar collapsible="icon" side={direction === "rtl" ? "right" : "left"}>
