@@ -33,6 +33,7 @@ function LaboratoryPage() {
   const [newOrderOpen, setNewOrderOpen] = useState(false);
   const [viewTarget, setViewTarget] = useState<LabTest | null>(null);
   const [uploadTarget, setUploadTarget] = useState<LabTest | null>(null);
+  const exportRef = useRef<(() => void) | null>(null);
 
   const stats = useMemo(() => {
     const today = new Date();
