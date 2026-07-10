@@ -8,6 +8,7 @@ import { PageHeader } from "@/components/coming-soon";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { MiniStatCard } from "@/components/ui/mini-stat-card";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -46,12 +47,6 @@ export const Route = createFileRoute("/_app/doctors")({
   component: DoctorsPage,
 });
 
-const TONE_STYLES = {
-  primary: "bg-primary",
-  teal: "bg-[color:var(--accent-teal)]",
-  warning: "bg-warning",
-  destructive: "bg-destructive",
-} as const;
 
 const ALL = "__all__";
 
@@ -155,21 +150,12 @@ function DoctorsPage() {
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {stats.map((s) => (
-          <Card key={s.label} className="card-glass p-4">
-            <div className="flex items-center gap-3">
-              <span
-                className={cn("h-2.5 w-2.5 shrink-0 rounded-full", TONE_STYLES[s.tone])}
-              />
-              <div className="min-w-0">
-                <div className="text-[11px] font-medium text-muted-foreground">
-                  {s.label}
-                </div>
-                <div className="text-lg font-semibold text-foreground tabular">
-                  {s.value}
-                </div>
-              </div>
-            </div>
-          </Card>
+          <MiniStatCard
+            key={s.label}
+            label={s.label}
+            value={s.value}
+            tone={s.tone}
+          />
         ))}
       </div>
 

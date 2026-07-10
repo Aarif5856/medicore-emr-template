@@ -7,6 +7,7 @@ import { Breadcrumbs } from "@/components/breadcrumbs";
 import { PageHeader } from "@/components/coming-soon";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { MiniStatCard } from "@/components/ui/mini-stat-card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { PharmacyProvider, usePharmacy } from "@/components/pharmacy/store";
@@ -185,24 +186,12 @@ function PharmacyPage() {
         )}
       >
         {stats.map((s) => (
-          <Card key={s.label} className="card-glass p-4">
-            <div className="flex items-center gap-3">
-              <span
-                className={cn(
-                  "h-2.5 w-2.5 shrink-0 rounded-full",
-                  TONE_STYLES[s.tone],
-                )}
-              />
-              <div className="min-w-0">
-                <div className="text-[11px] font-medium text-muted-foreground">
-                  {s.label}
-                </div>
-                <div className="text-lg font-semibold text-foreground tabular">
-                  {s.value}
-                </div>
-              </div>
-            </div>
-          </Card>
+          <MiniStatCard
+            key={s.label}
+            label={s.label}
+            value={s.value}
+            tone={s.tone}
+          />
         ))}
       </div>
 

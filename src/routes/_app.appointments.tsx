@@ -13,15 +13,14 @@ import { toast } from "sonner";
 import { Breadcrumbs } from "@/components/breadcrumbs";
 import { PageHeader } from "@/components/coming-soon";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { MiniStatCard } from "@/components/ui/mini-stat-card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
 import { CalendarView } from "@/components/appointments/calendar-view";
 import { AppointmentsListTable } from "@/components/appointments/appointments-list";
 import { BookingDialog } from "@/components/appointments/booking-dialog";
@@ -47,12 +46,6 @@ function AppointmentsRoute() {
   );
 }
 
-const TONE_STYLES = {
-  primary: "bg-primary",
-  teal: "bg-[color:var(--accent-teal)]",
-  warning: "bg-warning",
-  destructive: "bg-destructive",
-} as const;
 
 function AppointmentsPage() {
   const { appointments, addAppointment, updateAppointment } = useAppointments();
@@ -110,21 +103,12 @@ function AppointmentsPage() {
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {stats.map((s) => (
-          <Card key={s.label} className="card-glass p-4">
-            <div className="flex items-center gap-3">
-              <span
-                className={cn("h-2.5 w-2.5 shrink-0 rounded-full", TONE_STYLES[s.tone])}
-              />
-              <div className="min-w-0">
-                <div className="text-[11px] font-medium text-muted-foreground">
-                  {s.label}
-                </div>
-                <div className="text-lg font-semibold text-foreground tabular">
-                  {s.value}
-                </div>
-              </div>
-            </div>
-          </Card>
+          <MiniStatCard
+            key={s.label}
+            label={s.label}
+            value={String(s.value)}
+            tone={s.tone}
+          />
         ))}
       </div>
 
