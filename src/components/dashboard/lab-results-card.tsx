@@ -48,7 +48,7 @@ export function LabResultsCard() {
                 key={r.id}
                 className="flex items-center gap-3 rounded-md px-2 py-2.5 transition-colors hover:bg-muted/50"
               >
-                <div className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-primary/10 text-primary">
+                <div className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-muted text-muted-foreground">
                   <FlaskConical className="h-4 w-4" aria-hidden />
                 </div>
                 <div className="min-w-0 flex-1">
