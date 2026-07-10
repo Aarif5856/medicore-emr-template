@@ -256,6 +256,25 @@ export function StaffTable({ staff, onView, onEdit, onDeactivate, exportRef }: P
     setShift("All");
   };
 
+  if (exportRef) {
+    exportRef.current = () => {
+      const rows = table.getFilteredRowModel().rows.map((r) => r.original);
+      const columns: CsvColumn<StaffMember>[] = [
+        { header: "Staff ID", value: (s) => s.id },
+        { header: "Name", value: (s) => fullName(s) },
+        { header: "Role", value: (s) => s.role },
+        { header: "Department", value: (s) => s.department },
+        { header: "Phone", value: (s) => s.phone },
+        { header: "Email", value: (s) => s.email },
+        { header: "Shift", value: (s) => s.shift },
+        { header: "Status", value: (s) => s.status },
+        { header: "Joined", value: (s) => s.joinedDate },
+      ];
+      exportToCsv("medicore-staff.csv", rows, columns);
+      toast.success(`Exported ${rows.length} staff ${rows.length === 1 ? "member" : "members"}`);
+    };
+  }
+
   const counts = useMemo(() => {
     const c: Record<RoleTab, number> = {
       All: source.length,
