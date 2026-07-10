@@ -16,7 +16,7 @@ export function DepartmentChart() {
       <CardHeader className="pb-2">
         <CardTitle className="text-base">Appointments by Department</CardTitle>
         <p className="mt-0.5 text-xs text-muted-foreground">
-          This week · {isLoading ? "loading" : `${total} total`}
+          {isLoading ? "This week" : isError ? "This week" : `This week · ${total} total`}
         </p>
       </CardHeader>
       <CardContent>
