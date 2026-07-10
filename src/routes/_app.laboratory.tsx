@@ -138,6 +138,7 @@ function LaboratoryPage() {
         onUpload={handleUpload}
         onMarkCritical={handleMarkCritical}
         onCancel={handleCancel}
+        exportRef={exportRef}
       />
 
       <ReportSheet
