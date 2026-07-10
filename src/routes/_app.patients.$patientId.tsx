@@ -58,7 +58,7 @@ import {
 } from "@/data/patient-detail";
 
 export const Route = createFileRoute("/_app/patients/$patientId")({
-  head: () => ({ meta: [{ title: "Patient Profile — MediCore EMR" }] }),
+  head: () => ({ meta: [{ title: "Patient Profile · MediCore EMR" }] }),
   component: PatientProfilePage,
 });
 

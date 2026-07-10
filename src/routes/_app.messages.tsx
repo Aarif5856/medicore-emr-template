@@ -20,7 +20,7 @@ const searchSchema = z.object({
 });
 
 export const Route = createFileRoute("/_app/messages")({
-  head: () => ({ meta: [{ title: "Messages — MediCore EMR" }] }),
+  head: () => ({ meta: [{ title: "Messages · MediCore EMR" }] }),
   validateSearch: (search) => searchSchema.parse(search),
   component: MessagesPage,
 });
@@ -114,7 +114,7 @@ function MessagesPage() {
       <Breadcrumbs />
       <PageHeader
         title="Messages"
-        description="Secure conversations with colleagues and patients — right in the clinic workspace."
+        description="Secure conversations with colleagues and patients - right in the clinic workspace."
       />
 
       <Card className="card-glass min-h-0 flex-1 overflow-hidden p-0">

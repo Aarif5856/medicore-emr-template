@@ -19,7 +19,7 @@ import { daysUntil, type Medicine } from "@/data/pharmacy";
 import type { Prescription } from "@/data/prescriptions";
 
 export const Route = createFileRoute("/_app/pharmacy")({
-  head: () => ({ meta: [{ title: "Pharmacy — MediCore EMR" }] }),
+  head: () => ({ meta: [{ title: "Pharmacy · MediCore EMR" }] }),
   component: PharmacyRoute,
 });
 

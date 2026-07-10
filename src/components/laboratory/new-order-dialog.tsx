@@ -120,7 +120,7 @@ export function NewOrderDialog({ open, onOpenChange, onCreate }: Props) {
       notes: values.notes?.trim() || undefined,
     });
     toast.success(
-      `Lab order created for ${patient.firstName} ${patient.lastName} — ${def.name}`,
+      `Lab order created for ${patient.firstName} ${patient.lastName} - ${def.name}`,
     );
     onOpenChange(false);
   };

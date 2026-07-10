@@ -58,7 +58,7 @@ const SEEDS: Seed[] = [
     unread: 2,
     messages: [
       { dir: "in", text: "Morning! Can you review Mr. Kim's ECG from yesterday?", at: hr(26) },
-      { dir: "out", text: "On it — I'll send notes within the hour.", at: hr(25) },
+      { dir: "out", text: "On it - I'll send notes within the hour.", at: hr(25) },
       { dir: "in", text: "Also, the stress test slot at 3 PM opened up.", at: hr(24) },
       { dir: "in", text: "Should I move him there?", at: min(8) },
       { dir: "in", text: "Let me know when you get a sec 🙏", at: min(3) },
@@ -71,7 +71,7 @@ const SEEDS: Seed[] = [
     unread: 1,
     messages: [
       { dir: "in", text: "Hi, is my follow-up still on for Friday?", at: hr(4) },
-      { dir: "out", text: "Yes — 10:30 AM with Dr. Patel. See you then!", at: hr(3) },
+      { dir: "out", text: "Yes - 10:30 AM with Dr. Patel. See you then!", at: hr(3) },
       { dir: "in", text: "Perfect, thank you!", at: min(42) },
     ],
   },
@@ -83,7 +83,7 @@ const SEEDS: Seed[] = [
     messages: [
       { dir: "out", text: "Elena, do you have the vaccine inventory report?", at: hr(6) },
       { dir: "in", text: "Just uploaded it to the shared drive.", at: hr(5) },
-      { dir: "out", text: "Got it — thanks!", at: hr(5) },
+      { dir: "out", text: "Got it - thanks!", at: hr(5) },
     ],
   },
   {
@@ -104,7 +104,7 @@ const SEEDS: Seed[] = [
     unread: 0,
     messages: [
       { dir: "in", text: "My chest pain came back last night.", at: day(1) },
-      { dir: "out", text: "Please come in this morning — we'll fit you in.", at: day(1) },
+      { dir: "out", text: "Please come in this morning - we'll fit you in.", at: day(1) },
       { dir: "in", text: "Heading over now.", at: hr(20) },
     ],
   },
@@ -114,7 +114,7 @@ const SEEDS: Seed[] = [
     subtitle: "Administration",
     unread: 0,
     messages: [
-      { dir: "in", text: "Payroll cycle closes Friday — submit timesheets.", at: day(2) },
+      { dir: "in", text: "Payroll cycle closes Friday - submit timesheets.", at: day(2) },
       { dir: "out", text: "Will do, thanks Nadia.", at: day(2) },
     ],
   },
@@ -125,7 +125,7 @@ const SEEDS: Seed[] = [
     unread: 0,
     messages: [
       { dir: "in", text: "Can I get a copy of my lab results?", at: day(3) },
-      { dir: "out", text: "Sent to your patient portal — check the Results tab.", at: day(3) },
+      { dir: "out", text: "Sent to your patient portal - check the Results tab.", at: day(3) },
       { dir: "in", text: "Found them, thanks!", at: day(3) },
     ],
   },
@@ -157,7 +157,7 @@ const SEEDS: Seed[] = [
     unread: 0,
     messages: [
       { dir: "in", text: "Prescription refill needed for my inhaler.", at: day(4) },
-      { dir: "out", text: "Sent to your pharmacy — ready by 5 PM.", at: day(4) },
+      { dir: "out", text: "Sent to your pharmacy - ready by 5 PM.", at: day(4) },
     ],
   },
   {
@@ -188,7 +188,7 @@ const SEEDS: Seed[] = [
     unread: 0,
     messages: [
       { dir: "in", text: "Post-op rounds done, all stable.", at: hr(7) },
-      { dir: "out", text: "Great work — go grab a break.", at: hr(7) },
+      { dir: "out", text: "Great work - go grab a break.", at: hr(7) },
     ],
   },
   {
@@ -198,7 +198,7 @@ const SEEDS: Seed[] = [
     unread: 0,
     messages: [
       { dir: "in", text: "Question about my medication side effects.", at: day(5) },
-      { dir: "out", text: "Happy to help — what are you experiencing?", at: day(5) },
+      { dir: "out", text: "Happy to help - what are you experiencing?", at: day(5) },
       { dir: "in", text: "Mild nausea in the mornings.", at: day(5) },
       { dir: "out", text: "That's expected in week 1. If it persists past 10 days, call us.", at: day(5) },
     ],

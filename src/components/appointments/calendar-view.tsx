@@ -67,7 +67,7 @@ export function CalendarView({
     <div className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon" className="h-9 w-9" onClick={() => nav(-1)}>
+          <Button variant="outline" size="icon" className="h-9 w-9" onClick={() => nav(-1)} aria-label="Previous">
             <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
           </Button>
           <Button
@@ -78,7 +78,7 @@ export function CalendarView({
           >
             Today
           </Button>
-          <Button variant="outline" size="icon" className="h-9 w-9" onClick={() => nav(1)}>
+          <Button variant="outline" size="icon" className="h-9 w-9" onClick={() => nav(1)} aria-label="Next">
             <ChevronRight className="h-4 w-4 rtl:rotate-180" />
           </Button>
           <div className="ms-2 text-sm font-semibold text-foreground tabular">{label}</div>
@@ -223,8 +223,7 @@ function MonthChip({
         <button
           type="button"
           className={cn(
-            "flex w-full items-center gap-1 truncate rounded-md border-l-[3px] px-1.5 py-0.5 text-start text-[10px] font-medium transition-colors hover:brightness-110",
-            s.leftBorder,
+            "flex w-full items-center gap-1 truncate rounded-md px-1.5 py-0.5 text-start text-[10px] font-medium transition-colors hover:brightness-110",
             s.chip,
             appointment.status === "Cancelled" && "line-through opacity-70",
           )}
@@ -275,8 +274,7 @@ function DayOverflowPopover({
               <div
                 key={a.id}
                 className={cn(
-                  "flex items-center gap-2 rounded-md border-s-4 bg-muted/40 px-3 py-2",
-                  s.leftBorder,
+                  "flex items-center gap-2 rounded-md bg-muted/40 px-3 py-2",
                 )}
               >
                 <div className="min-w-0 flex-1">
@@ -485,8 +483,7 @@ function WeekApptBlock({
         <button
           type="button"
           className={cn(
-            "absolute overflow-hidden rounded-md border-s-4 px-1.5 py-1 text-start shadow-sm transition-transform hover:z-20 hover:scale-[1.02]",
-            s.leftBorder,
+            "absolute overflow-hidden rounded-md px-1.5 py-1 text-start shadow-sm transition-transform hover:z-20 hover:scale-[1.02]",
             s.chip,
             cancelled && "opacity-60",
           )}
@@ -626,8 +623,7 @@ function DayApptBlock({
         <button
           type="button"
           className={cn(
-            "absolute flex flex-col overflow-hidden rounded-lg border-s-4 px-3 py-2 text-start shadow-sm transition-transform hover:z-20 hover:scale-[1.01]",
-            s.leftBorder,
+            "absolute flex flex-col overflow-hidden rounded-lg px-3 py-2 text-start shadow-sm transition-transform hover:z-20 hover:scale-[1.01]",
             s.chip,
             cancelled && "opacity-60",
           )}

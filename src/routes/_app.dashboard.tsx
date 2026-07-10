@@ -15,7 +15,7 @@ import { RevenueChart } from "@/components/dashboard/revenue-chart";
 import { DoctorAvailability } from "@/components/dashboard/doctor-availability";
 
 export const Route = createFileRoute("/_app/dashboard")({
-  head: () => ({ meta: [{ title: "Dashboard — MediCore EMR" }] }),
+  head: () => ({ meta: [{ title: "Dashboard · MediCore EMR" }] }),
   component: DashboardPage,
 });
 
@@ -34,9 +34,9 @@ function DashboardPage() {
         }
       />
 
-      {/* Bento grid — 12 cols on md+, single column on mobile */}
+      {/* Bento grid - 12 cols on md+, single column on mobile */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
-        {/* Row 1 — KPI stats */}
+        {/* Row 1 - KPI stats */}
         {STAT_CARDS.map((s) => (
           <div key={s.id} className="md:col-span-6 xl:col-span-3">
             <StatCard data={s} />

@@ -26,7 +26,7 @@ import {
 export const Route = createFileRoute("/_app/notifications")({
   head: () => ({
     meta: [
-      { title: "Notifications — MediCore EMR" },
+      { title: "Notifications · MediCore EMR" },
       {
         name: "description",
         content: "System alerts, reminders, and clinic activity in one feed.",

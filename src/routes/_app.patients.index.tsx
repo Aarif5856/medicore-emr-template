@@ -10,7 +10,7 @@ import { PATIENTS_SUMMARY } from "@/data/patients";
 import { PatientsTable } from "@/components/patients/patients-table";
 
 export const Route = createFileRoute("/_app/patients/")({
-  head: () => ({ meta: [{ title: "Patients — MediCore EMR" }] }),
+  head: () => ({ meta: [{ title: "Patients · MediCore EMR" }] }),
   component: PatientsPage,
 });
 

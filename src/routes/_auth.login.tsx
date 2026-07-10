@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/_auth/login")({
-  head: () => ({ meta: [{ title: "Sign in — MediCore EMR" }] }),
+  head: () => ({ meta: [{ title: "Sign in · MediCore EMR" }] }),
   component: LoginPage,
 });
 

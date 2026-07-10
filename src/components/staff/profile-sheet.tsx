@@ -156,13 +156,13 @@ function ProfileBody({
               <InfoRow label="Shift" value={staff.shift} />
               <InfoRow
                 label="Reporting Manager"
-                value={manager ? `${fullName(manager)} · ${manager.id}` : "—"}
+                value={manager ? `${fullName(manager)} · ${manager.id}` : "-"}
                 full
               />
               {(staff.role === "Doctor" || staff.role === "Nurse") && (
                 <InfoRow
                   label="Qualification"
-                  value={staff.qualification ?? "—"}
+                  value={staff.qualification ?? "-"}
                   full
                 />
               )}

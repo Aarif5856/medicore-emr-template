@@ -22,7 +22,7 @@ import { MarkPaidDialog } from "@/components/billing/mark-paid-dialog";
 import { RevenueMiniChart } from "@/components/billing/revenue-mini-chart";
 
 export const Route = createFileRoute("/_app/billing")({
-  head: () => ({ meta: [{ title: "Billing & Invoices — MediCore EMR" }] }),
+  head: () => ({ meta: [{ title: "Billing & Invoices · MediCore EMR" }] }),
   component: BillingRoute,
 });
 

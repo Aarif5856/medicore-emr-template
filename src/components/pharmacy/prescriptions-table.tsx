@@ -152,7 +152,7 @@ export function PrescriptionsTable({
         header: "Medicines",
         cell: ({ row }) => {
           const rx = row.original;
-          const first = rx.lines[0]?.medicineName ?? "—";
+          const first = rx.lines[0]?.medicineName ?? "-";
           const extra = rx.lines.length - 1;
           return (
             <div className="flex items-center gap-2">
@@ -376,6 +376,7 @@ export function PrescriptionsTable({
               className="h-8 w-8"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
+              aria-label="Previous page"
             >
               <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
             </Button>
@@ -388,6 +389,7 @@ export function PrescriptionsTable({
               className="h-8 w-8"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
+              aria-label="Next page"
             >
               <ChevronRight className="h-4 w-4 rtl:rotate-180" />
             </Button>

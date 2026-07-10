@@ -453,6 +453,7 @@ function PageNumbers<TData>({
         className="h-8 w-8"
         onClick={() => table.previousPage()}
         disabled={!table.getCanPreviousPage()}
+        aria-label="Previous page"
       >
         <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
       </Button>
@@ -468,6 +469,8 @@ function PageNumbers<TData>({
             size="icon"
             className={cn("h-8 w-8 text-xs tabular", p === current && "glow-primary")}
             onClick={() => table.setPageIndex(p)}
+          aria-label={`Go to page ${p + 1}`}
+            aria-current={p === current ? "page" : undefined}
           >
             {p + 1}
           </Button>
@@ -479,6 +482,7 @@ function PageNumbers<TData>({
         className="h-8 w-8"
         onClick={() => table.nextPage()}
         disabled={!table.getCanNextPage()}
+        aria-label="Next page"
       >
         <ChevronRight className="h-4 w-4 rtl:rotate-180" />
       </Button>

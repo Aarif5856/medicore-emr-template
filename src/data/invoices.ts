@@ -122,7 +122,7 @@ const LINES_BY_SERVICE: Record<InvoiceService, LineTemplate[][]> = {
       { description: "Vital Signs Assessment", qty: 1, unitPrice: 25 },
     ],
     [
-      { description: "Specialist Consultation — Cardiology", qty: 1, unitPrice: 220 },
+      { description: "Specialist Consultation - Cardiology", qty: 1, unitPrice: 220 },
       { description: "ECG Interpretation", qty: 1, unitPrice: 55 },
     ],
     [
@@ -141,7 +141,7 @@ const LINES_BY_SERVICE: Record<InvoiceService, LineTemplate[][]> = {
       { description: "Sterile Dressing Kit", qty: 1, unitPrice: 22 },
     ],
     [
-      { description: "IV Fluid Therapy — 1L Saline", qty: 2, unitPrice: 65 },
+      { description: "IV Fluid Therapy - 1L Saline", qty: 2, unitPrice: 65 },
       { description: "Cannulation & Setup", qty: 1, unitPrice: 40 },
     ],
     [
@@ -149,7 +149,7 @@ const LINES_BY_SERVICE: Record<InvoiceService, LineTemplate[][]> = {
       { description: "Salbutamol Ampoule", qty: 3, unitPrice: 8 },
     ],
     [
-      { description: "Cast Application — Forearm", qty: 1, unitPrice: 260 },
+      { description: "Cast Application - Forearm", qty: 1, unitPrice: 260 },
       { description: "Post-procedure X-Ray", qty: 1, unitPrice: 90 },
     ],
   ],
@@ -167,7 +167,7 @@ const LINES_BY_SERVICE: Record<InvoiceService, LineTemplate[][]> = {
       { description: "Thyroid Function Panel (T3, T4, TSH)", qty: 1, unitPrice: 95 },
     ],
     [
-      { description: "Urine Analysis — Routine", qty: 1, unitPrice: 22 },
+      { description: "Urine Analysis - Routine", qty: 1, unitPrice: 22 },
       { description: "Urine Culture & Sensitivity", qty: 1, unitPrice: 55 },
     ],
   ],

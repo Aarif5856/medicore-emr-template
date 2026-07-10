@@ -179,8 +179,8 @@ export function AddStaffDialog({
         gender: values.gender,
         dob: new Date(values.dob).toISOString(),
         address: values.address.trim(),
-        emergencyContactName: "—",
-        emergencyContactPhone: "—",
+        emergencyContactName: "-",
+        emergencyContactPhone: "-",
         reportingManagerId: managerId,
         qualification,
       });
@@ -466,7 +466,7 @@ export function AddStaffDialog({
                         <Input
                           placeholder={
                             role === "Doctor"
-                              ? "MD, Specialty — e.g. MD Cardiology, FACC"
+                              ? "MD, Specialty - e.g. MD Cardiology, FACC"
                               : "BSN, RN"
                           }
                           className="h-9"

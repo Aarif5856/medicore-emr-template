@@ -91,7 +91,7 @@ const SEEDS: RxSeed[] = [
   ] },
   { patientIndex: 9, doctorIndex: 3, daysAgo: 6, status: "Cancelled", lines: [
     { medIndex: 10, dosage: "500mg", frequency: "BID", duration: "7 days", qty: 14 },
-  ], notes: "Patient reported allergy — replaced with alternative." },
+  ], notes: "Patient reported allergy - replaced with alternative." },
   { patientIndex: 10, doctorIndex: 4, daysAgo: 7, status: "Dispensed", lines: [
     { medIndex: 24, dosage: "1 tab", frequency: "OD", duration: "30 days", qty: 30 },
   ] },

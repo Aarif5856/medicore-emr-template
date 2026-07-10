@@ -15,7 +15,7 @@ import { AddStaffDialog } from "@/components/staff/add-staff-dialog";
 import { fullName, type StaffMember } from "@/data/staff";
 
 export const Route = createFileRoute("/_app/staff")({
-  head: () => ({ meta: [{ title: "Staff — MediCore EMR" }] }),
+  head: () => ({ meta: [{ title: "Staff · MediCore EMR" }] }),
   component: StaffPage,
 });
 

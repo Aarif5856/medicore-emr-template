@@ -432,6 +432,7 @@ export function LabTestsTable({
               className="h-8 w-8"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
+              aria-label="Previous page"
             >
               <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
             </Button>
@@ -444,6 +445,7 @@ export function LabTestsTable({
               className="h-8 w-8"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
+              aria-label="Next page"
             >
               <ChevronRight className="h-4 w-4 rtl:rotate-180" />
             </Button>

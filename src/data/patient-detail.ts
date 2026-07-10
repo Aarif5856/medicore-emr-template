@@ -94,9 +94,9 @@ export interface PatientLab {
 export const PATIENT_LABS: PatientLab[] = [
   { id: "L-9024", test: "Complete Blood Count", date: "2026-06-24", status: "Normal",   note: "All parameters within range." },
   { id: "L-8987", test: "Lipid Panel",          date: "2026-06-24", status: "Abnormal", note: "LDL elevated at 162 mg/dL." },
-  { id: "L-8813", test: "HbA1c",                date: "2026-05-30", status: "Normal",   note: "5.4% — within target." },
+  { id: "L-8813", test: "HbA1c",                date: "2026-05-30", status: "Normal",   note: "5.4% - within target." },
   { id: "L-8702", test: "Thyroid Panel",        date: "2026-05-04", status: "Normal",   note: "TSH 2.1 mIU/L." },
-  { id: "L-8551", test: "Troponin I",           date: "2026-04-11", status: "Critical", note: "Elevated — flagged for review." },
+  { id: "L-8551", test: "Troponin I",           date: "2026-04-11", status: "Critical", note: "Elevated - flagged for review." },
 ];
 
 /* ---------- Medical History Timeline ---------- */

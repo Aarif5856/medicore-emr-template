@@ -72,26 +72,26 @@ const WEEK_MORNING: WeeklyShift[] = [
   { day: "Wed", shift: "Morning", hours: "08:00 – 16:00" },
   { day: "Thu", shift: "Morning", hours: "08:00 – 16:00" },
   { day: "Fri", shift: "Morning", hours: "08:00 – 16:00" },
-  { day: "Sat", shift: "Off", hours: "—" },
-  { day: "Sun", shift: "Off", hours: "—" },
+  { day: "Sat", shift: "Off", hours: "-" },
+  { day: "Sun", shift: "Off", hours: "-" },
 ];
 
 const WEEK_EVENING: WeeklyShift[] = [
   { day: "Mon", shift: "Evening", hours: "14:00 – 22:00" },
   { day: "Tue", shift: "Evening", hours: "14:00 – 22:00" },
-  { day: "Wed", shift: "Off", hours: "—" },
+  { day: "Wed", shift: "Off", hours: "-" },
   { day: "Thu", shift: "Evening", hours: "14:00 – 22:00" },
   { day: "Fri", shift: "Evening", hours: "14:00 – 22:00" },
   { day: "Sat", shift: "Evening", hours: "14:00 – 22:00" },
-  { day: "Sun", shift: "Off", hours: "—" },
+  { day: "Sun", shift: "Off", hours: "-" },
 ];
 
 const WEEK_NIGHT: WeeklyShift[] = [
   { day: "Mon", shift: "Night", hours: "22:00 – 06:00" },
   { day: "Tue", shift: "Night", hours: "22:00 – 06:00" },
   { day: "Wed", shift: "Night", hours: "22:00 – 06:00" },
-  { day: "Thu", shift: "Off", hours: "—" },
-  { day: "Fri", shift: "Off", hours: "—" },
+  { day: "Thu", shift: "Off", hours: "-" },
+  { day: "Fri", shift: "Off", hours: "-" },
   { day: "Sat", shift: "Night", hours: "22:00 – 06:00" },
   { day: "Sun", shift: "Night", hours: "22:00 – 06:00" },
 ];
@@ -122,8 +122,8 @@ function makeAttendance(shift: Shift): StaffAttendanceRow[] {
     if (i === 7) status = "Absent";
     rows.push({
       date: daysAgoIso(i),
-      checkIn: status === "Absent" ? "—" : ci,
-      checkOut: status === "Absent" ? "—" : co,
+      checkIn: status === "Absent" ? "-" : ci,
+      checkOut: status === "Absent" ? "-" : co,
       status,
     });
   }
