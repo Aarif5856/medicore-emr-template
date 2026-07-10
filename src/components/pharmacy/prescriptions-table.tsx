@@ -54,6 +54,11 @@ import {
   type PrescriptionStatus,
 } from "@/data/prescriptions";
 import { PrescriptionStatusBadge, initialsFromName } from "@/components/pharmacy/badges";
+import { EmptyState } from "@/components/ui/empty-state";
+import { ErrorState } from "@/components/ui/error-state";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
+import { useMockQuery } from "@/lib/mock-query";
+import { Pill } from "lucide-react";
 
 const DATE_RANGES = ["All time", "Last 7 days", "Last 30 days", "This month"] as const;
 type DateRange = (typeof DATE_RANGES)[number];
@@ -82,6 +87,8 @@ export function PrescriptionsTable({
   onDispense,
   onCancel,
 }: Props) {
+  const { data, isLoading, isError, refetch } = useMockQuery(prescriptions);
+  const source = data ?? [];
   const [sorting, setSorting] = useState<SortingState>([{ id: "date", desc: true }]);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<PrescriptionStatus | "All">("All");
@@ -217,7 +224,7 @@ export function PrescriptionsTable({
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return prescriptions.filter((rx) => {
+    return source.filter((rx) => {
       if (status !== "All" && rx.status !== status) return false;
       if (!inRange(rx.date, dateRange)) return false;
       if (!q) return true;
@@ -228,7 +235,7 @@ export function PrescriptionsTable({
         rx.lines.some((l) => l.medicineName.toLowerCase().includes(q))
       );
     });
-  }, [prescriptions, search, status, dateRange]);
+  }, [source, search, status, dateRange]);
 
   const table = useReactTable({
     data: filtered,
@@ -246,6 +253,13 @@ export function PrescriptionsTable({
   const { pageIndex } = table.getState().pagination;
   const first = total === 0 ? 0 : pageIndex * pageSize + 1;
   const last = Math.min((pageIndex + 1) * pageSize, total);
+  const hasActiveFilters =
+    Boolean(search) || status !== "All" || dateRange !== "All time";
+  const clearFilters = () => {
+    setSearch("");
+    setStatus("All");
+    setDateRange("All time");
+  };
 
   return (
     <div className="space-y-3">
@@ -289,6 +303,13 @@ export function PrescriptionsTable({
         </Select>
       </div>
 
+      {isLoading ? (
+        <TableSkeleton columns={["w-24", "w-40", "w-32", "w-24", "w-20", "w-20", "w-8"]} />
+      ) : isError ? (
+        <div className="overflow-hidden rounded-lg border bg-card">
+          <ErrorState title="Couldn't load prescriptions" onRetry={refetch} />
+        </div>
+      ) : (
       <div className="overflow-hidden rounded-lg border bg-card">
         <div className="overflow-x-auto">
           <Table>
@@ -311,11 +332,21 @@ export function PrescriptionsTable({
             <TableBody>
               {table.getRowModel().rows.length === 0 ? (
                 <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className={cn("h-24 text-center text-sm text-muted-foreground")}
-                  >
-                    No prescriptions match your filters.
+                  <TableCell colSpan={columns.length} className="p-0">
+                    {hasActiveFilters ? (
+                      <EmptyState
+                        icon={Search}
+                        title="No matching prescriptions"
+                        description="Adjust your search or filters to see more results."
+                        action={{ label: "Clear filters", onClick: clearFilters }}
+                      />
+                    ) : (
+                      <EmptyState
+                        icon={Pill}
+                        title="No prescriptions yet"
+                        description="New prescriptions will show up here as they're written."
+                      />
+                    )}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -337,6 +368,7 @@ export function PrescriptionsTable({
           </Table>
         </div>
       </div>
+      )}
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="text-xs text-muted-foreground tabular">

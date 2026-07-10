@@ -10,6 +10,9 @@ import {
 } from "recharts";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChartSkeleton } from "@/components/ui/table-skeleton";
+import { ErrorState } from "@/components/ui/error-state";
+import { useMockQuery } from "@/lib/mock-query";
 import { REVENUE_BREAKDOWN } from "@/data/dashboard";
 
 interface TooltipItem {
@@ -53,6 +56,8 @@ function ChartTooltip({
 }
 
 export function RevenueChart() {
+  const { data, isLoading, isError, refetch } = useMockQuery(REVENUE_BREAKDOWN);
+
   return (
     <Card className="card-glass h-full">
       <CardHeader className="pb-2">
@@ -60,9 +65,16 @@ export function RevenueChart() {
         <p className="mt-0.5 text-xs text-muted-foreground">By service line · last 6 months</p>
       </CardHeader>
       <CardContent className="ps-2">
+        {isLoading ? (
+          <ChartSkeleton height={280} />
+        ) : isError || !data ? (
+          <div className="h-[280px]">
+            <ErrorState title="Couldn't load revenue" onRetry={refetch} />
+          </div>
+        ) : (
         <div className="h-[280px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={REVENUE_BREAKDOWN} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
+            <BarChart data={data} margin={{ top: 10, right: 12, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
               <XAxis
                 dataKey="month"
@@ -114,6 +126,7 @@ export function RevenueChart() {
             </BarChart>
           </ResponsiveContainer>
         </div>
+        )}
       </CardContent>
     </Card>
   );

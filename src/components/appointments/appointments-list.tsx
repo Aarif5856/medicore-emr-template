@@ -57,6 +57,11 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { AppointmentStatusBadge } from "@/components/appointments/status-badge";
+import { EmptyState } from "@/components/ui/empty-state";
+import { ErrorState } from "@/components/ui/error-state";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
+import { useMockQuery } from "@/lib/mock-query";
+import { CalendarClock } from "lucide-react";
 import {
   APPOINTMENT_STATUSES,
   type Appointment,
@@ -78,20 +83,22 @@ export function AppointmentsListTable({
   onReschedule,
   onCancel,
 }: Props) {
+  const { data, isLoading, isError, refetch } = useMockQuery(appointments);
+  const source = data ?? [];
   const [sorting, setSorting] = useState<SortingState>([{ id: "start", desc: false }]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pageSize, setPageSize] = useState<number>(10);
   const [range, setRange] = useState<DateRange | undefined>(undefined);
 
   const filtered = useMemo(() => {
-    if (!range?.from && !range?.to) return appointments;
-    return appointments.filter((a) => {
+    if (!range?.from && !range?.to) return source;
+    return source.filter((a) => {
       const d = parseISO(a.start);
       if (range.from && isBefore(d, range.from) && !isSameDay(d, range.from)) return false;
       if (range.to && isAfter(d, range.to) && !isSameDay(d, range.to)) return false;
       return true;
     });
-  }, [appointments, range]);
+  }, [source, range]);
 
   const columns = useMemo<ColumnDef<Appointment>[]>(
     () => [
@@ -229,6 +236,13 @@ export function AppointmentsListTable({
   const { pageIndex } = table.getState().pagination;
   const firstRow = totalRows === 0 ? 0 : pageIndex * pageSize + 1;
   const lastRow = Math.min((pageIndex + 1) * pageSize, totalRows);
+  const hasActiveFilters =
+    Boolean(search) || status !== "All" || Boolean(range?.from) || Boolean(range?.to);
+  const clearFilters = () => {
+    table.getColumn("patient")?.setFilterValue("");
+    table.getColumn("status")?.setFilterValue(undefined);
+    setRange(undefined);
+  };
 
   return (
     <div className="space-y-3">
@@ -318,6 +332,13 @@ export function AppointmentsListTable({
         </Popover>
       </div>
 
+      {isLoading ? (
+        <TableSkeleton columns={["w-32", "w-40", "w-32", "w-24", "w-24", "w-32", "w-20", "w-8"]} />
+      ) : isError ? (
+        <div className="overflow-hidden rounded-lg border bg-card">
+          <ErrorState title="Couldn't load appointments" onRetry={refetch} />
+        </div>
+      ) : (
       <div className="overflow-hidden rounded-lg border bg-card">
         <div className="overflow-x-auto">
           <Table>
@@ -340,11 +361,21 @@ export function AppointmentsListTable({
             <TableBody>
               {table.getRowModel().rows.length === 0 ? (
                 <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center text-sm text-muted-foreground"
-                  >
-                    No appointments match your filters.
+                  <TableCell colSpan={columns.length} className="p-0">
+                    {hasActiveFilters ? (
+                      <EmptyState
+                        icon={Search}
+                        title="No matching appointments"
+                        description="Adjust your search or filters to see more results."
+                        action={{ label: "Clear filters", onClick: clearFilters }}
+                      />
+                    ) : (
+                      <EmptyState
+                        icon={CalendarClock}
+                        title="No appointments scheduled"
+                        description="Book a slot to fill up the calendar."
+                      />
+                    )}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -366,6 +397,7 @@ export function AppointmentsListTable({
           </Table>
         </div>
       </div>
+      )}
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="text-xs text-muted-foreground tabular">

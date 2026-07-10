@@ -22,6 +22,7 @@ import {
   Pencil,
   Search,
   Trash2,
+  UserPlus,
 } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -55,6 +56,10 @@ import {
 import { cn } from "@/lib/utils";
 import { PATIENTS, type Patient, type PatientStatus } from "@/data/patients";
 import { formatDate, initials, PatientStatusBadge } from "@/components/patients/status-badge";
+import { EmptyState } from "@/components/ui/empty-state";
+import { ErrorState } from "@/components/ui/error-state";
+import { TableSkeleton } from "@/components/ui/table-skeleton";
+import { useMockQuery } from "@/lib/mock-query";
 
 const STATUS_OPTIONS: (PatientStatus | "All")[] = [
   "All",
@@ -67,6 +72,7 @@ const GENDER_OPTIONS = ["All", "Male", "Female", "Other"] as const;
 
 export function PatientsTable() {
   const navigate = useNavigate();
+  const { data, isLoading, isError, refetch } = useMockQuery(PATIENTS);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -221,7 +227,7 @@ export function PatientsTable() {
   );
 
   const table = useReactTable({
-    data: PATIENTS,
+    data: data ?? [],
     columns,
     state: { sorting, columnFilters, columnVisibility, rowSelection },
     onSortingChange: setSorting,
@@ -243,6 +249,12 @@ export function PatientsTable() {
   const { pageIndex } = table.getState().pagination;
   const firstRow = totalRows === 0 ? 0 : pageIndex * pageSize + 1;
   const lastRow = Math.min((pageIndex + 1) * pageSize, totalRows);
+  const hasActiveFilters = Boolean(search) || status !== "All" || gender !== "All";
+  const clearFilters = () => {
+    table.getColumn("patient")?.setFilterValue("");
+    table.getColumn("status")?.setFilterValue(undefined);
+    table.getColumn("gender")?.setFilterValue(undefined);
+  };
 
   return (
     <div className="space-y-3">
@@ -322,6 +334,17 @@ export function PatientsTable() {
       </div>
 
       {/* Table */}
+      {isLoading ? (
+        <TableSkeleton columns={["w-6", "w-40", "w-16", "w-10", "w-14", "w-32", "w-24", "w-32", "w-20", "w-8"]} />
+      ) : isError ? (
+        <div className="overflow-hidden rounded-lg border bg-card">
+          <ErrorState
+            title="Couldn't load patients"
+            description="We hit a snag fetching the patient list. Retry to try again."
+            onRetry={refetch}
+          />
+        </div>
+      ) : (
       <div className="overflow-hidden rounded-lg border bg-card">
         <div className="overflow-x-auto">
           <Table>
@@ -344,8 +367,22 @@ export function PatientsTable() {
             <TableBody>
               {table.getRowModel().rows.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={columns.length} className="h-24 text-center text-sm text-muted-foreground">
-                    No patients match your filters.
+                  <TableCell colSpan={columns.length} className="p-0">
+                    {hasActiveFilters ? (
+                      <EmptyState
+                        icon={Search}
+                        title="No matching patients"
+                        description="Adjust your search or filters to see more results."
+                        action={{ label: "Clear filters", onClick: clearFilters }}
+                      />
+                    ) : (
+                      <EmptyState
+                        icon={UserPlus}
+                        title="No patients yet"
+                        description="Add your first patient to start building the registry."
+                        action={{ label: "Add patient", href: "/patients/new" }}
+                      />
+                    )}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -373,6 +410,7 @@ export function PatientsTable() {
           </Table>
         </div>
       </div>
+      )}
 
       {/* Footer */}
       <div className="flex flex-wrap items-center justify-between gap-3">

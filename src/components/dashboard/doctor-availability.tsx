@@ -1,6 +1,12 @@
+import { Stethoscope } from "lucide-react";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { EmptyState } from "@/components/ui/empty-state";
+import { ErrorState } from "@/components/ui/error-state";
+import { ListSkeleton } from "@/components/ui/table-skeleton";
 import { cn } from "@/lib/utils";
+import { useMockQuery } from "@/lib/mock-query";
 import { DOCTOR_AVAILABILITY, type DoctorStatus } from "@/data/dashboard";
 
 const DOT_STYLES: Record<DoctorStatus, string> = {
@@ -25,6 +31,9 @@ function initials(name: string): string {
 }
 
 export function DoctorAvailability() {
+  const { data, isLoading, isError, refetch } = useMockQuery(DOCTOR_AVAILABILITY);
+  const items = data ?? [];
+
   return (
     <Card className="card-glass h-full">
       <CardHeader className="pb-2">
@@ -32,40 +41,69 @@ export function DoctorAvailability() {
         <p className="mt-0.5 text-xs text-muted-foreground">On-shift roster · today</p>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="grid grid-cols-[minmax(0,1fr)_auto_auto] gap-x-4 gap-y-1 border-t px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-          <div>Doctor</div>
-          <div className="hidden sm:block">Hours</div>
-          <div className="text-end">Status</div>
-        </div>
-        <ul>
-          {DOCTOR_AVAILABILITY.map((d) => (
-            <li
-              key={d.id}
-              className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-4 border-t px-4 py-3 transition-colors hover:bg-muted/50"
-            >
-              <div className="flex min-w-0 items-center gap-3">
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-primary/10 text-[11px] font-semibold text-primary">
-                    {initials(d.name)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="min-w-0">
-                  <div className="truncate text-sm font-medium text-foreground">{d.name}</div>
-                  <div className="truncate text-[11px] text-muted-foreground">{d.specialty}</div>
-                </div>
-              </div>
-              <div className="hidden text-xs text-muted-foreground tabular sm:block">
-                {d.hours}
-              </div>
-              <div className="flex items-center justify-end gap-2">
-                <span className={cn("h-2 w-2 rounded-full", DOT_STYLES[d.status])} aria-hidden />
-                <span className={cn("text-xs font-medium", TEXT_STYLES[d.status])}>
-                  {d.status}
-                </span>
-              </div>
-            </li>
-          ))}
-        </ul>
+        {isLoading ? (
+          <div className="px-2 pb-2 pt-3">
+            <ListSkeleton rows={5} />
+          </div>
+        ) : isError ? (
+          <ErrorState
+            compact
+            title="Couldn't load roster"
+            onRetry={refetch}
+          />
+        ) : items.length === 0 ? (
+          <EmptyState
+            compact
+            icon={Stethoscope}
+            title="No doctors on shift"
+            description="Nobody is scheduled for this shift."
+            action={{ label: "Manage schedule", href: "/doctors" }}
+          />
+        ) : (
+          <>
+            <div className="grid grid-cols-[minmax(0,1fr)_auto_auto] gap-x-4 gap-y-1 border-t px-4 py-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+              <div>Doctor</div>
+              <div className="hidden sm:block">Hours</div>
+              <div className="text-end">Status</div>
+            </div>
+            <ul>
+              {items.map((d) => (
+                <li
+                  key={d.id}
+                  className="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-4 border-t px-4 py-3 transition-colors hover:bg-muted/50"
+                >
+                  <div className="flex min-w-0 items-center gap-3">
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback className="bg-primary/10 text-[11px] font-semibold text-primary">
+                        {initials(d.name)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="min-w-0">
+                      <div className="truncate text-sm font-medium text-foreground" title={d.name}>
+                        {d.name}
+                      </div>
+                      <div
+                        className="truncate text-[11px] text-muted-foreground"
+                        title={d.specialty}
+                      >
+                        {d.specialty}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="hidden text-xs text-muted-foreground tabular sm:block">
+                    {d.hours}
+                  </div>
+                  <div className="flex items-center justify-end gap-2">
+                    <span className={cn("h-2 w-2 rounded-full", DOT_STYLES[d.status])} aria-hidden />
+                    <span className={cn("text-xs font-medium", TEXT_STYLES[d.status])}>
+                      {d.status}
+                    </span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
       </CardContent>
     </Card>
   );
