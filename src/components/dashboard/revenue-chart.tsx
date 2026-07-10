@@ -130,8 +130,9 @@ export function RevenueChart() {
               />
             </BarChart>
           </ResponsiveContainer>
-        </div>
-        )}
+        </figure>
+          );
+        })()}
       </CardContent>
     </Card>
   );
