@@ -20,6 +20,7 @@ import { RevenueChart } from "@/components/dashboard/revenue-chart";
 import { DoctorAvailability } from "@/components/dashboard/doctor-availability";
 import { useMockQuery } from "@/lib/mock-query";
 import { BookingDialog } from "@/components/appointments/booking-dialog";
+import { AddPatientDialog } from "@/components/patients/add-patient-dialog";
 import {
   AppointmentsProvider,
   useAppointments,
