@@ -86,7 +86,7 @@ export function DepartmentChart() {
                 </li>
               ))}
             </ul>
-          </>
+          </figure>
         )}
       </CardContent>
     </Card>
