@@ -18,12 +18,6 @@ export const Route = createFileRoute("/_app/staff")({
   component: StaffPage,
 });
 
-const TONE_STYLES = {
-  primary: "bg-primary",
-  teal: "bg-[color:var(--accent-teal)]",
-  warning: "bg-warning",
-  destructive: "bg-destructive",
-} as const;
 
 function StaffPage() {
   const navigate = useNavigate();
