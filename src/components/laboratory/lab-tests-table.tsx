@@ -91,6 +91,7 @@ interface Props {
   onUpload: (t: LabTest) => void;
   onMarkCritical: (t: LabTest) => void;
   onCancel: (t: LabTest) => void;
+  exportRef?: React.MutableRefObject<(() => void) | null>;
 }
 
 export function LabTestsTable({
@@ -99,6 +100,7 @@ export function LabTestsTable({
   onUpload,
   onMarkCritical,
   onCancel,
+  exportRef,
 }: Props) {
   const { data, isLoading, isError, refetch } = useMockQuery(tests);
   const source = data ?? [];
