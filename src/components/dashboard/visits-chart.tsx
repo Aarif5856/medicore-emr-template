@@ -151,8 +151,9 @@ export function VisitsChart() {
               />
             </AreaChart>
           </ResponsiveContainer>
-        </div>
-        )}
+        </figure>
+          );
+        })()}
       </CardContent>
     </Card>
   );
