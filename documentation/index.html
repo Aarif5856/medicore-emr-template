@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MediCore EMR — Documentation</title>
+<style>
+  :root{
+    --bg:#0f172a; --panel:#1e293b; --text:#e2e8f0; --muted:#94a3b8;
+    --accent:#22d3ee; --accent2:#0ea5e9; --border:#334155; --code:#0b1220;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.7}
+  .layout{display:flex;min-height:100vh}
+  nav{width:270px;background:var(--panel);border-right:1px solid var(--border);padding:28px 20px;position:fixed;top:0;bottom:0;overflow-y:auto}
+  nav .logo{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+  nav .logo .mark{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#22d3ee,#0284c7);display:flex;align-items:center;justify-content:center}
+  nav .logo .mark svg{width:26px;height:26px}
+  nav .logo b{font-size:18px}
+  nav .logo span{display:block;font-size:11px;color:var(--muted);letter-spacing:1px}
+  nav a{display:block;color:var(--muted);text-decoration:none;padding:7px 12px;border-radius:8px;font-size:14px;margin-bottom:2px}
+  nav a:hover{background:#26334a;color:var(--text)}
+  main{margin-left:270px;padding:48px 56px;max-width:960px}
+  h1{font-size:34px;margin-bottom:8px}
+  h2{font-size:24px;margin:44px 0 14px;padding-top:24px;border-top:1px solid var(--border);color:#fff}
+  h3{font-size:17px;margin:24px 0 10px;color:var(--accent)}
+  p{margin-bottom:12px;color:var(--text)}
+  .sub{color:var(--muted);font-size:15px;margin-bottom:24px}
+  code{background:var(--code);border:1px solid var(--border);border-radius:5px;padding:2px 7px;font-size:13.5px;color:#7dd3fc;font-family:Consolas,Monaco,monospace}
+  pre{background:var(--code);border:1px solid var(--border);border-radius:10px;padding:18px;overflow-x:auto;margin:14px 0;font-size:13.5px;line-height:1.6}
+  pre code{background:none;border:none;padding:0;color:#c9e8f5}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  th,td{border:1px solid var(--border);padding:10px 12px;text-align:left}
+  th{background:var(--panel);color:#fff}
+  ul,ol{margin:0 0 14px 22px}
+  li{margin-bottom:6px}
+  .badge{display:inline-block;background:#164e63;border:1px solid var(--accent);color:#67e8f9;border-radius:14px;padding:3px 12px;font-size:12.5px;font-weight:600;margin:0 6px 6px 0}
+  .note{background:#1a2c42;border-left:4px solid var(--accent);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0}
+  .warn{background:#3a2a15;border-left:4px solid #f59e0b;border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0}
+  footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--border);color:var(--muted);font-size:13.5px}
+  @media(max-width:900px){nav{display:none}main{margin:0;padding:28px 20px}}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav>
+  <div class="logo">
+    <div class="mark"><svg viewBox="0 0 72 72"><path d="M 14 38 L 27 38 L 31 44 L 36 20 L 41 52 L 45 38 L 58 38" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div><b>MediCore</b><span>EMR ADMIN — DOCS</span></div>
+  </div>
+  <a href="#introduction">1. Introduction</a>
+  <a href="#requirements">2. Requirements</a>
+  <a href="#installation">3. Installation</a>
+  <a href="#build">4. Build for Production</a>
+  <a href="#structure">5. Project Structure</a>
+  <a href="#pages">6. Pages &amp; Routes</a>
+  <a href="#theming">7. Theming (Light / Dark)</a>
+  <a href="#data">8. Sample Data &amp; API</a>
+  <a href="#components">9. UI Components</a>
+  <a href="#customization">10. Common Customizations</a>
+  <a href="#deployment">11. Deployment</a>
+  <a href="#faq">12. FAQ</a>
+  <a href="#credits">13. Credits</a>
+  <a href="#changelog">14. Changelog</a>
+  <a href="#support">15. Support</a>
+</nav>
+<main>
+
+<h1>MediCore EMR</h1>
+<p class="sub">Medical EMR Admin Dashboard Template — Documentation v1.0</p>
+
+<span class="badge">React 19</span>
+<span class="badge">Tailwind CSS v4</span>
+<span class="badge">shadcn/ui</span>
+<span class="badge">TypeScript</span>
+<span class="badge">TanStack Router</span>
+<span class="badge">Vite</span>
+
+<h2 id="introduction">1. Introduction</h2>
+<p>Thank you for purchasing <b>MediCore EMR</b>! 🎉</p>
+<p>MediCore is a modern, production-ready Medical EMR (Electronic Medical Records) admin dashboard template built with React 19, Tailwind CSS v4, shadcn/ui, and TypeScript. It provides a complete frontend foundation for clinics, hospitals, telemedicine platforms, and healthcare SaaS products.</p>
+<p>This documentation walks you through installation, project structure, theming, replacing the sample data with your own API, and common customizations. No advanced React knowledge is required to get started — every step is explained for beginners.</p>
+
+<h2 id="requirements">2. Requirements</h2>
+<ul>
+  <li><b>Node.js 18 or newer</b> (Node 20+ recommended) — download from <code>https://nodejs.org</code></li>
+  <li><b>npm</b> (comes with Node.js) or <b>bun</b> (optional, faster)</li>
+  <li>A code editor such as <b>VS Code</b></li>
+  <li>Basic familiarity with React is helpful but not required for simple text/color changes</li>
+</ul>
+
+<h2 id="installation">3. Installation</h2>
+<h3>Step 1 — Extract the files</h3>
+<p>Unzip the download package. Open the <code>source</code> folder in your code editor or terminal.</p>
+
+<h3>Step 2 — Install dependencies</h3>
+<pre><code>cd source
+npm install</code></pre>
+<p>Or, if you prefer bun (a <code>bun.lock</code> file is included):</p>
+<pre><code>bun install</code></pre>
+
+<h3>Step 3 — Start the development server</h3>
+<pre><code>npm run dev</code></pre>
+<p>Open the local URL shown in your terminal (typically <code>http://localhost:8080</code> or <code>http://localhost:5173</code>). You should see the MediCore dashboard running with sample data.</p>
+
+<div class="note"><b>Tip:</b> If <code>npm install</code> reports peer-dependency warnings, they are safe to ignore. If installation fails, delete the <code>node_modules</code> folder and the lock file, then run <code>npm install</code> again.</div>
+
+<h2 id="build">4. Build for Production</h2>
+<pre><code>npm run build</code></pre>
+<p>This creates an optimized production build. To preview the production build locally:</p>
+<pre><code>npm run preview</code></pre>
+<p>Other available scripts:</p>
+<table>
+  <tr><th>Command</th><th>Description</th></tr>
+  <tr><td><code>npm run dev</code></td><td>Start the development server with hot reload</td></tr>
+  <tr><td><code>npm run build</code></td><td>Production build</td></tr>
+  <tr><td><code>npm run preview</code></td><td>Preview the production build locally</td></tr>
+  <tr><td><code>npm run lint</code></td><td>Run ESLint checks</td></tr>
+  <tr><td><code>npm run format</code></td><td>Format code with Prettier</td></tr>
+</table>
+
+<h2 id="structure">5. Project Structure</h2>
+<pre><code>source/
+├── public/                  # Static assets (favicon)
+├── src/
+│   ├── components/
+│   │   ├── ui/              # 45+ reusable shadcn/ui components
+│   │   │                    #   (button, card, table, dialog, tabs, ...)
+│   │   ├── dashboard/       # Dashboard widgets (stat cards, charts, ...)
+│   │   ├── patients/        # Patient table, add/edit dialogs, badges
+│   │   ├── doctors/         # Doctor cards, profile sheet, add dialog
+│   │   ├── appointments/    # Calendar view, list, booking/reschedule
+│   │   ├── laboratory/      # Lab tests table, report sheet, dialogs
+│   │   ├── pharmacy/        # Inventory, prescriptions, restock dialog
+│   │   ├── billing/         # Invoices table, invoice sheet, dialogs
+│   │   ├── staff/           # Staff table, profile sheet
+│   │   ├── messages/        # Conversation list &amp; thread
+│   │   ├── notifications/   # Notification store &amp; visuals
+│   │   ├── brand/           # Logo mark component
+│   │   ├── app-sidebar.tsx  # Main navigation sidebar
+│   │   ├── app-header.tsx   # Sticky header (search, theme, profile)
+│   │   └── breadcrumbs.tsx  # Breadcrumb navigation
+│   ├── data/                # ★ All sample/demo data lives here
+│   │   ├── patients.ts, doctors.ts, appointments.ts,
+│   │   ├── lab-tests.ts, pharmacy.ts, invoices.ts,
+│   │   └── staff.ts, messages.ts, notifications.ts, dashboard.ts
+│   ├── hooks/
+│   │   ├── use-theme.tsx    # Light/dark theme hook
+│   │   └── use-mobile.tsx   # Responsive breakpoint hook
+│   ├── lib/
+│   │   ├── utils.ts         # cn() class helper
+│   │   ├── export-csv.ts    # CSV export utility
+│   │   └── mock-query.ts    # Simulated async data loading
+│   ├── routes/              # ★ File-based routing (TanStack Router)
+│   │   ├── _app.dashboard.tsx, _app.patients.index.tsx, ...
+│   │   └── _auth.login.tsx  # Login page
+│   ├── styles.css           # ★ Tailwind v4 theme tokens (colors)
+│   └── router.tsx           # Router setup
+├── package.json
+├── vite.config.ts
+├── tsconfig.json
+└── netlify.toml             # Ready-made Netlify config</code></pre>
+<p>Folders marked with ★ are the ones you will edit most often.</p>
+
+<h2 id="pages">6. Pages &amp; Routes</h2>
+<p>MediCore uses <b>TanStack Router</b> with file-based routing. Every file in <code>src/routes/</code> automatically becomes a page:</p>
+<table>
+  <tr><th>URL</th><th>Route file</th><th>Description</th></tr>
+  <tr><td><code>/dashboard</code></td><td>_app.dashboard.tsx</td><td>KPIs, visit charts, department distribution, revenue, doctor availability</td></tr>
+  <tr><td><code>/patients</code></td><td>_app.patients.index.tsx</td><td>Patient table with search, filters, pagination, CSV export</td></tr>
+  <tr><td><code>/patients/:id</code></td><td>_app.patients.$patientId.tsx</td><td>Patient profile — vitals, history, medications, billing tabs</td></tr>
+  <tr><td><code>/patients/new</code></td><td>_app.patients.new.tsx</td><td>Add patient form</td></tr>
+  <tr><td><code>/doctors</code></td><td>_app.doctors.tsx</td><td>Physician directory — grid &amp; table views, specialty filters</td></tr>
+  <tr><td><code>/appointments</code></td><td>_app.appointments.tsx</td><td>Calendar (day/week/month) + list view, booking &amp; reschedule</td></tr>
+  <tr><td><code>/laboratory</code></td><td>_app.laboratory.tsx</td><td>Test orders, statuses, critical results, report sheet</td></tr>
+  <tr><td><code>/pharmacy</code></td><td>_app.pharmacy.tsx</td><td>Medicine inventory, stock alerts, prescriptions</td></tr>
+  <tr><td><code>/billing</code></td><td>_app.billing.tsx</td><td>Invoices, revenue stats, payment status</td></tr>
+  <tr><td><code>/staff</code></td><td>_app.staff.tsx</td><td>Staff roster and roles</td></tr>
+  <tr><td><code>/messages</code></td><td>_app.messages.tsx</td><td>Internal messaging UI</td></tr>
+  <tr><td><code>/notifications</code></td><td>_app.notifications.tsx</td><td>Notification center</td></tr>
+  <tr><td><code>/settings</code></td><td>_app.settings.tsx</td><td>Settings page</td></tr>
+  <tr><td><code>/login</code></td><td>_auth.login.tsx</td><td>Login page (UI only — connect your own auth)</td></tr>
+</table>
+<p><b>To add a new page:</b> create a file such as <code>src/routes/_app.reports.tsx</code>, export a component, and add a link to it in <code>src/components/app-sidebar.tsx</code>. The route is generated automatically.</p>
+
+<h2 id="theming">7. Theming (Light / Dark Mode)</h2>
+<p>Theme switching is handled by the <code>use-theme</code> hook (<code>src/hooks/use-theme.tsx</code>). The toggle button in the header switches between light and dark instantly.</p>
+<h3>Changing brand colors</h3>
+<p>All colors are defined as design tokens in <code>src/styles.css</code> using Tailwind CSS v4's <code>@theme</code> / CSS-variable system. Light-mode tokens are defined in <code>:root</code> and dark-mode overrides under the <code>.dark</code> selector. For example, to change the primary accent color, edit the <code>--primary</code> variable in both places. Every component updates automatically because they all reference the same tokens.</p>
+<div class="note"><b>Note:</b> Tailwind CSS v4 does not use <code>tailwind.config.js</code>. Theme customization lives directly in <code>src/styles.css</code> — this is the modern v4 approach.</div>
+
+<h2 id="data">8. Sample Data &amp; Connecting Your API</h2>
+<p>All demo content (patients, doctors, appointments, lab tests, medicines, invoices, staff, messages, notifications, dashboard stats) lives in plain TypeScript files inside <code>src/data/</code>. Each file exports typed arrays/objects, so you can see the exact shape your API should return.</p>
+<h3>Replacing sample data with a real backend</h3>
+<ol>
+  <li>Open the relevant data file, e.g. <code>src/data/patients.ts</code>, and note the exported type/interface.</li>
+  <li>The template already includes <b>TanStack Query</b>. Replace the local import with a query that fetches from your API and returns data in the same shape:</li>
+</ol>
+<pre><code>import { useQuery } from "@tanstack/react-query";
+
+const { data: patients, isLoading } = useQuery({
+  queryKey: ["patients"],
+  queryFn: () =&gt; fetch("/api/patients").then(r =&gt; r.json()),
+});</code></pre>
+<ol start="3">
+  <li>Loading skeletons (<code>table-skeleton.tsx</code>, <code>skeleton.tsx</code>) and empty/error states (<code>empty-state.tsx</code>, <code>error-state.tsx</code>) are already built — wire them to <code>isLoading</code> / <code>isError</code>.</li>
+</ol>
+<div class="warn"><b>Important:</b> MediCore is a <b>frontend template</b>. It does not include a backend, database, or real authentication. The login page is UI-only — connect it to your own auth provider (Supabase, Firebase, your REST API, etc.).</div>
+
+<h2 id="components">9. UI Components</h2>
+<p>The template ships with 45+ reusable components in <code>src/components/ui/</code>, based on <b>shadcn/ui</b> (Radix UI primitives + Tailwind). Highlights:</p>
+<ul>
+  <li><b>Data display:</b> table, card, badge, avatar, chart (Recharts wrapper), progress, mini-stat-card</li>
+  <li><b>Overlays:</b> dialog, alert-dialog, sheet, drawer, popover, tooltip, hover-card, dropdown-menu</li>
+  <li><b>Forms:</b> input, textarea, select, checkbox, radio-group, switch, slider, form (react-hook-form + zod), calendar / date picker, input-otp</li>
+  <li><b>Navigation:</b> sidebar, tabs, breadcrumb, pagination, command palette (Cmd/Ctrl + K global search), menubar</li>
+  <li><b>Feedback:</b> sonner toasts, skeleton loaders, empty-state, error-state</li>
+</ul>
+<p>Because these are standard shadcn/ui components, you can copy any new component from the shadcn/ui documentation and it will match the design system automatically.</p>
+
+<h2 id="customization">10. Common Customizations</h2>
+<h3>Change the logo &amp; brand name</h3>
+<ul>
+  <li>Logo mark: <code>src/components/brand/logo-mark.tsx</code></li>
+  <li>Sidebar brand text: <code>src/components/app-sidebar.tsx</code></li>
+  <li>Favicon: <code>public/favicon.svg</code></li>
+</ul>
+<h3>Edit sidebar menu items</h3>
+<p>Open <code>src/components/app-sidebar.tsx</code> — menu sections (Main, Clinical, Finance, Management, System) are defined as simple arrays. Add, remove, or rename items there.</p>
+<h3>Change currency / date formats</h3>
+<p>Amounts and dates are rendered where they are displayed (tables, cards). Dates use <code>date-fns</code> — adjust format strings, e.g. <code>format(date, "MMM d, yyyy")</code>.</p>
+<h3>Export to CSV</h3>
+<p>The Export buttons use <code>src/lib/export-csv.ts</code>. It converts the current table data to a downloadable CSV — reuse it for any new table.</p>
+
+<h2 id="deployment">11. Deployment</h2>
+<h3>Netlify (recommended — config included)</h3>
+<p>A ready-made <code>netlify.toml</code> is included. Push the project to a Git repository, connect it in Netlify, and it will detect the build settings automatically. Or drag-and-drop: run <code>npm run build</code> and upload the output folder.</p>
+<h3>Vercel</h3>
+<p>Import the repository in Vercel and select the Vite framework preset. Build command <code>npm run build</code>.</p>
+
+<h2 id="faq">12. FAQ</h2>
+<h3>Is a backend or database included?</h3>
+<p>No. MediCore is a frontend template with realistic local sample data, designed to plug into any backend.</p>
+<h3>Does it work with npm, yarn, and bun?</h3>
+<p>Yes. A <code>bun.lock</code> is included, but <code>npm install</code> works normally.</p>
+<h3>Can I use it for client projects?</h3>
+<p>Yes — per the marketplace license you purchased. For multiple end products, purchase the appropriate license per project.</p>
+<h3>Is it responsive?</h3>
+<p>Yes — every page is fully responsive across desktop, tablet, and mobile, including a mobile drawer sidebar.</p>
+<h3>How do I update the sample data?</h3>
+<p>Edit the TypeScript files in <code>src/data/</code>. Changes appear instantly with hot reload.</p>
+
+<h2 id="credits">13. Credits</h2>
+<table>
+  <tr><th>Library</th><th>Purpose</th><th>License</th></tr>
+  <tr><td>React 19</td><td>UI framework</td><td>MIT</td></tr>
+  <tr><td>Tailwind CSS v4</td><td>Styling</td><td>MIT</td></tr>
+  <tr><td>shadcn/ui + Radix UI</td><td>Component primitives</td><td>MIT</td></tr>
+  <tr><td>TanStack Router / Query / Table</td><td>Routing, data, tables</td><td>MIT</td></tr>
+  <tr><td>Recharts</td><td>Charts</td><td>MIT</td></tr>
+  <tr><td>lucide-react</td><td>Icons</td><td>ISC</td></tr>
+  <tr><td>react-hook-form + zod</td><td>Forms &amp; validation</td><td>MIT</td></tr>
+  <tr><td>date-fns</td><td>Date utilities</td><td>MIT</td></tr>
+  <tr><td>sonner</td><td>Toast notifications</td><td>MIT</td></tr>
+  <tr><td>Vite</td><td>Build tool</td><td>MIT</td></tr>
+</table>
+<p>All libraries are open-source (MIT/ISC) and safe for commercial redistribution.</p>
+
+<h2 id="changelog">14. Changelog</h2>
+<pre><code>v1.0 — July 2026
+- Initial release
+- 14 pages: Dashboard, Patients, Patient Profile, Add Patient, Doctors,
+  Appointments (calendar + list), Laboratory, Pharmacy, Billing &amp; Invoices,
+  Staff, Messages, Notifications, Settings, Login
+- Light + Dark mode, fully responsive, TypeScript throughout</code></pre>
+
+<h2 id="support">15. Support</h2>
+<p>If you have questions or run into problems, contact us through our marketplace profile page. We usually reply within 24–48 hours. Please include:</p>
+<ul>
+  <li>Your Node.js version (<code>node -v</code>)</li>
+  <li>The exact error message or a screenshot</li>
+  <li>What step you were on</li>
+</ul>
+<p>Thank you again for choosing MediCore — we'd love to see what you build with it! If you're happy with the template, a rating on the marketplace helps us a lot. ⭐</p>
+
+<footer>MediCore EMR v1.0 — © 2026 Aarif Web Studio. Documentation for buyers.</footer>
+</main>
+</div>
+</body>
+</html>

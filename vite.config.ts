@@ -1,20 +1,37 @@
-// @lovable.dev/vite-tanstack-config already includes the following — do NOT add them manually
-// or the app will break with duplicate plugins:
-//   - TanStack devtools (dev-only, first), tanstackStart, viteReact, tailwindcss, tsConfigPaths,
-//     nitro (build-only using cloudflare as a default target), VITE_* env injection, @ path alias,
-//     React/TanStack dedupe, error logger plugins, and sandbox detection (port/host/strictPort).
-// You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
-import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import { defineConfig } from "vite";
+import tailwindcss from "@tailwindcss/vite";
+import tsConfigPaths from "vite-tsconfig-paths";
+import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import { nitro } from "nitro/vite";
+import viteReact from "@vitejs/plugin-react";
 
-export default defineConfig({
-  tanstackStart: {
-    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-    // nitro/vite builds from this
-    server: { entry: "server" },
+export default defineConfig(({ command }) => ({
+  // Match the build's CSS pipeline in dev so the preview stays honest.
+  css: { transformer: "lightningcss" },
+  resolve: {
+    alias: {
+      "@": new URL("./src", import.meta.url).pathname,
+    },
+    dedupe: [
+      "react",
+      "react-dom",
+      "react/jsx-runtime",
+      "react/jsx-dev-runtime",
+      "@tanstack/react-query",
+      "@tanstack/query-core",
+    ],
   },
-  // On Netlify (or any non-Cloudflare deploy) use the Netlify nitro preset so
-  // the SSR handler is emitted as a Netlify Function and static assets land
-  // in `dist/`. On the Lovable sandbox / Cloudflare deploy the wrapper's
-  // default `cloudflare-module` preset is used instead.
-  nitro: process.env.NETLIFY ? { preset: "netlify" } : undefined,
-});
+  plugins: [
+    tailwindcss(),
+    tsConfigPaths({ projects: ["./tsconfig.json"] }),
+    // Server entry redirected to src/server.ts (SSR error wrapper).
+    tanstackStart({ server: { entry: "server" } }),
+    // nitro emits the production server build. On Netlify the `netlify`
+    // preset outputs a Netlify Function; elsewhere the zero-config default
+    // targets Node.
+    ...(command === "build"
+      ? [nitro(process.env.NETLIFY ? { preset: "netlify" } : {})]
+      : []),
+    viteReact(),
+  ],
+}));
