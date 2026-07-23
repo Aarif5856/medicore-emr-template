@@ -26,10 +26,20 @@ export default defineConfig(({ command }) => ({
     tsConfigPaths({ projects: ["./tsconfig.json"] }),
     // Server entry redirected to src/server.ts (SSR error wrapper).
     tanstackStart({ server: { entry: "server" } }),
-    // nitro emits the production server build. On Netlify the `netlify`
-    // preset outputs a Netlify Function; elsewhere the zero-config default
-    // targets Node.
-    ...(command === "build" ? [nitro(process.env.NETLIFY ? { preset: "netlify" } : {})] : []),
+    // nitro emits the production server build. On Netlify/Vercel the
+    // matching preset outputs that platform's native function format;
+    // elsewhere the zero-config default targets plain Node.
+    ...(command === "build"
+      ? [
+          nitro(
+            process.env.NETLIFY
+              ? { preset: "netlify" }
+              : process.env.VERCEL
+                ? { preset: "vercel" }
+                : {},
+          ),
+        ]
+      : []),
     viteReact(),
   ],
 }));
