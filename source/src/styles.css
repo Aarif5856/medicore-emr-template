@@ -1,0 +1,271 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * MediCore EMR — "Clinical Trust" Design System
+ *
+ * Tokens are defined as CSS custom properties on :root (light) and .dark,
+ * then mapped to Tailwind utilities via @theme inline. All colors use oklch.
+ * Never hardcode colors in components — use semantic tokens (bg-primary,
+ * text-foreground, border-border, etc.) so light/dark stays consistent.
+ */
+
+@theme inline {
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent-teal: var(--accent-teal);
+  --color-accent-teal-foreground: var(--accent-teal-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --shadow-glow: 0 0 12px rgba(56, 189, 248, 0.15);
+}
+
+:root {
+  --radius: 0.625rem;
+
+  /* Surfaces */
+  --background: oklch(0.984 0.005 247); /* #F8FAFC slate-50 */
+  --foreground: oklch(0.208 0.042 265.755); /* #0F172A slate-900 */
+  --card: oklch(1 0 0); /* #FFFFFF */
+  --card-foreground: oklch(0.208 0.042 265.755);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.208 0.042 265.755);
+
+  /* Brand */
+  --primary: oklch(0.685 0.15 234); /* #0EA5E9 sky-500 */
+  --primary-foreground: oklch(1 0 0);
+  --primary-hover: oklch(0.605 0.155 236); /* #0284C7 sky-600 */
+
+  --secondary: oklch(0.968 0.007 247.896);
+  --secondary-foreground: oklch(0.208 0.042 265.755);
+
+  --accent-teal: oklch(0.72 0.12 187); /* #14B8A6 teal-500 */
+  --accent-teal-foreground: oklch(1 0 0);
+
+  --muted: oklch(0.968 0.007 247.896);
+  --muted-foreground: oklch(0.5 0.03 257); /* #475569 slate-600 */
+  --accent: oklch(0.955 0.02 234); /* subtle sky tint */
+  --accent-foreground: oklch(0.208 0.042 265.755);
+
+  /* Semantic */
+  --destructive: oklch(0.637 0.235 25); /* #EF4444 */
+  --destructive-foreground: oklch(1 0 0);
+  --warning: oklch(0.77 0.16 70); /* #F59E0B */
+  --warning-foreground: oklch(0.208 0.042 265.755);
+  --success: oklch(0.72 0.12 187); /* teal-500 */
+  --success-foreground: oklch(1 0 0);
+
+  /* Chrome */
+  --border: oklch(0.914 0.015 250); /* #E2E8F0 */
+  --input: oklch(0.914 0.015 250);
+  --ring: oklch(0.685 0.15 234);
+
+  --chart-1: oklch(0.685 0.15 234);
+  --chart-2: oklch(0.72 0.12 187);
+  --chart-3: oklch(0.77 0.16 70);
+  --chart-4: oklch(0.637 0.235 25);
+  --chart-5: oklch(0.6 0.18 300);
+
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.208 0.042 265.755);
+  --sidebar-primary: oklch(0.685 0.15 234);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.955 0.02 234);
+  --sidebar-accent-foreground: oklch(0.605 0.155 236);
+  --sidebar-border: oklch(0.914 0.015 250);
+  --sidebar-ring: oklch(0.685 0.15 234);
+}
+
+.dark {
+  /* Deep navy, not pure black */
+  --background: oklch(0.19 0.035 258); /* #0B1220 */
+  --foreground: oklch(0.968 0.007 247.896); /* #F1F5F9 */
+
+  /* Glass card — solid fallback; glass variant via .card-glass utility */
+  --card: oklch(0.27 0.035 260); /* slate-800-ish, solid */
+  --card-foreground: oklch(0.968 0.007 247.896);
+  --popover: oklch(0.27 0.035 260);
+  --popover-foreground: oklch(0.968 0.007 247.896);
+
+  --primary: oklch(0.77 0.13 232); /* #38BDF8 sky-400 */
+  --primary-foreground: oklch(0.19 0.035 258);
+  --primary-hover: oklch(0.7 0.14 234);
+
+  --secondary: oklch(0.3 0.03 260);
+  --secondary-foreground: oklch(0.968 0.007 247.896);
+
+  --accent-teal: oklch(0.76 0.13 187);
+  --accent-teal-foreground: oklch(0.19 0.035 258);
+
+  --muted: oklch(0.3 0.03 260);
+  --muted-foreground: oklch(0.7 0.03 257); /* #94A3B8 slate-400 */
+  --accent: oklch(0.32 0.05 245);
+  --accent-foreground: oklch(0.968 0.007 247.896);
+
+  --destructive: oklch(0.65 0.22 25);
+  --destructive-foreground: oklch(1 0 0);
+  --warning: oklch(0.78 0.16 70);
+  --warning-foreground: oklch(0.19 0.035 258);
+  --success: oklch(0.76 0.13 187);
+  --success-foreground: oklch(0.19 0.035 258);
+
+  --border: oklch(1 0 0 / 10%); /* rgba(148,163,184,0.1)-ish */
+  --input: oklch(1 0 0 / 12%);
+  --ring: oklch(0.77 0.13 232);
+
+  --chart-1: oklch(0.77 0.13 232);
+  --chart-2: oklch(0.76 0.13 187);
+  --chart-3: oklch(0.78 0.16 70);
+  --chart-4: oklch(0.7 0.2 25);
+  --chart-5: oklch(0.7 0.18 300);
+
+  --sidebar: oklch(0.22 0.035 258);
+  --sidebar-foreground: oklch(0.968 0.007 247.896);
+  --sidebar-primary: oklch(0.77 0.13 232);
+  --sidebar-primary-foreground: oklch(0.19 0.035 258);
+  --sidebar-accent: oklch(0.3 0.05 240);
+  --sidebar-accent-foreground: oklch(0.77 0.13 232);
+  --sidebar-border: oklch(1 0 0 / 8%);
+  --sidebar-ring: oklch(0.77 0.13 232);
+}
+
+/* Glass card utility — used in dark mode for non-data surfaces.
+   Data-heavy areas (tables, charts) should keep bg-card (solid). */
+@utility card-glass {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+}
+
+.dark .card-glass {
+  background-color: rgb(30 41 59 / 0.6);
+  backdrop-filter: blur(12px) saturate(140%);
+  border-color: rgb(148 163 184 / 0.1);
+}
+
+/* Subtle glow for interactive primary elements in dark mode only. */
+@utility glow-primary {
+  transition: box-shadow 200ms ease;
+}
+.dark .glow-primary {
+  box-shadow: 0 0 12px rgb(56 189 248 / 0.15);
+}
+.dark .glow-primary:hover {
+  box-shadow: 0 0 18px rgb(56 189 248 / 0.28);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-size: 14px;
+    line-height: 1.5;
+    transition:
+      background-color 200ms ease,
+      color 200ms ease;
+  }
+
+  h1 {
+    font-size: 30px;
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  h2 {
+    font-size: 24px;
+    line-height: 1.25;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  h3 {
+    font-size: 20px;
+    line-height: 1.3;
+    font-weight: 500;
+  }
+  small {
+    font-size: 12px;
+  }
+
+  /* Tabular numerals for stats / tables */
+  table,
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Respect users who prefer reduced motion — disables non-essential
+   transitions, transforms, and animations globally. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .hover\:-translate-y-0\.5:hover,
+  .hover\:translate-y-0\.5:hover,
+  .hover\:scale-105:hover,
+  .hover\:scale-\[1\.02\]:hover {
+    transform: none !important;
+  }
+}

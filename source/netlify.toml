@@ -1,0 +1,22 @@
+## Netlify configuration for MediCore EMR (TanStack Start + nitro)
+##
+## nitro's `netlify` preset (activated by the NETLIFY=true env var that
+## Netlify sets automatically, and mirrored in vite.config.ts) emits:
+##
+##   dist/                                  → static assets (publish dir)
+##     _headers, _redirects, assets/, favicon.svg, ...
+##   .netlify/functions-internal/server/    → SSR handler (Netlify Function v2)
+##     server.mjs  → exports `config = { path: "/*" }` so Netlify auto-mounts
+##                   it at every unmatched route. No manual _redirects rule
+##                   is required (and adding `/* → /index.html 200` would
+##                   break SSR by serving a non-existent index.html).
+##
+## `.netlify/functions-internal/` is a Netlify-reserved directory that the
+## build system auto-detects — do NOT override `[functions] directory` to
+## point elsewhere, and do NOT set publish to `dist/client` (that path does
+## not exist for this SSR build; it's a leftover from Netlify's SPA
+## auto-detection which must be cleared in the site UI if it was set).
+
+[build]
+  command = "npm run build"
+  publish = "dist"
