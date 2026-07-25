@@ -90,10 +90,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "theme-color", content: "#0EA5E9" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -110,6 +113,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 const THEME_INIT_SCRIPT = `try{var t=localStorage.getItem('medicore-theme');if(!t){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}`;
 const DIR_INIT_SCRIPT = `try{var d=localStorage.getItem('medicore-direction');if(d==='rtl'){document.documentElement.setAttribute('dir','rtl');}else{document.documentElement.setAttribute('dir','ltr');}}catch(e){}`;
+// Registers the hand-written service worker in public/sw.js. Deferred to the
+// load event so it never competes with hydration for bandwidth.
+const SW_REGISTER_SCRIPT = `if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js',{scope:'/'}).catch(function(){});});}`;
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
@@ -122,6 +128,7 @@ function RootShell({ children }: { children: ReactNode }) {
       <body>
         {children}
         <Scripts />
+        <script dangerouslySetInnerHTML={{ __html: SW_REGISTER_SCRIPT }} />
       </body>
     </html>
   );
