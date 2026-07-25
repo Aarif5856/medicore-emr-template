@@ -1,0 +1,25 @@
+{
+  "id": "/",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "name": "MediCore EMR · Medical Admin Dashboard",
+  "short_name": "MediCore EMR",
+  "description": "MediCore EMR is a premium admin dashboard template for hospitals and clinics — patients, appointments, laboratory, pharmacy, billing and more. This is a free interactive demo of the full template.",
+  "lang": "en",
+  "dir": "ltr",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#0EA5E9",
+  "background_color": "#FFFFFF",
+  "categories": ["business", "productivity", "medical"],
+  "icons": [
+    { "src": "/pwa-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/pwa-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/pwa-maskable-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Patients", "url": "/patients" },
+    { "name": "Appointments", "url": "/appointments" },
+    { "name": "Laboratory", "url": "/laboratory" }
+  ]
+}
